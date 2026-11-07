@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Web Studio Tycoon</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:"Inter",system-ui,sans-serif;background:radial-gradient(700px 320px at 85% -10%,rgba(99,102,241,.28),transparent 60%),linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);background-attachment:fixed;color:#F1F5F9;font-size:14px;min-height:100vh}
+h1,h2,h3{font-weight:800;color:#F1F5F9}
+button{font-family:inherit;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:12px 16px;font-weight:600;font-size:14px;background:rgba(255,255,255,.08);color:#F1F5F9;min-height:48px;box-shadow:0 4px 14px rgba(2,6,23,.35);transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease,background .15s ease}
+button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):hover{transform:scale(1.02)}
+button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):active{transform:scale(.97)}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible{outline:2px solid #22D3EE;outline-offset:2px}
+button.primary{background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;border:none;width:100%;box-shadow:0 8px 22px rgba(99,102,241,.45)}
+button.green{background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;border:none;box-shadow:0 8px 22px rgba(34,197,94,.35)}
+button.ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
+button.danger{background:linear-gradient(135deg,#DC2626,#EF4444);color:#fff;border:none;width:100%;box-shadow:0 8px 22px rgba(239,68,68,.35)}
+button[style*="width:auto"]{min-height:40px}
+#upgrades button{min-height:40px}
+input,select{font-family:inherit;font-size:15px;padding:11px 12px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.07);color:#F1F5F9;color-scheme:dark}
+input::placeholder{color:#64748B}
+#hostingSelect,#cmsSelect,.taskrow select{background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.16)!important;color:#F1F5F9}
+.app{display:block;max-width:520px;margin:0 auto;min-height:100vh}
+.side{width:282px;max-width:86vw;background:rgba(10,15,30,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid rgba(255,255,255,.10);padding:16px 12px;position:fixed;left:0;top:0;bottom:0;height:100vh;height:100dvh;overflow:auto;z-index:70;transform:translateX(-105%);transition:transform .25s ease;box-shadow:4px 0 24px rgba(2,6,23,.6)}
+.side.open{transform:none}
+.side nav{padding-bottom:4px}
+.player{text-align:center;padding:6px 4px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:12px}
+.pava{width:86px;height:86px;margin:0 auto;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#6366F1,#22D3EE);padding:3px;position:relative}
+.pava svg,.pava img{width:100%;height:100%;display:block;border-radius:50%;object-fit:cover}
+.lvlbadge{display:inline-block;background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700;margin-top:6px;box-shadow:0 4px 14px rgba(99,102,241,.4)}
+.player h2{margin:8px 0 2px;font-size:17px}
+.moneyrow{display:flex;gap:6px;justify-content:center;margin-top:9px;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:5px 10px;font-weight:700;font-size:13px;color:#E2E8F0}
+.pill b{color:#22C55E}
+.navbtn{display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:none;background:transparent;padding:12px 10px;border-radius:999px;font-size:14.5px;color:#CBD5E1;margin:2px 0;box-shadow:none;min-height:44px}
+.navbtn .cnt{margin-left:auto;font-size:12px;color:#E2E8F0;font-weight:700;background:rgba(255,255,255,.12);border-radius:999px;padding:2px 8px}
+.navbtn.on{background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;font-weight:700;box-shadow:0 6px 18px rgba(99,102,241,.4)}
+.navbtn.on .cnt{background:rgba(255,255,255,.25);color:#fff}
+.navbtn:active{transform:none}
+.side .objectif{font-size:12px;color:#94A3B8;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:10px;line-height:1.5;margin-top:14px}
+.side .objectif b{color:#F1F5F9}
+.mainwrap{min-width:0}
+.topbar{background:rgba(10,15,30,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:#F1F5F9;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:5;box-shadow:0 2px 16px rgba(2,6,23,.5);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar h1{font-size:15px;margin:0;font-weight:800}
+.topbar .logoBars{display:none}
+.topbar .tstat{display:none}
+.topbar .tstat.mobDay{display:inline-block}
+.topbar .tstat.mobMoney{display:inline-block}
+.topbar .tstat{font-size:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:5px 11px;color:#E2E8F0}
+.topbar button.green{margin-left:auto;padding:12px 16px;font-size:14px;white-space:nowrap;min-height:48px}
+.logoBars{display:flex;align-items:flex-end;gap:2px;height:22px;flex:0 0 auto}
+.logoBars i{width:6px;border-radius:2px 2px 0 0;display:block}
+main{padding:12px 12px 116px}
+.card{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 8px 30px rgba(2,6,23,.45);transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-2px)}
+.card h3{margin:0 0 6px;font-size:16px;color:#F1F5F9;font-weight:800}
+.card p{margin:6px 0;line-height:1.5;color:#CBD5E1}
+.small{font-size:12.5px;color:#94A3B8}
+.hidden{display:none!important}
+.bar{height:12px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#6366F1,#22D3EE);border-radius:999px}
+.bar.blue i{background:#22D3EE}.bar.purple i{background:#8B5CF6}.bar.pop i{background:#F59E0B}.bar.share i{background:#F59E0B}.bar.energy i{background:#EC4899}.bar.red i{background:#EF4444}.bar.pink i{background:#EC4899}.bar.loyalty i{background:#F59E0B}.bar.xp i{background:#8B5CF6}
+.tag{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:3px 10px;border-radius:999px;font-size:12px;margin:2px;font-weight:600;color:#CBD5E1}
+.toast{position:fixed;left:50%;transform:translateX(-50%);width:min(496px,calc(100vw - 28px));bottom:calc(104px + env(safe-area-inset-bottom));background:rgba(17,26,51,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);color:#F1F5F9;padding:14px 18px;border-radius:16px;font-weight:600;text-align:center;z-index:50;box-shadow:0 10px 30px rgba(2,6,23,.6)}
+.jday{font-weight:700;font-size:14px;color:#F1F5F9;margin:14px 0 4px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}.jday:first-child{margin-top:0;padding-top:0;border-top:0}.jline{display:flex;gap:8px;padding:8px 10px;margin:6px 0;background:rgba(99,102,241,.10);border-left:4px solid #6366F1;border-radius:0 12px 12px 0;color:#CBD5E1;font-size:13px;line-height:1.5}.jico{flex:0 0 auto;font-size:15px}
+.actgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:520px){.actgrid{grid-template-columns:1fr}}
+.gridSites{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:12px}
+.gridTalents{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:12px}
+.gridStats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.gridTypes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.siteCard{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.10);border-radius:22px;overflow:hidden;box-shadow:0 8px 30px rgba(2,6,23,.45);display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
+.siteCard:hover{transform:translateY(-2px)}
+.siteTop{height:6px}
+.siteCard .body{padding:18px 18px 6px;flex:1}
+.siteHead{display:flex;gap:10px;align-items:center}
+.segico{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;box-shadow:0 4px 14px rgba(2,6,23,.5)}
+.siteHead b{font-size:15.5px;display:block;word-break:break-all;color:#F1F5F9;font-weight:700}
+.spark{margin:10px 0 4px}
+.siteNums{display:flex;justify-content:space-between;gap:8px;margin-top:8px}
+.siteNums div{text-align:left}.siteNums div:last-child{text-align:right}
+.siteNums b{font-size:20px;font-weight:800;display:block;color:#F1F5F9}
+.siteNums small{color:#94A3B8;text-transform:uppercase;letter-spacing:.06em;font-size:10.5px}
+.cardNums div:first-child b{color:#22D3EE}.cardNums div:last-child b{color:#22C55E}
+.strip{display:flex;height:14px;overflow:hidden}
+.strip span{display:block;height:100%}
+.siteBtns{display:flex;gap:8px;padding:0 18px 18px}
+.siteBtns button{flex:1;padding:10px 6px;font-size:13px;min-height:40px}
+.tCard{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.10);border-radius:22px;overflow:hidden;box-shadow:0 8px 30px rgba(2,6,23,.45);display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
+.tCard:hover{transform:translateY(-2px)}
+.tCard .body{padding:18px;flex:1}
+.tHead{display:flex;gap:11px;align-items:flex-start}
+.tava{width:64px;height:64px;flex:0 0 64px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#6366F1,#22D3EE);padding:3px}
+.tava svg,.tava img{width:100%;height:100%;display:block;border-radius:50%;object-fit:cover}
+.tHead b{font-size:15.5px;display:block;color:#F1F5F9;font-weight:700}
+.tHead .sal{color:#94A3B8;font-size:13px;margin-top:2px}
+.segbar{display:flex;height:26px;border-radius:999px;overflow:hidden;margin-top:9px}
+.segbar span{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}
+.seglabels{display:flex;margin-top:4px}
+.seglabels span{flex:1;text-align:center;font-size:10.5px;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em}
+.tFoot{background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.08);color:#CBD5E1;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.tFoot b{color:#fff}
+.mock{border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(255,255,255,.04);padding:14px;margin:10px 0}
+.mock .skl{height:12px;border-radius:999px;background:rgba(255,255,255,.12);margin:7px 0}
+.mock .skl.short{width:45%}.mock .skl.mid{width:70%}
+.taskrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.taskrow .tname{width:96px;flex:0 0 96px;font-weight:600;color:#F1F5F9;font-size:13px}
+.taskrow .bar{flex:1;margin:0}.taskrow .tnum{width:54px;flex:0 0 54px;text-align:right;font-weight:700;color:#E2E8F0}
+.taskrow button{padding:8px 14px;min-height:40px}
+.statCard{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,.45);transition:transform .2s ease,box-shadow .2s ease}
+.statCard:hover{transform:translateY(-2px)}
+.statCard small{color:#94A3B8;font-weight:700;text-transform:uppercase;font-size:11px;letter-spacing:.08em}
+.statCard b{font-size:28px;font-weight:800;display:block;margin:5px 0 2px;color:#F1F5F9}
+.hbar{display:flex;align-items:center;gap:9px;margin:7px 0}
+.hbar .hn{width:150px;flex:0 0 150px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#CBD5E1}
+.hbar .bar{flex:1;margin:0}.hbar .hv{width:64px;flex:0 0 64px;text-align:right;font-weight:700;font-size:13px;color:#F1F5F9}
+table.rank{width:100%;border-collapse:collapse;background:transparent}
+table.rank td,table.rank th{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;color:#F1F5F9}
+table.rank th{color:#94A3B8;text-transform:uppercase;font-size:11px;letter-spacing:.08em}
+table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
+.typeCard{border:2px solid rgba(255,255,255,.12);border-radius:16px;padding:12px;cursor:pointer;background:rgba(255,255,255,.05);text-align:left;width:100%;color:#F1F5F9;box-shadow:none}
+.typeCard.on{border-color:#6366F1;background:rgba(99,102,241,.16);box-shadow:0 0 0 1px #6366F1,0 8px 22px rgba(99,102,241,.3)}
+.typeCard .prev{height:44px;background:rgba(255,255,255,.06);border-radius:8px;padding:7px;margin-bottom:7px}
+.typeCard .prev i{display:block;height:7px;border-radius:4px;background:rgba(255,255,255,.18);margin:4px 0}
+.themeBtn{border:2px solid rgba(255,255,255,.12);border-radius:16px;padding:11px 6px;background:rgba(255,255,255,.05);font-size:22px;width:100%;color:#F1F5F9;box-shadow:none}
+.themeBtn.on{border-color:#6366F1;background:rgba(99,102,241,.16);box-shadow:0 0 0 1px #6366F1,0 8px 22px rgba(99,102,241,.3)}
+.themeBtn small{display:block;font-size:11.5px;font-weight:600;color:#94A3B8;margin-top:3px}
+.officeBanner{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.10);margin-bottom:12px;background:rgba(255,255,255,.04)}
+.officeBanner svg{width:100%;height:auto;display:block}
+.bottomnav{display:flex;position:fixed;left:50%;transform:translateX(-50%);width:min(496px,calc(100vw - 24px));bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;background:rgba(17,26,51,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:6px 8px;box-shadow:0 10px 30px rgba(2,6,23,.6)}
+.bnavbtn{flex:1;border:none;background:transparent;border-radius:999px;padding:6px 2px;font-size:11px;font-weight:700;color:#94A3B8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;box-shadow:none}
+.bnavbtn .ic{font-size:20px;line-height:1}
+.bnavbtn.on{color:#fff;background:linear-gradient(135deg,#6366F1,#22D3EE);box-shadow:0 4px 14px rgba(99,102,241,.4)}
+.menuBack{position:fixed;inset:0;background:rgba(2,6,23,.6);backdrop-filter:blur(2px);z-index:65}
+#launchBtn{min-height:48px;padding:14px 16px;font-size:17px}
+
+
+.topbar .tstat.mobDay{display:none}
+#dayBanner{position:fixed;left:50%;top:34%;transform:translate(-50%,-50%);z-index:90;pointer-events:none;background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;font-weight:800;font-size:26px;padding:16px 28px;border-radius:999px;box-shadow:0 12px 32px rgba(99,102,241,.5);opacity:0;white-space:nowrap}
+#dayBanner.show{animation:dayPop 1.5s ease forwards}
+@keyframes dayPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}28%{transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+#helpScreen p{font-size:13px;line-height:1.55;color:#CBD5E1;margin:10px 0}
+#helpScreen p b{color:#F1F5F9}
+
+.createProgress{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:10px 16px;margin-bottom:12px;font-weight:700;color:#F1F5F9}
+.createProgress .cdots{display:flex;gap:8px;align-items:center}
+.cdot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18);display:inline-block}
+.cdot.done{background:#6366F1}
+.cdot.on{background:#22D3EE;box-shadow:0 0 0 3px rgba(34,211,238,.25)}
+</style></head><body>
+<div class="app">
+<aside class="side">
+ <div class="player">
+  <div class="pava" id="playerAvatar"></div>
+  <div class="pinfo">
+   <h2>Toi — Fondateur</h2>
+   <span class="lvlbadge" id="pLevel">Studio niveau 1</span>
+   <div class="bar pink" style="margin:8px auto 0;max-width:180px"><i id="lvlBar" style="width:0%"></i></div>
+   <div class="moneyrow">
+    <span class="pill">💵 <b id="sMoney">$750 M</b></span>
+    <span class="pill">🪙 <b id="sCoins">1M</b></span>
+    <span class="pill">⭐ <b id="sRep">0</b></span>
+   </div>
+  </div>
+ </div>
+ <nav id="mainNav">
+  <button class="navbtn on" data-tab="sites" onclick="showTab('sites',this)">🖥️ Sites <span class="cnt" id="cntSites">0</span></button>
+  <button class="navbtn" data-tab="create" onclick="showTab('create',this)">➕ Créer un site</button>
+  <button class="navbtn" data-tab="team" onclick="showTab('team',this)">👥 Équipe <span class="cnt" id="cntTeam">1</span></button>
+  <button class="navbtn" data-tab="stats" onclick="showTab('stats',this)">📊 Statistiques</button>
+  <button class="navbtn" data-tab="contracts" onclick="showTab('contracts',this)">📋 Contrats <span class="cnt" id="cntContracts">0</span></button>
+  <button class="navbtn" data-tab="ranking" onclick="showTab('ranking',this)">🏆 Classement</button>
+  <button class="navbtn" data-tab="market" onclick="showTab('market',this)">🎯 Marché</button>
+  <button class="navbtn" data-tab="office" onclick="showTab('office',this)">🏢 Bureau &amp; outils</button>
+  </nav>
+ <div class="objectif">🎯 <b>Objectif :</b> studio <b>niveau 10</b> et <b>1 000 de réputation</b>.<br>📅 Jour <b id="sDaySide">1</b> • 👀 <b id="sVisitorsSide">0</b> visiteurs/jour</div>
+ <button class="primary" style="width:100%;margin-top:14px" onclick="showTab('help')">💡 Aide &amp; astuces</button>
+ <button class="primary" style="width:100%;margin-top:10px" onclick="showTab('journal')">📖 Journal du studio</button>
+</aside>
+<div class="mainwrap">
+<header class="topbar">
+ <span class="logoBars" title="Web Studio Tycoon"><i style="height:9px;background:#ff6b35"></i><i style="height:15px;background:#2b7de9"></i><i style="height:12px;background:#ab47bc"></i><i style="height:18px;background:#22b573"></i><i style="height:8px;background:#ffa726"></i></span>
+ <h1 id="screenTitle">🖥️ Mes sites</h1>
+ <span class="tstat mobDay">📅 Jour <b id="sDay">1</b></span>
+ <span class="tstat">👀 <b id="sVisitors">0</b> / jour</span>
+ <span class="tstat">🏢 Niv. <b id="sLevel">1</b></span>
+ <span class="tstat mobMoney">💵 <b id="sMoneyM">$750 M</b></span>
+ <button class="green" id="nextDayBtn" onclick="nextDay()">📅 Jour <b>1</b></button>
+</header>
+<main>
+<!-- SITES -->
+<section id="tab-sites">
+ <div class="officeBanner" id="officeScene"></div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+  <button class="green" style="flex:1;min-width:170px" onclick="showTab('create')">➕ Créer un site</button>
+  <button class="ghost" style="flex:1;min-width:170px" onclick="showTab('contracts')">📋 Voir les contrats</button>
+ </div>
+ <div id="mySites"></div>
+</section>
+<!-- CREATION -->
+<section id="tab-create" class="hidden">
+ <div id="createProgress" class="createProgress"></div>
+ <div class="card" id="cstep1"><h3>1️⃣ Nom de domaine</h3>
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
+  <input id="domainInput" style="flex:2;min-width:160px" maxlength="16" placeholder="mon-super-site" oninput="renderCreatePreview()">
+  <select id="domainExt" onchange="renderCreatePreview()">
+   <option value=".free">.free</option><option value=".fr">.fr</option><option value=".com">.com</option><option value=".net">.net</option><option value=".org">.org</option>
+  </select>
+ </div>
+ <p class="small">De 3 à 16 caractères : lettres, chiffres et tirets. Si tu laisses vide, le jeu choisira un nom pour toi dans le thème.</p>
+ <button class="primary" style="width:100%;margin-top:12px" onclick="createStep=2;renderCreate()">Continuer →</button></div>
+ <div class="card" id="cstep2"><button class="ghost" style="margin-bottom:10px" onclick="createStep=1;renderCreate()">← Retour</button><h3>2️⃣ Type de site</h3><div class="gridTypes" id="typeGrid"></div></div>
+ <div class="card" id="cstep3"><button class="ghost" style="margin-bottom:10px" onclick="createStep=2;renderCreate()">← Retour</button><h3>3️⃣ Thème du site</h3><div class="gridTypes" id="themeGrid"></div>
+ <p class="small">Le prix dépend du thème : c'est le coût de lancement, payé une seule fois.</p></div>
+ <div class="card" id="cstep4"><button class="ghost" style="margin-bottom:10px" onclick="createStep=3;renderCreate()">← Retour</button><h3>4️⃣ Hébergement, système &amp; aperçu</h3>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+  <label class="small" style="flex:1;min-width:160px">🏠 Hébergement<br><select id="hostingSelect" onchange="renderCreatePreview()" style="width:100%;padding:9px;border-radius:8px;border:1px solid #cfdde4;background:#fff">
+  <option value="0">Mutualisé — gratuit</option>
+  <option value="1">Standard — 200 $ + 15 $ / jour</option>
+  <option value="2">Pro — 500 $ + 30 $ / jour</option>
+  <option value="3">Rapide — 900 $ + 50 $ / jour</option>
+  <option value="4">Dédié — 1 500 $ + 80 $ / jour</option>
+  </select></label>
+  <label class="small" style="flex:1;min-width:160px">⚙️ Système de gestion<br><select id="cmsSelect" onchange="renderCreatePreview()" style="width:100%;padding:9px;border-radius:8px;border:1px solid #cfdde4;background:#fff">
+  <option value="custom">Sur mesure — gratuit</option>
+  <option value="engine">Moteur — 300 $ (+15 qualité)</option>
+  <option value="builder">Constructeur — 150 $ (+5 qualité, +1 / jour)</option>
+  </select></label>
+ </div>
+ <div id="createPreview"></div>
+ <button id="launchBtn" class="green" style="width:100%;font-size:16px" onclick="createSiteFromForm()">🚀 Lancer ce site</button></div>
+</section>
+<!-- DETAIL SITE -->
+<section id="tab-siteDetail" class="hidden"><div id="siteDetail"></div></section>
+<!-- EQUIPE -->
+<section id="tab-team" class="hidden">
+ <div id="myTeam" style="margin-bottom:14px"></div>
+ <div id="freelances" style="margin-bottom:14px"></div>
+ <div id="candidates"></div>
+</section>
+<!-- STATS -->
+<section id="tab-stats" class="hidden"><div id="statsBox"></div></section>
+<!-- CONTRATS -->
+<section id="tab-contracts" class="hidden">
+ <div id="activeBox"></div>
+ <div id="contracts"></div>
+</section>
+<!-- CLASSEMENT -->
+<section id="tab-ranking" class="hidden">
+ <div class="card"><h3>🏆 Classement des studios</h3>
+ <div id="rankingTable"></div>
+</div>
+</section>
+<!-- MARCHE -->
+<section id="tab-market" class="hidden">
+ <div class="card"><h3>🎯 Parts de marché</h3>
+ <div id="segments"></div></div>
+ <div class="card"><h3>⚔️ Attaquer et se défendre</h3>
+ <div id="marketActions"></div><p id="defenseInfo"></p></div>
+ <div class="card"><h3>🏭 Les studios rivaux</h3>
+ <div id="rivalsList"></div></div>
+</section>
+<!-- BUREAU & OUTILS -->
+<section id="tab-office" class="hidden">
+ <div id="upgrades"></div>
+ <div class="card"><h3>📚 Formation du héros</h3>
+ <div class="actgrid">
+ <button onclick="train('dev')">💻 Formation Dev (+2) — 150 $</button>
+ <button onclick="train('dev','coins')">💻 Formation Dev (+2) — 12 🪙</button>
+ <button onclick="train('design')">🎨 Formation Design (+2) — 150 $</button>
+ <button onclick="train('design','coins')">🎨 Formation Design (+2) — 12 🪙</button>
+ </div><p id="mySkills"></p></div>
+ <div class="card"><h3>💾 Partie</h3><p class="small" id="saveStatus">💾 Sauvegarde automatique : OK — ta partie est gardée.</p>
+ <button class="danger" onclick="resetGame()">🗑️ Recommencer une nouvelle partie</button></div>
+</section>
+<!-- AIDE -->
+<section id="tab-help" class="hidden"><div class="card">
+<h3>Comment jouer ? C'est simple :</h3>
+<div id="helpScreen"></div>
+</div></section>
+<!-- JOURNAL -->
+<section id="tab-journal" class="hidden"><div class="card">
+<h3>📖 Journal du studio</h3>
+<p class="small">Tout ce qui arrive à ton studio, jour par jour.</p>
+<div id="journalScreen"></div>
+</div></section>
+</main>
+</div>
+</div>
+<div id="toast" class="toast hidden"></div>
+<div id="dayBanner" class="hidden"></div>
+<nav class="bottomnav">
+ <button class="bnavbtn on" data-tab="sites" onclick="showTab('sites')"><span class="ic">🏠</span>Accueil</button>
+ <button class="bnavbtn" data-tab="create" onclick="showTab('create')"><span class="ic">➕</span>Créer</button>
+ <button class="bnavbtn" data-tab="team" onclick="showTab('team')"><span class="ic">👥</span>Équipe</button>
+ <button class="bnavbtn" data-tab="contracts" onclick="showTab('contracts')"><span class="ic">📋</span>Contrats</button>
+ <button class="bnavbtn" data-tab="market" onclick="showTab('market')"><span class="ic">🎯</span>Marché</button>
+ <button class="bnavbtn" onclick="toggleMenu()"><span class="ic">☰</span>Menu</button>
+</nav>
+<div class="menuBack hidden" id="menuBack" onclick="closeMenu()"></div>
+<script>
+/* --- Avatars dessinés (SVG original, 100 % hors ligne) --- */
+const SKIN=['#ffe0bd','#f1c27d','#e0ac69','#c68642','#8d5524'];
+const HAIR=['#222222','#5b3a1e','#b06a2a','#e8c66a','#d94f30','#4a6fa5','#7a4dff'];
+const SHIRT=['#e05252','#3f8fd2','#58a83c','#e9a820','#8a63d2','#e67e22'];
+const AVBG=[['#a5b4fc','#e0e7ff'],['#f9a8d4','#fce7f3'],['#6ee7b7','#d1fae5'],['#fcd34d','#fef3c7'],['#fca5a5','#fee2e2'],['#93c5fd','#dbeafe'],['#c4b5fd','#ede9fe']];
+function seedNum(seed){let s=0;for(let c of String(seed))s=(s*31+c.charCodeAt(0))>>>0;return s}
+function pick(seed,arr,off){return arr[(seedNum(seed)+off)%arr.length]}
+function avatar(seed){
+ const skin=pick(seed,SKIN,1),hair=pick(seed,HAIR,3),shirt=pick(seed,SHIRT,5),bg=pick(seed,AVBG,7),st=seedNum(seed)%5;
+ const gid='avbg-'+String(seed).replace(/[^a-z0-9]/gi,'');
+ let hairSvg= st==0?`<path d="M22 40 Q20 12 50 12 Q80 12 78 40 L70 34 Q68 22 50 22 Q32 22 30 34 Z" fill="${hair}"/><path d="M48 14 Q54 4 62 10 Q56 12 52 16 Z" fill="${hair}"/>`
+ : st==1?`<circle cx="50" cy="20" r="13" fill="${hair}"/><circle cx="35" cy="26" r="8" fill="${hair}"/><circle cx="65" cy="26" r="8" fill="${hair}"/><circle cx="50" cy="11" r="9" fill="${hair}"/>`
+ : st==2?`<path d="M22 40 Q22 12 50 12 Q78 12 78 40 L68 36 Q66 22 50 22 Q34 22 32 36 Z" fill="${hair}"/><path d="M22 36 Q14 56 18 82 L32 82 Q27 56 31 36 Z" fill="${hair}"/><path d="M78 36 Q86 56 82 82 L68 82 Q73 56 69 36 Z" fill="${hair}"/>`
+ : st==3?`<path d="M22 40 Q20 12 50 12 Q80 12 78 40 L70 34 Q68 22 50 22 Q32 22 30 34 Z" fill="${hair}"/><circle cx="25" cy="42" r="11" fill="${hair}"/><circle cx="75" cy="42" r="11" fill="${hair}"/>`
+ :`<circle cx="50" cy="26" r="21" fill="${hair}"/><circle cx="29" cy="38" r="10" fill="${hair}"/><circle cx="71" cy="38" r="10" fill="${hair}"/><circle cx="50" cy="8" r="11" fill="${hair}"/><circle cx="36" cy="16" r="9" fill="${hair}"/><circle cx="64" cy="16" r="9" fill="${hair}"/>`;
+ return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${bg[0]}"/><stop offset="1" stop-color="${bg[1]}"/></linearGradient></defs><rect width="100" height="100" fill="url(#${gid})"/><path d="M12 100 Q18 66 50 66 Q82 66 88 100 Z" fill="${shirt}"/><path d="M43 67 L50 77 L57 67 L53 64 L47 64 Z" fill="#ffffff" opacity=".92"/><circle cx="50" cy="82" r="1.8" fill="#ffffff" opacity=".7"/><circle cx="50" cy="91" r="1.8" fill="#ffffff" opacity=".7"/><circle cx="50" cy="46" r="27" fill="${skin}"/>${hairSvg}<ellipse cx="40" cy="46" rx="4.5" ry="5.5" fill="#ffffff"/><ellipse cx="60" cy="46" rx="4.5" ry="5.5" fill="#ffffff"/><circle cx="40" cy="47" r="2.6" fill="#1f2937"/><circle cx="60" cy="47" r="2.6" fill="#1f2937"/><circle cx="41" cy="45.5" r="1" fill="#ffffff"/><circle cx="61" cy="45.5" r="1" fill="#ffffff"/><path d="M35 38 Q40 35.5 45 38" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M55 38 Q60 35.5 65 38" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M49 52 Q51 55 49 56" stroke="#d99a6c" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M41 60 Q50 68 59 60" stroke="#7c2d12" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="31" cy="56" r="4.5" fill="#ff9db0" opacity=".55"/><circle cx="69" cy="56" r="4.5" fill="#ff9db0" opacity=".55"/></svg>`;
+}
+function workerAt(x,y,seed,scale){
+ const skin=pick(seed,SKIN,1),hair=pick(seed,HAIR,3),shirt=pick(seed,SHIRT,5),st=seedNum(seed)%5;
+ let hairSvg= st==0?`<path d="M-24 2 Q-22 -20 0 -20 Q22 -20 24 2 L13 -2 Q11 -13 0 -13 Q-11 -13 -13 -2 Z" fill="${hair}"/>`
+ : st==1?`<circle cx="0" cy="-14" r="11" fill="${hair}"/><circle cx="-14" cy="-8" r="7" fill="${hair}"/><circle cx="14" cy="-8" r="7" fill="${hair}"/>`
+ : st==2?`<path d="M-24 2 Q-22 -20 0 -20 Q22 -20 24 2 L13 -2 Q11 -13 0 -13 Q-11 -13 -13 -2 Z" fill="${hair}"/><path d="M-24 0 Q-30 20 -26 34 L-16 34 Q-20 18 -14 0 Z" fill="${hair}"/><path d="M24 0 Q30 20 26 34 L16 34 Q20 18 14 0 Z" fill="${hair}"/>`
+ : st==3?`<path d="M-24 2 Q-22 -20 0 -20 Q22 -20 24 2 L13 -2 Q11 -13 0 -13 Q-11 -13 -13 -2 Z" fill="${hair}"/><circle cx="-22" cy="4" r="9" fill="${hair}"/><circle cx="22" cy="4" r="9" fill="${hair}"/>`
+ :`<circle cx="0" cy="-12" r="19" fill="${hair}"/><circle cx="-18" cy="0" r="8" fill="${hair}"/><circle cx="18" cy="0" r="8" fill="${hair}"/>`;
+ return `<g transform="translate(${x} ${y}) scale(${scale})">
+ <rect x="-26" y="34" width="52" height="34" rx="5" fill="${shirt}"/>
+ <path d="M-7 34 L0 41 L7 34 L4 32 L-4 32 Z" fill="#ffffff" opacity=".9"/>
+ <circle cx="0" cy="8" r="24" fill="${skin}"/>
+ ${hairSvg}
+ <circle cx="-8" cy="8" r="3" fill="#1f2937"/><circle cx="8" cy="8" r="3" fill="#1f2937"/>
+ <circle cx="-7" cy="7" r="1" fill="#ffffff"/><circle cx="9" cy="7" r="1" fill="#ffffff"/>
+ <path d="M-7 19 Q0 25 7 19" stroke="#7c2d12" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+ <rect x="-34" y="62" width="68" height="10" rx="3" fill="#5b7a8c"/>
+ <rect x="-20" y="40" width="40" height="26" rx="3" fill="#33424f"/><rect x="-16" y="44" width="32" height="17" fill="#9fd8ef"/></g>`;
+}
+function officeSVG(){
+ const bgc=['#bfe6ea','#cfeee4','#d8ecfa','#fde8f1','#e9e2fa'];
+ const bg=bgc[G.office]||bgc[0];
+ const seats=OFFICES[G.office].max+1;
+ const people=[{seed:'hero-darkman',name:'Toi'}].concat(G.team.map(e=>({seed:e.seed,name:e.name})));
+ let workers='';
+ for(let i=0;i<seats;i++){
+   const xx=seats==1?380:70+i*(620/(seats-1));
+   if(people[i]) workers+=workerAt(xx,96,people[i].seed,0.92)+`<text x="${xx}" y="212" text-anchor="middle" font-size="13" font-weight="bold" fill="#28505f">${people[i].name}</text>`;
+   else workers+=`<g transform="translate(${xx} 116)"><rect x="-26" y="28" width="52" height="13" rx="5" fill="#a9bfc9"/><rect x="-20" y="40" width="40" height="22" rx="3" fill="#c3d3da"/><text x="0" y="98" text-anchor="middle" font-size="11" fill="#6d8894">place libre</text></g>`;
+ }
+ const sub=G.sites&&G.sites.length?('Tes sites en ligne : '+G.sites.length):(G.active?('Projet en cours : '+G.active.t):'Lance ton premier site !');
+ return `<svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg">
+ <rect width="760" height="230" fill="${bg}"/>
+ <rect y="182" width="760" height="48" fill="#9fc6cf"/>
+ <text x="26" y="42" font-size="20" font-weight="bold" fill="#174a5e">${OFFICES[G.office].name}</text>
+ <text x="26" y="64" font-size="13" fill="#38616f">Jour ${G.day} • ${sub}</text>
+ <g><rect x="586" y="20" width="150" height="54" rx="8" fill="#ffffff" opacity=".85"/><text x="661" y="43" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b7fc1">TON STUDIO</text><text x="661" y="61" text-anchor="middle" font-size="11" fill="#5c707b">Niveau ${level()} • ${people.length} personne(s)</text></g>
+ <g><rect x="30" y="150" width="22" height="18" fill="#c46a35"/><path d="M41 150 Q26 128 16 134 Q32 142 38 148 Q40 126 52 120 Q56 140 45 149 Q57 138 64 144 Q50 154 41 150Z" fill="#2e9e5b"/></g>
+ ${workers}</svg>`;
+}
+function sparkline(hist,color){
+ let h=(hist&&hist.length?hist:[0]);let max=Math.max(...h,10);
+ let pts=h.map((v,i)=>`${(i/(Math.max(1,h.length-1)))*100},${30-(v/max)*26}`).join(' ');
+ if(h.length<2)pts=`0,${30-(h[0]/max)*26} 100,${30-(h[0]/max)*26}`;
+ return `<svg class="spark" viewBox="0 0 100 34" width="100%" height="34" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"/><line x1="0" y1="31" x2="100" y2="31" stroke="#dbe6eb" stroke-dasharray="3 3"/></svg>`;
+}
+function barsChartSVG(items,color){
+ let max=Math.max(...items.map(i=>i.v),1);
+ let bw=Math.floor(560/Math.max(1,items.length));
+ return `<svg viewBox="0 0 600 170" width="100%" height="170"><line x1="34" y1="140" x2="590" y2="140" stroke="#cfdde4"/>${items.map((it,i)=>{let h=Math.round(it.v/max*118);let x=44+i*bw;return `<rect x="${x}" y="${140-h}" width="${Math.max(10,bw-16)}" height="${h}" rx="3" fill="${color}"/><text x="${x+Math.max(5,(bw-16)/2)}" y="156" text-anchor="middle" font-size="10" fill="#66777f">${it.label}</text>`}).join('')}</svg>`;
+}
+
+/* --- Données du jeu --- */
+const CONTRACT_TYPES=[
+ {t:"Site vitrine",emoji:"🌐",min:1,work:20,pay:345,rep:10,days:5},
+ {t:"Blog pro",emoji:"✍️",min:1,work:30,pay:500,rep:14,days:6},
+ {t:"Site restaurant",emoji:"🍽️",min:2,work:45,pay:815,rep:22,days:7},
+ {t:"Boutique en ligne",emoji:"🛒",min:3,work:70,pay:1400,rep:38,days:9},
+ {t:"Application mobile",emoji:"📱",min:4,work:100,pay:2350,rep:60,days:11},
+ {t:"Plateforme web",emoji:"🚀",min:6,work:150,pay:3900,rep:95,days:13},
+ {t:"Projet grande entreprise",emoji:"🏢",min:8,work:220,pay:6550,rep:150,days:15},
+ {t:"Application IA prestige",emoji:"🤖",min:9,work:300,pay:10900,rep:240,days:18}];
+const CLIENTS=["Boulangerie Soleil","Café Nova","Studio Danse Luna","Boutique Kira","Taxi Rapido","École Horizon","Sport Club Atlas","Maison Flora","Tech Conseil Plus","Ferme Verte"];
+const CANDIDATES=[
+ {name:"Maya",role:"Designer",spec:"Design",lvl:1,power:6,salary:25,seed:"maya1"},
+ {name:"Leo",role:"Développeur",spec:"Dev",lvl:1,power:6,salary:25,seed:"leo2"},
+ {name:"Sofia",role:"Designer",spec:"Design",lvl:2,power:11,salary:48,seed:"sofia3"},
+ {name:"Noah",role:"Développeur",spec:"Dev",lvl:2,power:12,salary:52,seed:"noah4"},
+ {name:"Awa",role:"Marketing",spec:"Marketing",lvl:3,power:16,salary:75,seed:"awa5"},
+ {name:"Kenji",role:"Développeur Senior",spec:"Dev",lvl:4,power:24,salary:120,seed:"kenji6"},
+ {name:"Lina",role:"Designer Senior",spec:"Design",lvl:4,power:23,salary:115,seed:"lina7"},
+ {name:"Omar",role:"Chef de projet",spec:"Gestion",lvl:5,power:32,salary:170,seed:"omar8"}];
+const FREELANCERS=[
+ {name:"Nina",role:"Designer",spec:"Design",lvl:2,power:11,salary:45,seed:"free-nina"},
+ {name:"Karim",role:"Développeur",spec:"Dev",lvl:3,power:15,salary:65,seed:"free-karim"},
+ {name:"Zoé",role:"Rédactrice",spec:"Marketing",lvl:1,power:7,salary:30,seed:"free-zoe"},
+ {name:"Hugo",role:"Développeur",spec:"Dev",lvl:2,power:12,salary:50,seed:"free-hugo"},
+ {name:"Inès",role:"Designer",spec:"Design",lvl:3,power:16,salary:70,seed:"free-ines"},
+ {name:"Théo",role:"Community manager",spec:"Marketing",lvl:2,power:10,salary:40,seed:"free-theo"}];
+const HOSTINGS=[
+ {name:"Mutualisé",cap:300,prot:0,cost:0,perDay:0},
+ {name:"Standard",cap:800,prot:0,cost:200,perDay:15},
+ {name:"Pro",cap:2000,prot:1,cost:500,perDay:30},
+ {name:"Rapide",cap:5000,prot:1,cost:900,perDay:50},
+ {name:"Dédié",cap:0,prot:2,cost:1500,perDay:80}];
+const CMS={
+ custom:{name:"Sur mesure",cost:0},
+ engine:{name:"Moteur",cost:300},
+ builder:{name:"Constructeur",cost:150}};
+const ZONES={
+ free:{cost:0,perDay:0},
+ fr:{cost:10,perDay:2},
+ com:{cost:15,perDay:3},
+ net:{cost:12,perDay:2},
+ org:{cost:10,perDay:2}};
+const ADVERTISERS=["Les Délices de Marie","AutoPlus Garage","Voyages Horizon","Gym Forme+","Librairie Page d'Or","Café des Artistes","Jardins & Co","TechNova","Mode Élégance","Resto Le Petit Chef"];
+function genAdOffer(){return{id:Date.now()+Math.random(),name:ADVERTISERS[Math.floor(Math.random()*ADVERTISERS.length)],rate:30+Math.floor(Math.random()*31)}}
+function genAdOffers(){return[genAdOffer(),genAdOffer(),genAdOffer()]}
+const TRAFFIC_SOURCES=[
+ {name:"Trafic d'arbitrage",bonus:[150,250],days:[2,3]},
+ {name:"Moteurs de recherche",bonus:[250,400],days:[2,4]},
+ {name:"Réseaux sociaux",bonus:[100,200],days:[3,4]},
+ {name:"Trafic premium",bonus:[400,600],days:[2,3]}];
+function genTrafficOffer(){let s=TRAFFIC_SOURCES[Math.floor(Math.random()*TRAFFIC_SOURCES.length)];
+ let bonus=Math.round((s.bonus[0]+Math.random()*(s.bonus[1]-s.bonus[0]))/10)*10;
+ let days=s.days[0]+Math.floor(Math.random()*(s.days[1]-s.days[0]+1));
+ return{id:Date.now()+Math.random(),name:s.name,bonus:bonus,days:days,cost:Math.round(bonus*days/2.5)}}
+function genTrafficOffers(){return[genTrafficOffer(),genTrafficOffer(),genTrafficOffer()]}
+const OFFICES=[
+ {name:"Ta chambre",max:1,cost:0},{name:"Petit bureau",max:3,cost:600},
+ {name:"Bureau moderne",max:5,cost:1800},{name:"Étage créatif",max:7,cost:4500},
+ {name:"Tour du studio",max:9,cost:10000}];
+const TOOLS=[
+ {name:"PC de base",bonus:0,cost:0},{name:"PC puissant",bonus:3,cost:400},
+ {name:"Suite design pro",bonus:6,cost:1100},{name:"Serveurs rapides",bonus:10,cost:2800},
+ {name:"Studio IA complet",bonus:16,cost:6500}];
+const SEGMENTS=[
+ {id:"blogs",name:"Blogs & récits",emoji:"📝",cost:300,rival:320,color:"#ab47bc",c2:"#ec407a",ideas:["Plume du Matin","Cahier Sauvage","Mots en Voyage","Le Petit Atelier d'Écriture"]},
+ {id:"shops",name:"Boutiques en ligne",emoji:"🛍️",cost:550,rival:460,color:"#ef5350",c2:"#fb8c00",ideas:["Panier Doré","Rue des Trouvailles","Comptoir des Saisons","La Boîte à Merveilles"]},
+ {id:"games",name:"Jeux navigateur",emoji:"🎲",cost:750,rival:620,color:"#42a5f5",c2:"#7e57c2",ideas:["Dés & Dragons de Pixels","Île aux Énigmes","Course des Comètes","Donjon Sucré"]},
+ {id:"news",name:"Infos & actualités",emoji:"🗞️",cost:650,rival:540,color:"#ffa726",c2:"#ef5350",ideas:["Le Signal du Jour","Radio des Rues","Chronique Claire","L'Œil du Quartier"]},
+ {id:"services",name:"Services utiles",emoji:"🧭",cost:900,rival:720,color:"#66bb6a",c2:"#26a69a",ideas:["Boussole Quotidienne","Coup de Main Express","Agenda des Voisins","Le Guide Malin"]},
+ {id:"mode",name:"Mode & beauté",emoji:"👗",cost:650,rival:480,color:"#ec407a",c2:"#f06292",ideas:["L'Atelier du Style","Mode & Moi","Le Dressing Chic","Tendances du Jour"]},
+ {id:"musique",name:"Musique",emoji:"🎵",cost:600,rival:450,color:"#7e57c2",c2:"#9575cd",ideas:["La Scène Sonore","Notes & Rythmes","Le Studio du Son","Mélodies du Monde"]},
+ {id:"sport",name:"Sport",emoji:"⚽",cost:700,rival:560,color:"#26a69a",c2:"#4db6ac",ideas:["Le Terrain de Jeu","Sport & Passion","L'Esprit d'Équipe","Match du Jour"]},
+ {id:"science",name:"Science",emoji:"🔬",cost:800,rival:600,color:"#5c6bc0",c2:"#7986cb",ideas:["Le Labo Curieux","Science pour Tous","L'Œil Scientifique","Questions & Réponses"]},
+ {id:"humour",name:"Humour",emoji:"😂",cost:500,rival:380,color:"#00acc1",c2:"#26c6da",ideas:["Le Coin des Blagues","Rires & Sourires","L'Humour du Jour","La Bande Rigolote"]}];
+const SITE_TYPES=[
+ {id:"perso",name:"Site personnel",icon:"👤",desc:"Simple et rapide à lancer"},
+ {id:"catalogue",name:"Catalogue",icon:"🗂️",desc:"Des pages de produits ou d'offres"},
+ {id:"contenu",name:"Site de contenu",icon:"📰",desc:"Articles, guides et histoires"},
+ {id:"actus",name:"Site d'actualités",icon:"📡",desc:"Des nouvelles fraîches chaque jour"},
+ {id:"portail",name:"Portail",icon:"🚪",desc:"Beaucoup de rubriques au même endroit"},
+ {id:"magazine",name:"Magazine",icon:"📖",desc:"Un magazine en ligne avec des rubriques"},
+ {id:"bloginfo",name:"Blog d'infos",icon:"✍️",desc:"Des infos et des conseils réguliers"},
+ {id:"forum",name:"Forum",icon:"💬",desc:"Une communauté qui discute"},
+ {id:"social",name:"Réseau social",icon:"👥",desc:"Des profils et des partages"},
+ {id:"fichiers",name:"Site de fichiers",icon:"📁",desc:"Des fichiers à télécharger"},
+ {id:"encyclo",name:"Encyclopédie",icon:"📚",desc:"Des fiches pour tout apprendre"}];
+const RIVAL_DEF=[
+ {name:"Studio Brume",score:220},{name:"Atelier Caramel",score:310},
+ {name:"Pixel Rivière",score:410},{name:"Forge du Sud",score:520},
+ {name:"Orbite Verte",score:680},{name:"Le Phare Web",score:850}];
+const TASK_DEF=[
+ {id:"design",name:"🎨 Design",cls:"red"},
+ {id:"layout",name:"🧩 Mise en page",cls:"blue"},
+ {id:"code",name:"💻 Programmation",cls:"purple"},
+ {id:"content",name:"📝 Contenu",cls:""},
+ {id:"seo",name:"🔍 SEO",cls:"share"},
+ {id:"social",name:"👥 Réseaux sociaux",cls:"pink"},
+ {id:"mkt",name:"📣 Marketing direct",cls:"pop"}];
+
+/* --- État de la partie --- */
+let G, selectedSiteId=null, selSeg='blogs', selType='contenu', createStep=1;
+function freshRivals(){return RIVAL_DEF.map(r=>({...r}))}
+function fresh(){return{day:1,money:750000000,rep:0,dev:6,design:4,team:[],active:null,offers:genOffers(1),office:0,tool:0,done:0,won:false,coins:1000000,
+ sites:[],rivals:freshRivals(),defense:0,loyalty:0,cdMarket:0,cdAggress:0,log:[],siteIncomeTotal:0,visitorsTotal:0,visitorHist:[],adOffers:genAdOffers(),trafficOffers:genTrafficOffers()}}
+function defaultTasks(q){return{design:Math.min(90,Math.round(q*0.9)),layout:Math.min(85,Math.round(q*0.8)),code:Math.min(88,Math.round(q*0.85)),content:Math.min(80,Math.round(q*0.75)),seo:Math.min(70,Math.round(q*0.55)),social:Math.min(65,Math.round(q*0.5)),mkt:Math.min(70,Math.round(q*0.6))}}
+function ensure(){
+ if(!Array.isArray(G.sites))G.sites=[];
+ if(!Array.isArray(G.rivals)||!G.rivals.length)G.rivals=freshRivals();
+ if(typeof G.defense!=="number")G.defense=0;
+ if(typeof G.loyalty!=="number")G.loyalty=0;
+ if(typeof G.cdMarket!=="number")G.cdMarket=0;
+ if(typeof G.cdAggress!=="number")G.cdAggress=0;
+ if(typeof G.coins!=="number")G.coins=0;
+ if(!Array.isArray(G.adOffers))G.adOffers=genAdOffers();
+ if(!Array.isArray(G.trafficOffers))G.trafficOffers=genTrafficOffers();
+ if(!Array.isArray(G.log))G.log=[];
+ G.log=G.log.map(e=>{if(typeof e==='string'){let m=e.match(/^Jour (\d+) — (.*)$/);return m?{d:+m[1],t:m[2],c:'info'}:{d:G.day,t:e,c:'info'}}if(e&&typeof e==='object'&&typeof e.t==='string')return{d:typeof e.d==='number'?e.d:G.day,t:e.t,c:['contrat','site','rival','equipe','argent','marche','defense','studio','info'].includes(e.c)?e.c:'info'};return{d:G.day,t:String(e),c:'info'}});
+ if(typeof G.siteIncomeTotal!=="number")G.siteIncomeTotal=0;
+ if(typeof G.visitorsTotal!=="number")G.visitorsTotal=0;
+ if(!Array.isArray(G.visitorHist))G.visitorHist=[];
+ G.sites.forEach(s=>{
+  if(typeof s.visitors!=="number")s.visitors=0;
+  if(!SEGMENTS.find(x=>x.id==s.seg))s.seg='blogs';
+  if(typeof s.popularity!=="number")s.popularity=12;
+  if(typeof s.version!=="number")s.version=1;if(!s.type)s.type="Site de contenu";
+  if(!Array.isArray(s.hist)||!s.hist.length)s.hist=[s.visitors];
+  if(!s.tasks||typeof s.tasks!=="object")s.tasks=defaultTasks(s.quality||30);
+  TASK_DEF.forEach(t=>{if(typeof s.tasks[t.id]!=="number")s.tasks[t.id]=Math.min(90,Math.round((s.quality||30)*0.7))});
+  if(typeof s.hosting!=="number"){s.hosting=s.quality>=60?4:2;s.hostingV=2}
+  else if(typeof s.hostingV!=="number"){s.hosting=[0,2,4][s.hosting]||0;s.hostingV=2}
+  if(!s.assign||typeof s.assign!=="object")s.assign={};
+  if(s.traffic&&typeof s.traffic.days!=="number")s.traffic=null;
+  if(!s.zone)s.zone='.free';
+  if(!s.cms||!CMS[s.cms])s.cms='custom';
+  if(typeof s.ads==="number"){let n=s.ads;s.ads=[];for(let i=0;i<n;i++)s.ads.push({id:Date.now()+i+Math.random(),name:ADVERTISERS[i%ADVERTISERS.length],rate:20,on:true})}
+  if(!Array.isArray(s.ads))s.ads=[];
+ });
+ G.team.forEach(e=>{if(typeof e.energy!=="number")e.energy=82+(seedNum(e.seed)%16);
+  if(typeof e.loyalty!=="number")e.loyalty=loyaltyOf(e);
+  if(typeof e.xp!=="number")e.xp=0;
+  if(e.temp&&typeof e.daysLeft!=="number")e.daysLeft=3;});
+ if(typeof G.xpHero!=="number")G.xpHero=0;
+ return G}
+function level(){return Math.min(10,1+Math.floor(G.rep/110))}
+function power(){let p=G.dev+G.design+TOOLS[G.tool].bonus;G.team.forEach(e=>p+=e.power);return p}
+function salaries(){return G.team.reduce((a,e)=>a+e.salary,0)}
+function permCount(){return G.team.filter(e=>!e.temp).length}
+function loyaltyOf(c){return typeof c.loyalty==="number"?c.loyalty:(60+(seedNum(c.seed)%30))}
+function hostingOf(s){return HOSTINGS[typeof s.hosting==="number"?s.hosting:0]}
+function hostingCost(){return G.sites.reduce((a,s)=>a+hostingOf(s).perDay,0)}
+function zoneOf(s){return ZONES[((s.zone||'.free').slice(1))]||ZONES.free}
+function domainCost(){return G.sites.reduce((a,s)=>a+zoneOf(s).perDay,0)}
+function genOffers(lv){let a=[];for(let i=0;i<4;i++){let pool=CONTRACT_TYPES.filter(c=>c.min<=lv+1);let b=pool[Math.floor(Math.random()*pool.length)];a.push({...b,client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()})}return a}
+
+/* --- Sauvegarde (ne plante jamais : localStorage, puis sessionStorage, puis mémoire) --- */
+let storageOK=true,memSave=null;
+function storageWorks(){try{localStorage.setItem('__wst_test','1');localStorage.removeItem('__wst_test');return true}catch(e){return false}}
+function save(){try{localStorage.setItem('webStudioTycoonV1',JSON.stringify(G));storageOK=true}catch(e){try{sessionStorage.setItem('webStudioTycoonV1',JSON.stringify(G));storageOK=true}catch(e2){memSave=JSON.stringify(G);storageOK=false}}updateSaveStatus()}
+function updateSaveStatus(){let el=document.getElementById('saveStatus');if(!el)return;el.textContent=storageOK?'💾 Sauvegarde automatique : OK — ta partie est gardée.':'⚠️ Sauvegarde bloquée par ton navigateur : le jeu marche, mais ta partie ne sera gardée que tant que la page reste ouverte. Ouvre le fichier dans Safari pour la garder.'}
+function load(){try{let x=null;try{x=localStorage.getItem('webStudioTycoonV1')}catch(e){}if(!x){try{x=sessionStorage.getItem('webStudioTycoonV1')}catch(e){}}G=x?JSON.parse(x):fresh()}catch(e){G=fresh()}ensure()}
+function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),3200)}
+const LOG_CATS={contrat:'💼',site:'🌐',rival:'⚔️',equipe:'👥',argent:'💰',marche:'📣',defense:'🛡️',studio:'🏢',info:'🗒️'};
+function addLog(txt,cat){G.log.unshift({d:G.day,t:txt,c:cat||'info'});G.log=G.log.slice(0,60)}
+function renderJournal(){let box=document.getElementById('journalScreen');if(!box)return;
+ if(!G.log.length){box.innerHTML='<p class="small">Ton journal est encore vide — lance un site ou prends un contrat, et chaque journée de ton studio s\'écrira ici.</p>';return}
+ let days=[];G.log.forEach(e=>{let g=days.find(x=>x.d===e.d);if(!g){g={d:e.d,items:[]};days.push(g)}g.items.push(e)});
+ box.innerHTML='<p class="small">'+G.log.length+' entrée(s) — la plus récente en haut.</p>'+days.map(g=>'<div class="jday">📅 Jour '+g.d+'</div>'+g.items.map(e=>'<div class="jline"><span class="jico">'+(LOG_CATS[e.c]||'🗒️')+'</span><span>'+e.t+'</span></div>').join('')).join('')}
+
+/* --- Navigation --- */
+const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer un site",siteDetail:"🔎 Détail du site",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",ranking:"🏆 Classement",market:"🎯 Marché",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio"};
+function showTab(id,btn){
+ ['sites','create','siteDetail','team','stats','contracts','ranking','market','office','help','journal'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
+ document.querySelectorAll('#mainNav .navbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
+ document.querySelectorAll('.bnavbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
+ document.getElementById('screenTitle').textContent=TITLES[id]||'Web Studio Tycoon';
+ closeMenu();
+ if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='journal')renderJournal();
+ window.scrollTo(0,0)}
+function toggleMenu(){document.querySelector('.side').classList.toggle('open');document.getElementById('menuBack').classList.toggle('hidden')}
+function closeMenu(){let s=document.querySelector('.side');if(s)s.classList.remove('open');let m=document.getElementById('menuBack');if(m)m.classList.add('hidden')}
+
+/* --- Calculs : visiteurs, revenus, parts de marché, compétences --- */
+function segOf(id){return SEGMENTS.find(s=>s.id==id)||SEGMENTS[0]}
+function typeOf(id){return SITE_TYPES.find(t=>t.id==id)}
+function siteVisitors(s){let cap=hostingOf(s).cap;let v=Math.round(s.quality*s.popularity/2);if(cap>0)v=Math.min(v,cap);return v+(s.traffic?s.traffic.bonus:0)}
+function siteRevenue(s){let v=siteVisitors(s);let adRev=(Array.isArray(s.ads)?s.ads:[]).filter(a=>a.on).reduce((t,a)=>t+Math.round(v/1000*a.rate),0);return Math.round(v*0.05)+adRev}
+function sponsorIncome(){return Math.floor(G.rep/10)}
+function dailyRevenue(){return G.sites.reduce((a,s)=>a+siteRevenue(s),0)}
+function totalVisitors(){return G.sites.reduce((a,s)=>a+siteVisitors(s),0)}
+function rivalFactor(){let avg=G.rivals.reduce((a,r)=>a+r.score,0)/Math.max(1,G.rivals.length);return Math.min(2.2,Math.max(.7,avg/480))}
+function segPower(id){return G.sites.filter(s=>s.seg==id).reduce((a,s)=>a+s.quality*1.5+s.popularity+siteVisitors(s)/40,0)}
+function segShare(id){let p=segPower(id);if(p<=0)return 0;let r=segOf(id).rival*rivalFactor();return Math.round(1000*p/(p+r))/10}
+function totalShare(){return SEGMENTS.reduce((a,s)=>a+segShare(s.id),0)}
+function playerScore(){return Math.round(G.rep+G.done*25+totalVisitors()/10+totalShare()*4+level()*50+G.sites.length*40)}
+function talentSkills(c){
+ let base=c.lvl*4+Math.round(c.power/2);
+ let d={design:base,code:base,layout:base,mkt:base};
+ if(c.spec=='Design'){d.design+=14;d.layout+=7}
+ if(c.spec=='Dev'){d.code+=14;d.layout+=5}
+ if(c.spec=='Marketing'){d.mkt+=15;d.design+=4}
+ if(c.spec=='Gestion'){d.mkt+=8;d.layout+=8;d.code+=4}
+ let v=n=>Math.max(2,Math.min(30,n));
+ return{design:v(d.design),code:v(d.code),layout:v(d.layout),mkt:v(d.mkt)}}
+function talentEnergy(c){return typeof c.energy==="number"?c.energy:(84+(seedNum(c.seed)%15))}
+
+/* --- Création et gestion des sites --- */
+function createSite(segId,name,typeName,zone,hostingIdx,cms){
+ let seg=segOf(segId);
+ let z=ZONES[((zone||'.free').slice(1))]||ZONES.free;
+ let h=(typeof hostingIdx==="number"&&hostingIdx>=0&&hostingIdx<=4)?hostingIdx:0;
+ let c=CMS[cms]||CMS.custom;
+ let total=seg.cost+z.cost+HOSTINGS[h].cost+c.cost;
+ if(G.money<total){toast("💰 Il te faut "+total+" $ pour lancer ce site");return false}
+ G.money-=total;
+ let used=G.sites.map(s=>s.name);
+ let finalName=name||seg.ideas.find(n=>!used.includes(n))||(seg.ideas[0]+" "+(G.sites.length+2));
+ let quality=Math.min(95,Math.round(22+G.dev+G.design+TOOLS[G.tool].bonus+power()/3+Math.random()*12));
+ if(cms=='engine')quality=Math.min(100,quality+15);
+ if(cms=='builder')quality=Math.min(100,quality+5);
+ let s={id:Date.now()+Math.random(),seg:segId,name:finalName,type:typeName||"Site de contenu",quality:quality,popularity:12,ads:[],visitors:0,version:1,hist:[],tasks:defaultTasks(quality),hosting:h,hostingV:2,zone:zone||'.free',cms:cms||'custom',traffic:null,assign:{}};
+ s.visitors=siteVisitors(s);s.hist=[s.visitors];G.sites.push(s);addLog("Nouveau site en ligne : "+finalName+" ("+seg.name+") — lancement payé "+total+" $. Il commence à attirer ses premiers visiteurs.",'site');
+ save();render();toast("🌐 Site lancé : "+finalName+" ! Il rapportera chaque jour.");return true}
+function createSiteFromForm(){
+ let raw=(document.getElementById('domainInput').value||"").trim().toLowerCase();
+ let seg=segOf(selSeg);
+ if(raw&&!/^[a-z0-9-]{3,16}$/.test(raw)){toast("⚠️ Nom de domaine invalide : 3 à 16 caractères, lettres, chiffres et tirets.");return}
+ let ext=(document.getElementById('domainExt')||{}).value||".free";
+ let name=raw?(raw+ext):"";
+ if(name&&G.sites.find(s=>s.name==name)){toast("⚠️ Ce domaine est déjà pris par un de tes sites.");return}
+ let h=parseInt(((document.getElementById('hostingSelect')||{}).value||'0'),10);if(isNaN(h)||h<0||h>4)h=0;
+ let cms=((document.getElementById('cmsSelect')||{}).value||'custom');if(!CMS[cms])cms='custom';
+ if(createSite(selSeg,name,typeOf(selType).name,ext,h,cms)){createStep=1;document.getElementById('domainInput').value="";showTab('sites')}}
+function upgradeSite(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(s.cms=='engine'){toast("🔒 Le moteur de ce site est verrouillé : on ne peut pas améliorer sa qualité manuellement.");return}
+ let cost=180;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ if(s.quality>=100){toast("⭐ Ce site est déjà au maximum de qualité");return}
+ G.money-=cost;s.quality=Math.min(100,s.quality+10);
+ TASK_DEF.forEach(t=>s.tasks[t.id]=Math.min(100,s.tasks[t.id]+7));
+ addLog(s.name+" amélioré : qualité +10 (180 $). Il est plus beau et plus rapide.",'site');save();render();renderSiteDetail();toast("🔧 "+s.name+" : qualité +10")}
+function promoteSite(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ let cost=150;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ let mx=s.cms=='builder'?80:100;
+ if(s.popularity>=mx){toast("⭐ Ce site est déjà au maximum de popularité");return}
+ G.money-=cost;s.popularity=Math.min(mx,s.popularity+12);addLog(s.name+" promu : popularité +12 (150 $). Plus de monde va le découvrir.",'site');save();render();renderSiteDetail();toast("📣 "+s.name+" : popularité +12")}
+function sellAd(id,offerId){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(!Array.isArray(s.ads))s.ads=[];
+ if(s.ads.length>=3){toast("📺 Ce site a déjà ses 3 espaces de pub");return}
+ let o=(G.adOffers||[]).find(x=>x.id==offerId);if(!o){toast("⚠️ Cette offre n'est plus disponible.");return}
+ s.ads.push({id:Date.now()+Math.random(),name:o.name,rate:o.rate,on:true});G.money+=40;addLog("Pub vendue sur "+s.name+" : "+o.name+" ("+o.rate+" $ / 1000 clics, +40 $ tout de suite). Les revenus commencent demain.",'marche');
+ G.adOffers=G.adOffers.filter(x=>x.id!=offerId);G.adOffers.push(genAdOffer());
+ save();render();renderSiteDetail();toast("💸 Pub vendue sur "+s.name+" : "+o.name+" ("+o.rate+" $ / 1000 clics, +40 $ tout de suite)")}
+function toggleAd(id,adId){let s=G.sites.find(x=>x.id==id);if(!s)return;let a=(s.ads||[]).find(x=>x.id==adId);if(!a)return;a.on=!a.on;addLog((a.on?"Pub reprise sur ":"Pub mise en pause sur ")+s.name+" : "+a.name+".",'marche');save();render();renderSiteDetail();toast(a.on?"▶️ Pub reprise : "+a.name:"⏸️ Pub en pause : "+a.name)}
+function removeAd(id,adId){let s=G.sites.find(x=>x.id==id);if(!s)return;let a=(s.ads||[]).find(x=>x.id==adId);s.ads=(s.ads||[]).filter(x=>x.id!=adId);if(a)addLog("Pub retirée de "+s.name+" : "+a.name+". L'espace est libre pour un nouvel annonceur.",'marche');save();render();renderSiteDetail();toast("🗑️ Espace de pub libéré sur "+s.name)}
+function closeSite(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(!confirm("Fermer le site "+s.name+" ? Tu récupères 100 $."))return;
+ G.money+=100;addLog("Site fermé : "+s.name+". Tu récupères 100 $.",'site');G.sites=G.sites.filter(x=>x.id!=id);selectedSiteId=null;save();render();showTab('sites');toast("Site fermé : "+s.name)}
+function openSite(id){selectedSiteId=id;showTab('siteDetail')}
+function workTask(id,taskId){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(s.tasks[taskId]>=100){toast("✅ Cette tâche est déjà terminée");return}
+ let wSeed=((s.assign||{})[taskId])||'hero';
+ if(wSeed=='hero'){let cost=60;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+  G.money-=cost;s.tasks[taskId]=Math.min(100,s.tasks[taskId]+12);
+  s.quality=Math.min(100,s.quality+1);
+  G.xpHero=(G.xpHero||0)+1;let xpMsg='';
+  if(G.xpHero>=4){G.xpHero=0;G.dev+=1;G.design+=1;xpMsg=" • ⭐ Tu gagnes en expérience : Dev +1 et Design +1 !"}
+  save();render();renderSiteDetail();toast("🛠️ Tu as avancé la tâche de +12 sur "+s.name+xpMsg);return}
+ let e=G.team.find(x=>x.seed==wSeed);
+ if(!e){s.assign[taskId]='hero';save();render();renderSiteDetail();toast("⚠️ Ce membre n'est plus dans l'équipe — c'est toi qui reprends la tâche.");return}
+ if((e.energy||0)<15){toast("😴 "+e.name+" est fatigué(e) : son énergie est trop basse. Attends demain.");return}
+ let gain=8+Math.round(e.power/2);e.energy-=15;
+ s.tasks[taskId]=Math.min(100,s.tasks[taskId]+gain);
+ s.quality=Math.min(100,s.quality+1);
+ e.xp=(e.xp||0)+1;let xpMsg='';
+ if(e.xp>=4){e.xp=0;e.power+=1;xpMsg=" • ⭐ "+e.name+" gagne en expérience : +1 puissance !"}
+ save();render();renderSiteDetail();toast("🛠️ "+e.name+" a avancé la tâche de +"+gain+" sur "+s.name+" (-15 ⚡)"+xpMsg)}
+function setTaskWorker(id,taskId,seed){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(!s.assign)s.assign={};s.assign[taskId]=seed;save();renderSiteDetail()}
+function speedTask(id,taskId){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(s.tasks[taskId]>=100){toast("✅ Cette tâche est déjà terminée");return}
+ if((G.coins||0)<15){toast("🪙 Il te faut 15 pièces — termine des contrats ou publie des versions de site.");return}
+ G.coins-=15;s.tasks[taskId]=100;s.quality=Math.min(100,s.quality+1);
+ save();render();renderSiteDetail();toast("⚡ Tâche terminée en un éclair sur "+s.name+" ! (-15 🪙)")}
+function upgradeHosting(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ let cur=typeof s.hosting==="number"?s.hosting:0;
+ if(cur>=4){toast("⭐ Ce site a déjà le meilleur hébergement");return}
+ let nx=HOSTINGS[cur+1];
+ if(G.money<nx.cost){toast("💰 Il te faut "+nx.cost+" $");return}
+ G.money-=nx.cost;s.hosting=cur+1;addLog(s.name+" passe en hébergement "+nx.name+" ("+nx.cost+" $, puis "+nx.perDay+" $ / jour). Plus de visiteurs et plus de protection.",'site');save();render();renderSiteDetail();
+ toast("🏠 "+s.name+" passe en hébergement "+nx.name+" ("+nx.perDay+" $ / jour)")}
+function buyTrafficOffer(id,offerId){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(s.traffic){toast("🚀 "+s.name+" a déjà un pack de trafic actif ("+s.traffic.days+" jour(s) restant(s)).");return}
+ let o=(G.trafficOffers||[]).find(x=>x.id==offerId);if(!o){toast("⚠️ Cette offre n'est plus disponible.");return}
+ if(G.money<o.cost){toast("💰 Il te faut "+o.cost+" $");return}
+ G.money-=o.cost;s.traffic={bonus:o.bonus,days:o.days};addLog("Trafic acheté pour "+s.name+" : "+o.name+" — +"+o.bonus+" visiteurs / jour pendant "+o.days+" jours ("+o.cost+" $).",'marche');
+ G.trafficOffers=G.trafficOffers.filter(x=>x.id!=offerId);G.trafficOffers.push(genTrafficOffer());
+ save();render();renderSiteDetail();
+ toast("🚀 "+o.name+" pour "+s.name+" : +"+o.bonus+" visiteurs / jour pendant "+o.days+" jours !")}
+function tasksAvg(s){return Math.round(TASK_DEF.reduce((a,t)=>a+s.tasks[t.id],0)/TASK_DEF.length)}
+function publishVersion(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
+ if(tasksAvg(s)<100){toast("⚠️ Termine d'abord les 7 tâches à 100 %");return}
+ s.version++;s.quality=Math.min(100,s.quality+5);s.popularity=Math.min(100,s.popularity+8);G.rep+=6;G.coins=(G.coins||0)+5;
+ s.tasks={design:35,layout:30,code:38,content:32,seo:25,social:22,mkt:28};
+ addLog(s.name+" passe en version "+s.version+" : qualité +5, popularité +8, +6 réputation et +5 🪙. Les visiteurs voient la différence.",'site');save();render();renderSiteDetail();toast("🚀 "+s.name+" : version "+s.version+" publiée ! +6 réputation et +5 🪙")}
+
+/* --- Marché : campagnes, attaques, défense --- */
+function campagne(){
+ if(G.cdMarket>0){toast("⏳ Campagne encore en attente : "+G.cdMarket+" jour(s)");return}
+ let cost=250;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ if(!G.sites.length){toast("🌐 Crée d'abord au moins un site (menu Créer un site)");return}
+ G.money-=cost;G.cdMarket=3;G.rep+=5;
+ G.sites.forEach(s=>s.popularity=Math.min(100,s.popularity+8));
+ addLog("Campagne marketing lancée (250 $) : tous tes sites gagnent +8 en popularité, +5 réputation. Tes bannières sont partout sur le web aujourd'hui.",'marche');save();render();toast("📣 Campagne lancée ! Popularité +8 sur tous tes sites, +5 réputation")}
+function offreAgressive(){
+ if(G.cdAggress>0){toast("⏳ Offre agressive encore en attente : "+G.cdAggress+" jour(s)");return}
+ let cost=400;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ let top=[...G.rivals].sort((a,b)=>b.score-a.score)[0];
+ G.money-=cost;G.cdAggress=5;top.score=Math.max(60,top.score-35);G.rep+=8;
+ addLog("Offre agressive contre "+top.name+" (400 $) : le rival perd 35 points au classement, +8 réputation pour toi. Il ne va pas aimer ça…",'rival');save();render();toast("⚔️ "+top.name+" recule ! +8 réputation pour toi")}
+function renforcerSecu(){
+ if(G.defense>=5){toast("🛡️ Défense déjà au maximum");return}
+ let cost=300;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ G.money-=cost;G.defense++;save();render();toast("🛡️ Sécurité renforcée : défense niveau "+G.defense)}
+function fideliser(){
+ if(G.loyalty>=5){toast("❤️ Fidélisation déjà au maximum");return}
+ let cost=220;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ G.money-=cost;G.loyalty++;save();render();toast("❤️ Visiteurs plus fidèles : niveau "+G.loyalty)}
+
+/* --- Contrats, négociation, journée --- */
+function accept(id){if(G.active){toast("⚠️ Termine d'abord ton contrat en cours !");return}let c=G.offers.find(o=>o.id==id);G.active={...c,progress:0,left:c.days};G.offers=G.offers.filter(o=>o.id!=id);if(G.offers.length<3)G.offers.push(...genOffers(level()).slice(0,1));addLog("Nouveau contrat signé avec "+c.client+" : "+c.t+" — "+c.pay+" $ si tu finis en "+c.days+" jours. Au travail !",'contrat');save();render();toast("✅ Contrat accepté : "+c.t)}
+function negoChance(){return Math.min(90,55+Math.floor(G.rep/25))}
+function negotiateOffer(id){
+ let o=G.offers.find(x=>x.id==id);if(!o)return;
+ if(o.negotiated){toast("💬 Tu as déjà négocié ce contrat.");return}
+ if(G.active){toast("⚠️ Termine d'abord ton contrat en cours !");return}
+ if(Math.random()*100<negoChance()){
+  let bonus=25+Math.floor(Math.random()*16);
+  o.pay=Math.round(o.pay*(1+bonus/100));o.negotiated=true;addLog("Négociation réussie avec "+o.client+" : +"+bonus+" % → "+o.pay+" $ pour « "+o.t+" ». Bien joué !",'contrat');
+  save();render();toast("💬 Négociation réussie ! +"+bonus+" % → "+o.pay+" $ pour ce contrat.");
+ }else{
+  G.offers=G.offers.filter(x=>x.id!=id);
+  if(G.offers.length<3)G.offers.push(...genOffers(level()).slice(0,1));
+  addLog(o.client+" a refusé de négocier et a retiré son offre « "+o.t+" ». Tant pis, une autre arrivera.",'contrat');save();render();toast("😤 Le client a refusé de négocier et a retiré son offre.");
+ }
+}
+function tickSites(){
+ let income=0;
+ G.sites.forEach(s=>{
+  if(s.traffic){s.traffic.days--;if(s.traffic.days<=0){s.traffic=null;addLog("Le pack de trafic de "+s.name+" est terminé : le boost de visiteurs s'arrête aujourd'hui.",'marche')}}
+  let growth=s.quality>=50?2:(s.quality>=30?1:0.5);
+  growth+=G.loyalty*0.4; growth-=s.ads.length*0.3;
+  let popMax=s.cms=='builder'?80:100;
+  s.popularity=Math.max(5,Math.min(popMax,Math.round((s.popularity+growth)*10)/10));
+  if(s.cms=='builder')s.quality=Math.min(100,s.quality+1);
+  s.visitors=siteVisitors(s);s.hist.push(s.visitors);s.hist=s.hist.slice(-8); income+=siteRevenue(s);});
+ G.money+=income;G.siteIncomeTotal+=income;G.visitorsTotal+=totalVisitors();
+ G.visitorHist.push(totalVisitors());G.visitorHist=G.visitorHist.slice(-12);
+ if(G.sites.length){let top=G.sites.slice().sort((a,b)=>siteVisitors(b)-siteVisitors(a))[0];addLog("Bilan du jour : tes sites ont rapporté +"+income+" $ avec "+totalVisitors()+" visiteurs. Le plus visité : "+top.name+" ("+siteVisitors(top)+" visiteurs).",'argent');}
+ return income}
+function tickRivals(){
+ G.rivals.forEach(r=>{r.score+=4+Math.floor(Math.random()*11)});
+ if(G.cdMarket>0)G.cdMarket--; if(G.cdAggress>0)G.cdAggress--;
+ if(G.sites.length&&Math.random()<.22){
+  let r=G.rivals[Math.floor(Math.random()*G.rivals.length)];
+  if(G.defense>=2||(G.defense==1&&Math.random()<.5)){
+   addLog(r.name+" a tenté une contre-attaque, mais ta défense l'a bloquée. Ta défense perd 1 niveau — pense à la renforcer.",'defense');G.defense=Math.max(0,G.defense-1);
+  }else{
+   let hit=G.sites[Math.floor(Math.random()*G.sites.length)];
+   let dmg=Math.max(1,7-3*hostingOf(hit).prot);
+   hit.popularity=Math.max(5,hit.popularity-dmg);
+   addLog(r.name+" a lancé une campagne contre "+hit.name+" : popularité -"+dmg+". Améliore l'hébergement de ce site ou renforce ta sécurité pour te protéger.",'rival');}}}
+function nextDay(){
+ let lvlBefore=level();
+ G.day++;let sal=salaries()+hostingCost()+domainCost();G.money-=sal;
+ if(sal>0)addLog("Charges du jour : salaires "+salaries()+" $ + hébergement "+hostingCost()+" $ + domaines "+domainCost()+" $ = "+sal+" $.",'argent');
+ G.team.forEach(e=>e.energy=Math.min(100,(typeof e.energy==="number"?e.energy:85)+(e.temp?6:6+Math.floor(loyaltyOf(e)/20))));
+ G.team.forEach(e=>{if(e.temp)e.daysLeft--});
+ let leaving=G.team.filter(e=>e.temp&&e.daysLeft<=0);
+ if(leaving.length){G.team=G.team.filter(e=>!(e.temp&&e.daysLeft<=0));leaving.forEach(e=>addLog(e.name+" (freelance) a terminé sa mission de 3 jours et quitte le studio. Merci pour le coup de main !",'equipe'))}
+ if(G.active){G.active.progress+=power();G.active.left--;
+  if(G.active.progress>=G.active.work){let c=G.active;G.money+=c.pay;G.rep+=c.rep;G.done++;G.coins=(G.coins||0)+10;G.active=null;addLog("Contrat terminé pour "+c.client+" : "+c.t+" — "+c.pay+" $ encaissés, +"+c.rep+" réputation et +10 🪙. Le client est ravi !",'contrat');toast(`🎉 Contrat terminé ! +${c.pay} $ et +${c.rep} réputation et +10 🪙`)}
+  else if(G.active.left<0){G.rep=Math.max(0,G.rep-15);G.active=null;addLog("Contrat perdu pour retard : le client a annulé, -15 réputation. Les délais, c'est sacré…",'contrat');toast("⏰ Trop tard ! Contrat perdu, -15 réputation")}}
+ let inc=tickSites(); tickRivals();
+ let sponsor=sponsorIncome();if(sponsor>0){G.money+=sponsor;addLog("Sponsors : +"+sponsor+" $ aujourd'hui grâce à ta réputation ("+G.rep+"). C'est de l'argent qui tombe chaque matin.",'argent')}
+ if(Math.random()<.35)G.offers=genOffers(level());
+ if(Math.random()<.35)G.adOffers=genAdOffers();
+ if(Math.random()<.35)G.trafficOffers=genTrafficOffers();
+ if(G.money<0){G.money=0;toast("💸 Attention, caisse vide ! Prends un petit contrat rapide.")}
+ if(!G.won&&level()>=10&&G.rep>=1000){G.won=true;addLog("VICTOIRE ! Ton studio est légendaire : niveau 10 et 1 000 de réputation. Bravo !",'studio');setTimeout(()=>toast("🏆 BRAVO ! Studio légendaire ! Tu as gagné Web Studio Tycoon !"),400)}
+ if(level()>lvlBefore)addLog("Ton studio passe au niveau "+level()+" ! Ta réputation grandit, et de nouveaux contrats se débloquent.",'studio');
+ save();render();
+ let db=document.getElementById('dayBanner');if(db){db.textContent='☀️ Jour '+G.day;db.classList.remove('hidden');db.classList.remove('show');void db.offsetWidth;db.classList.add('show');setTimeout(()=>{db.classList.add('hidden');db.classList.remove('show')},1500)}}
+
+/* --- Équipe : recrutement, freelances, formation, bureau --- */
+function hire(id){let c=CANDIDATES.find(x=>x.seed==id);if(G.team.find(x=>x.seed==id))return;
+ if(permCount()>=OFFICES[G.office].max){toast("🏢 Bureau plein ! Améliore ton bureau pour recruter plus.");return}
+ if(G.money<c.salary*3){toast("💰 Garde au moins 3 jours de salaire avant de recruter.");return}
+ G.team.push({...c,energy:84+(seedNum(c.seed)%15),loyalty:loyaltyOf(c)});addLog(c.name+" rejoint ton studio ("+c.role+", niveau "+c.lvl+", "+c.salary+" $ / jour). Bienvenue !",'equipe');save();render();toast("👋 "+c.name+" rejoint ton studio !")}
+function hireFreelance(id){let c=FREELANCERS.find(x=>x.seed==id);if(!c||G.team.find(x=>x.seed==id))return;
+ if(G.money<c.salary){toast("💰 Il te faut au moins un jour de salaire ("+c.salary+" $) pour embaucher ce freelance.");return}
+ G.team.push({...c,temp:true,daysLeft:3,energy:90});addLog(c.name+" rejoint ton studio pour 3 jours ("+c.salary+" $ / jour). Un renfort bienvenu !",'equipe');save();render();toast("💼 "+c.name+" rejoint ton studio pour 3 jours !")}
+function fire(seed){let m=G.team.find(x=>x.seed==seed);G.team=G.team.filter(e=>e.seed!=seed);if(m)addLog(m.name+(m.temp?" a terminé sa mission plus tôt et quitte le studio.":" a été renvoyé(e) du studio."),'equipe');save();render()}
+function train(kind,cur){
+ if(cur=='coins'){if((G.coins||0)<12){toast("🪙 Il te faut 12 pièces — termine des contrats ou publie des versions de site.");return}G.coins-=12}
+ else{if(G.money<150){toast("💰 Il te faut 150 $");return}G.money-=150}
+ G[kind]+=2;addLog("Tu t'es formé(e) en "+(kind=='dev'?"Dev":"Design")+" : +2. Tu travailles plus vite !",'equipe');save();render();toast("📚 Compétence +2 !")}
+function trainMember(seed,cur){
+ let e=G.team.find(x=>x.seed==seed);if(!e)return;
+ if(e.temp){toast("💼 On ne forme pas un freelance — il part dans "+e.daysLeft+" jour(s).");return}
+ if(e.lvl>=10){toast("🏆 "+e.name+" est déjà niveau max !");return}
+ if(cur=='coins'){let cc=8*e.lvl;if((G.coins||0)<cc){toast("🪙 Il te faut "+cc+" pièces — termine des contrats ou publie des versions de site.");return}G.coins-=cc}
+ else{let cm=100*e.lvl;if(G.money<cm){toast("💰 Il te faut "+cm+" $");return}G.money-=cm}
+ e.lvl++;e.power+=2;e.salary=Math.round(e.salary*1.12);e.energy=100;e.loyalty=Math.min(100,loyaltyOf(e)+8);
+ addLog(e.name+" formé(e) : niveau "+e.lvl+", +2 puissance, salaire "+e.salary+" $ / jour. Son énergie est à 100 %.",'equipe');
+ save();render();toast("📚 "+e.name+" passe niveau "+e.lvl+" ! +2 puissance, salaire "+e.salary+" $ / jour")}
+function buyOffice(i){let o=OFFICES[i];if(G.money<o.cost){toast("💰 Il te faut "+o.cost+" $");return}G.money-=o.cost;G.office=i;addLog("Nouveau bureau : "+o.name+" — ton équipe peut maintenant accueillir jusqu'à "+(o.max+1)+" personnes !",'studio');save();render();toast("🏢 Nouveau bureau : "+o.name)}
+function buyTool(i){let o=TOOLS[i];if(G.money<o.cost){toast("💰 Il te faut "+o.cost+" $");return}G.money-=o.cost;G.tool=i;addLog("Nouvel outil : "+o.name+" (+"+o.bonus+" puissance). Tu travailles plus vite maintenant !",'studio');save();render();toast("🛠️ Nouvel outil : "+o.name)}
+function resetGame(){if(confirm("Recommencer une nouvelle partie ?")){G=fresh();selectedSiteId=null;save();render();showTab('sites');toast("Nouvelle partie ! Bonne chance 🚀")}}
+
+/* --- Rendu général --- */
+/* --- Aide : une seule source, affichee dans le Menu et dans l'ecran Aide --- */
+const HELP=[
+{t:"1️⃣ Sites :",x:"l'écran principal montre tous tes sites en cartes : version, graphique de visiteurs, revenus et avancement. Clique sur « Détails » pour ouvrir un site."},
+{t:"2️⃣ Créer un site :",x:"menu « Créer un site » — choisis un nom de domaine, un type, un thème, puis lance-le. Ton site rapporte des visiteurs et de l'argent chaque jour."},
+{t:"3️⃣ Détail d'un site :",x:"les 7 tâches (design, mise en page, programmation, contenu, SEO, réseaux sociaux, marketing) avancent avec les boutons +. Quand les 7 tâches sont à 100 %, publie une nouvelle version : ton site devient meilleur."},
+{t:"4️⃣ Publicité :",x:"dans le détail d'un site, vends des espaces de pub à des annonceurs (3 max par site) : chaque pub rapporte selon tes visiteurs, et tu peux la mettre en pause ou la retirer quand tu veux."},
+{t:"5️⃣ Contrats :",x:"choisis un contrat, puis clique sur le bouton 📅 Jour pour travailler. Sois à 100 % avant la fin du délai pour être payé."},
+{t:"6️⃣ Équipe :",x:"recrute des talents (salaire payé chaque jour). Leurs compétences s'ajoutent à ta puissance. Forme-les pour monter leur niveau : +1 niveau, +2 puissance, énergie à 100 %."},
+{t:"👥 Compétences :",x:"les 4 barres colorées en bas de chaque carte sont les 4 compétences de la personne : Design, Code, Mise en page, Marketing. Elles montent avec le niveau et la puissance — donc avec la formation et l'expérience au travail."},
+{t:"💬 Négocier :",x:"sur chaque contrat, tu peux essayer de négocier un meilleur prix (+25 à 40 %). Plus ta réputation est haute, plus ça a de chances de marcher — mais si le client refuse, il retire son offre !"},
+{t:"🏆 Sponsors :",x:"chaque jour, tes sponsors te versent un peu d'argent selon ta réputation (réputation divisée par 10). Plus tu es connu, plus tu gagnes — même sans rien faire. C'est un filet de sécurité pour ne jamais tomber à zéro."},
+{t:"⭐ Expérience :",x:"quand un membre travaille sur une tâche, il gagne de l'expérience : toutes les 4 tâches, +1 puissance — et ses 4 compétences montent avec. Toi aussi : toutes les 4 tâches que tu fais toi-même, Dev +1 et Design +1."},
+{t:"🪙 Pièces :",x:"tu gagnes 10 pièces par contrat terminé et 5 pièces par version de site publiée. Les pièces servent à former tes talents et toi-même sans dépenser d'argent, et à finir une tâche d'un coup."},
+{t:"🛠️ Tâches :",x:"dans le détail d'un site, choisis qui travaille sur chaque tâche — toi (60 $) ou un membre de ton équipe (15 ⚡ d'énergie, plus il est fort plus il avance vite). Tu peux aussi finir une tâche d'un coup avec 15 🪙."},
+{t:"🏠 Hébergement :",x:"chaque site a un hébergement (Mutualisé, Pro, Dédié). Un meilleur hébergement accueille plus de visiteurs par jour et protège mieux contre les attaques des rivaux — mais il coûte des dollars chaque jour."},
+{t:"💛 Loyauté :",x:"tes employés ont une loyauté. Plus elle est haute, plus ils récupèrent d'énergie chaque jour. Les former augmente leur loyauté de 8."},
+{t:"💼 Freelances :",x:"embauche un renfort pour 3 jours dans l'écran Équipe — il part ensuite tout seul, sans que tu aies à le renvoyer."},
+{t:"🚀 Trafic acheté :",x:"dans le détail d'un site, achète une offre de trafic — chaque offre a sa source, son volume et sa durée. Les effets actifs sont visibles sur l'écran Sites."},
+{t:"7️⃣ Statistiques :",x:"visites, profits, sites et employés en un coup d'œil, avec les graphiques de tes sites et de tes segments."},
+{t:"8️⃣ Marché & classement :",x:"ta part de chaque thème grandit avec tes sites. Campagnes et offres pour dépasser les rivaux, sécurité et fidélisation pour te défendre."},
+{t:"🌐 Créer un site :",x:"choisis le nom, l'extension du domaine (chaque extension a son prix et son coût par jour), le type, le thème, l'hébergement et le système de gestion — Sur mesure (gratuit), Moteur (+15 qualité mais qualité verrouillée) ou Constructeur (+5 qualité, +1 par jour, popularité max 80)."},
+{t:"🏠 Hébergement :",x:"5 niveaux, du Mutualisé gratuit au Dédié. Un meilleur hébergement accueille plus de visiteurs par jour et protège mieux contre les attaques des rivaux — mais il coûte des dollars chaque jour."},
+{t:"🚀 Trafic :",x:"achète des offres de trafic pour un site — chaque offre a sa source, son volume et sa durée. Les effets actifs sont visibles sur l'écran Sites."},
+{t:"9️⃣ Bureau & outils :",x:"agrandis ton bureau pour accueillir plus de monde (chaque bureau donne des places en plus), achète de meilleurs outils et forme-toi pour aller plus vite partout."},
+{t:"",x:"⚠️ Surveille les délais des contrats et ton argent : les salaires partent chaque jour."},
+{t:"",x:"🏆 Tu gagnes la partie au niveau 10 avec 1 000 de réputation."},
+{t:"🌐 Créer ton site, étape par étape :",x:"1. Choisis un nom de domaine • 2. Choisis un type de site • 3. Choisis un thème • 4. Vérifie l'aperçu et lance ton site."},
+{t:"👥 Ton équipe :",x:"Les personnes qui travaillent avec toi. Leur puissance s'ajoute à la tienne chaque jour. Forme-les depuis leur carte : +1 niveau et +2 puissance, en dollars ou en pièces 🪙. Et dans le détail d'un site, choisis qui travaille sur chaque tâche : toi ou un membre de ton équipe."},
+{t:"💼 Freelances — renfort temporaire :",x:"Un freelance travaille avec toi pendant 3 jours, puis il part tout seul. Il est payé chaque jour comme les autres et peut travailler sur tes tâches, mais on ne peut pas le former. Sa loyauté est inconnue (« ? »)."},
+{t:"🧑‍💼 Talents à recruter :",x:"Chaque carte montre le salaire par jour, l'énergie et les 4 compétences. Un bon talent travaille plus vite, mais son salaire est payé chaque jour."},
+{t:"📋 Contrats disponibles :",x:"Choisis un contrat à ta taille. Plus il est gros, plus il demande de travail — et plus il rapporte. Clique sur le bouton 📅 Jour en haut pour avancer."},
+{t:"🏆 Classement des studios :",x:"Le score mélange réputation, contrats réussis, visiteurs, parts de marché et niveau du studio. Il bouge chaque jour, pour toi comme pour les studios rivaux simulés."},
+{t:"💡 Pour grimper :",x:"finis des contrats, crée de bons sites et prends des parts de marché."},
+{t:"🎯 Parts de marché :",x:"Chaque thème est un segment. Ta part grandit quand tes sites du thème deviennent bons et populaires. Les studios rivaux occupent le reste du marché."},
+{t:"⚔️ Attaquer et se défendre :",x:"Actions simples, avec un temps d'attente entre deux utilisations. Ta défense et ta fidélisation protègent tes visiteurs quand un rival contre-attaque."},
+{t:"🏭 Les studios rivaux :",x:"Ce sont des studios inventés, gérés par le jeu : tu joues seul, mais le marché bouge comme s'ils étaient là."},
+{t:"🏢 Bureau & outils :",x:"Un plus grand bureau accueille plus de monde et change la bannière de l'écran Sites."},
+{t:"📚 Formation du héros :",x:"Améliore tes propres compétences pour travailler plus vite, sur les contrats comme sur tes sites. Paie en dollars ou en pièces 🪙."},
+{t:"💾 Partie :",x:"Sauvegarde automatique sur ton téléphone — ta partie en cours est gardée, avec tes sites, tes parts de marché et ton classement."},
+{t:"📖 Journal du studio :",x:"tout ce qui arrive à ton studio est noté dans le journal — contrats, sites, attaques des rivaux, embauches, argent. Ouvre le Menu (☰) puis « Journal du studio » pour le relire, jour par jour."},
+{t:"😴 Aucun site pour le moment :",x:"Lance ton premier site avec le bouton vert « Créer un site » : même un petit blog commence à rapporter chaque jour. Tu peux aussi commencer par un contrat pour gagner tes premiers dollars."},
+{t:"💤 Aucun contrat en cours :",x:"Choisis un contrat ci-dessous, puis clique sur le bouton 📅 Jour pour avancer."},
+];
+function renderHelp(){let h=HELP.map(i=>i.t?`<p><b>${i.t}</b> ${i.x}</p>`:`<p>${i.x}</p>`).join('');let a=document.getElementById('helpScreen');if(a)a.innerHTML=h;}
+function fmtNum(n){n=Math.round(n);if(n>=1000000)return (n/1000000).toFixed(1).replace(/\.0$/,'')+' M';if(n>=1000)return (n/1000).toFixed(1).replace(/\.0$/,'')+' K';return String(n);}
+function fmtMoney(n){return n>=1000?'$'+fmtNum(n):n+' $';}
+function fmtCoins(n){return n>=1000?fmtNum(n).replace(' ',''):String(n);}
+function render(){
+ document.getElementById('sDay').textContent=G.day;
+ document.getElementById('sDaySide').textContent=G.day;
+ let nb=document.getElementById('nextDayBtn');if(nb)nb.innerHTML='📅 Jour <b>'+G.day+'</b>';
+ document.getElementById('sMoney').textContent=fmtMoney(G.money);
+ let mm=document.getElementById('sMoneyM');if(mm)mm.textContent=fmtMoney(G.money);
+ document.getElementById('sCoins').textContent=fmtCoins(G.coins||0);
+ document.getElementById('sRep').textContent=G.rep;
+ document.getElementById('sLevel').textContent=level();
+ document.getElementById('pLevel').textContent='Studio niveau '+level()+' • '+OFFICES[G.office].name;
+ document.getElementById('lvlBar').style.width=((G.rep%110)/110*100)+'%';
+ document.getElementById('sVisitors').textContent=totalVisitors();
+ document.getElementById('sVisitorsSide').textContent=totalVisitors();
+ document.getElementById('playerAvatar').innerHTML=avatar('hero-darkman');
+ document.getElementById('cntSites').textContent=G.sites.length;
+ document.getElementById('cntTeam').textContent=(permCount()+1)+' / '+(OFFICES[G.office].max+1);
+ document.getElementById('cntContracts').textContent=G.offers.length+(G.active?' +1':"");
+ document.getElementById('officeScene').innerHTML=officeSVG();
+ let ab=document.getElementById('activeBox');
+ if(G.active){let pct=Math.min(100,Math.round(G.active.progress/G.active.work*100));
+  ab.innerHTML=`<div class="card" style="border-color:#22b573"><h3>🚧 Contrat en cours : ${G.active.emoji} ${G.active.t}</h3><p>Client : <b>${G.active.client}</b> • Gain : <b>${G.active.pay} $</b> • Délai restant : <b>${G.active.left} jour(s)</b></p><div class="bar blue"><i style="width:${pct}%"></i></div><p class="small">${pct}% fait — Puissance par jour : ${power()} • Salaires/jour : ${salaries()} $</p></div>`;
+ } else ab.innerHTML=`<div class="card"><h3>💤 Aucun contrat en cours</h3><p class="small">Puissance : ${power()} • Salaires/jour : ${salaries()} $ • Contrats réussis : ${G.done} • Revenus de tes sites au total : ${G.siteIncomeTotal} $ • Sponsors : +${sponsorIncome()} $ / jour</p><div class="bar"><i style="width:${Math.min(100,G.rep/10)}%"></i></div><p class="small">Progression vers la victoire : ${G.rep} / 1 000 réputation</p></div>`;
+ document.getElementById('contracts').innerHTML=G.offers.map(c=>{
+  let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p>${locked?`<p class="small">🔒 Débloqué au studio niveau ${c.min}</p>`:''}</div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre ce contrat'}</button><button ${locked||G.active||c.negotiated?'disabled':''} onclick="negotiateOffer(${c.id})">${c.negotiated?'✅ Négocié : '+c.pay+' $':'💬 Négocier — chance '+negoChance()+' %'}</button>${c.negotiated?'':`<p class="small">💬 Négocier peut ajouter +25 à 40 % au prix — mais si le client refuse, il retire son offre. La chance dépend de ta réputation.</p>`}</div>`}).join('');
+ renderSites();renderCreate();renderMarket();renderRanking();renderTeam();renderUpgrades();renderStats();renderHelp();renderJournal();
+ if(selectedSiteId)renderSiteDetail();
+}
+function stripHTML(s){
+ let t=s.tasks;let tot=Math.max(1,TASK_DEF.reduce((a,x)=>a+(t[x.id]||0),0));
+ let w=k=>Math.max(3,Math.round((t[k]||0)/tot*100));
+ let cols={design:'#ef5350',layout:'#42a5f5',code:'#ab47bc',content:'#66bb6a',seo:'#ffa726',social:'#e91e63',mkt:'#ff7043'};
+ return `<div class="strip">`+TASK_DEF.map(x=>`<span style="width:${w(x.id)}%;background:${cols[x.id]}"></span>`).join('')+`</div>`;
+}
+function renderSites(){
+ if(!G.sites.length){document.getElementById('mySites').innerHTML='';return}
+ let eff=G.sites.filter(s=>s.traffic).map(s=>`🚀 <b>${s.name}</b> : +${s.traffic.bonus} visiteurs / jour, encore ${s.traffic.days} jour(s)`).join('<br>');
+ document.getElementById('mySites').innerHTML=(eff?`<div class="card" style="border-color:#ffa726"><h3>✨ Effets actifs</h3><p>${eff}</p></div>`:'')+`<div class="gridSites">`+G.sites.map(s=>{let seg=segOf(s.seg);let v=siteVisitors(s);
+  return `<div class="siteCard"><div class="siteTop" style="background:${seg.color}"></div><div class="body">
+  <div class="siteHead"><div class="segico" style="background:${seg.color}">${seg.emoji}</div><div><b>${s.name}</b><span class="small">${s.type} • Version ${s.version}</span></div></div>
+  ${sparkline(s.hist,seg.color)}
+  <div class="siteNums cardNums"><div><b>${v}</b><small>visiteurs / jour</small></div><div><b>${siteRevenue(s)} $</b><small>revenus / jour</small></div></div>
+  <p class="small" style="margin-top:8px">⭐ Qualité ${s.quality} • 🔥 Popularité ${Math.round(s.popularity)} • 📺 Pub ${s.ads.length}/3 • 🎯 Part ${segShare(s.seg)} %</p>
+  </div>${stripHTML(s)}
+  <div class="siteBtns"><button onclick="openSite(${s.id})">🔎 Détails</button><button onclick="upgradeSite(${s.id})">🔧 Améliorer</button><button onclick="promoteSite(${s.id})">📣 Promouvoir</button></div>
+  </div>`}).join('')+`</div>
+  <p class="small" style="margin-top:8px">La bande colorée en bas de chaque carte montre l'avancement des tâches : <span style="color:#ef5350">■</span> design, <span style="color:#42a5f5">■</span> mise en page, <span style="color:#ab47bc">■</span> programmation, <span style="color:#66bb6a">■</span> contenu, <span style="color:#ffa726">■</span> SEO, <span style="color:#e91e63">■</span> réseaux sociaux, <span style="color:#ff7043">■</span> marketing.</p>`;
+}
+function renderCreate(){
+ let tg=document.getElementById('typeGrid');if(!tg)return;
+ ['cstep1','cstep2','cstep3','cstep4'].forEach((id,i)=>{let el=document.getElementById(id);if(el)el.classList.toggle('hidden',i+1!=createStep)});
+ let pr=document.getElementById('createProgress');if(pr)pr.innerHTML='Étape '+createStep+' sur 4<span class="cdots">'+[1,2,3,4].map(n=>'<span class="cdot'+(n==createStep?' on':(n<createStep?' done':''))+'"></span>').join('')+'</span>';
+ tg.innerHTML=SITE_TYPES.map(t=>`<button type="button" class="typeCard ${t.id==selType?'on':''}" onclick="selType='${t.id}';createStep=3;renderCreate()"><div class="prev"><i style="width:55%"></i><i style="width:80%"></i><i style="width:40%"></i></div><b>${t.icon} ${t.name}</b><br><span class="small">${t.desc}</span></button>`).join('');
+ document.getElementById('themeGrid').innerHTML=SEGMENTS.map(s=>`<button type="button" class="themeBtn ${s.id==selSeg?'on':''}"${s.id==selSeg?'':` style="background:${s.color}14;border-color:${s.color}66"`} onclick="selSeg='${s.id}';createStep=4;renderCreate()">${s.emoji}<small>${s.name}<br>Lancement : ${s.cost} $</small></button>`).join('');
+ renderCreatePreview();
+}
+function renderCreatePreview(){
+ let box=document.getElementById('createPreview');if(!box)return;
+ let raw=((document.getElementById('domainInput')||{}).value||"").trim().toLowerCase();
+ let ext=(document.getElementById('domainExt')||{}).value||".free";
+ let seg=segOf(selSeg);
+ let name=raw?(raw+ext):(seg.ideas.find(n=>!G.sites.map(s=>s.name).includes(n))||seg.ideas[0]);
+ let zone=ZONES[(ext||'.free').slice(1)]||ZONES.free;
+ let h=parseInt(((document.getElementById('hostingSelect')||{}).value||'0'),10);if(isNaN(h)||h<0||h>4)h=0;
+ let cms=((document.getElementById('cmsSelect')||{}).value||'custom');if(!CMS[cms])cms='custom';
+ let total=seg.cost+zone.cost+HOSTINGS[h].cost+CMS[cms].cost;
+ let perDay=zone.perDay+HOSTINGS[h].perDay;
+ box.innerHTML=`<div class="mock"><div class="siteHead"><div class="segico" style="background:${seg.color}">${seg.emoji}</div><div><b>${name}</b><br><span class="small">${typeOf(selType).name} • ${seg.name}</span></div></div><div class="skl mid"></div><div class="skl"></div><div class="skl short"></div></div>
+ <p>💰 Lancement : thème <b>${seg.cost} $</b> + domaine <b>${zone.cost} $</b> + hébergement <b>${HOSTINGS[h].cost} $</b> + système <b>${CMS[cms].cost} $</b> = <b>${total} $</b> (tu as ${fmtMoney(G.money)}) ${G.money>=total?'✅ Tu peux le lancer !':'— il te manque <b>'+(total-G.money)+' $</b> : fais un contrat pour gagner de l\'argent.'}<br><span class="small">Ensuite, ce site te coûtera ${perDay} $ par jour (domaine + hébergement) et rapportera selon sa qualité et sa popularité.</span></p>`;
+ let btn=document.getElementById('launchBtn');
+ if(btn){btn.disabled=G.money<total;btn.textContent=G.money>=total?'🚀 Lancer ce site ('+total+' $)':'🔒 Il te manque '+(total-G.money)+' $ — fais un contrat d\'abord';}
+}
+function renderSiteDetail(){
+ let box=document.getElementById('siteDetail');if(!box)return;
+ let s=G.sites.find(x=>x.id==selectedSiteId);
+ if(!s){box.innerHTML=`<div class="card"><h3>Aucun site sélectionné</h3><p>Retourne à l'écran Sites et clique sur « Détails » sur une carte.</p><button class="primary" onclick="showTab('sites')">← Retour à mes sites</button></div>`;return}
+ let seg=segOf(s.seg);let v=siteVisitors(s);let avg=tasksAvg(s);
+ box.innerHTML=`<button class="ghost" style="margin-bottom:10px" onclick="showTab('sites')">← Retour à mes sites</button>
+ <div class="card"><div class="siteHead"><div class="segico" style="background:${seg.color}">${seg.emoji}</div><div><b style="font-size:19px">${s.name}</b><br><span class="small">${s.type} • ${seg.name} • Version ${s.version}</span></div></div>
+ <div class="mock"><div class="skl mid" style="background:#c9bde8"></div><div class="skl"></div><div class="skl"></div><div class="skl short"></div><p class="small">Aperçu simplifié de la page d'accueil de ton site.</p></div>
+ <div class="siteNums"><div><b>${v}</b><small>visiteurs / jour</small></div><div><b>${siteRevenue(s)} $</b><small>revenus / jour</small></div><div><b>${segShare(s.seg)} %</b><small>part de marché</small></div><div><b>${s.ads.length} / 3</b><small>espaces de pub</small></div></div>
+ <p>⭐ Qualité : <b>${s.quality} / 100</b></p><div class="bar"><i style="width:${s.quality}%"></i></div>
+ <p>🔥 Popularité : <b>${Math.round(s.popularity)} / 100</b></p><div class="bar pop"><i style="width:${Math.round(s.popularity)}%"></i></div>
+ ${sparkline(s.hist,seg.color)}
+ </div>
+ <div class="card"><h3>🛠️ Tâches — version ${s.version+1} prête à ${avg} %</h3>
+ ${TASK_DEF.map(t=>{let w=((s.assign||{})[t.id])||'hero';let wObj=w=='hero'?null:G.team.find(x=>x.seed==w);
+  let gain=wObj?(8+Math.round(wObj.power/2)):12;let tired=wObj&&(wObj.energy||0)<15;
+  return `<div class="taskrow" style="flex-wrap:wrap"><span class="tname">${t.name}</span><div class="bar ${t.cls}"><i style="width:${s.tasks[t.id]}%"></i></div><span class="tnum">${s.tasks[t.id]} / 100</span>
+  <select onchange="setTaskWorker(${s.id},'${t.id}',this.value)" style="padding:8px;border-radius:8px;border:1px solid #cfdde4;background:#fff;font-size:14px;max-width:150px">
+  <option value="hero" ${w=='hero'?'selected':''}>👤 Toi</option>
+  ${G.team.map(e=>`<option value="${e.seed}" ${w==e.seed?'selected':''}>${e.temp?'💼 ':''}${e.name} (+${e.power} • ${e.energy||0}⚡)</option>`).join('')}
+  </select>
+  <button onclick="workTask(${s.id},'${t.id}')" ${s.tasks[t.id]>=100||tired?'disabled':''}>🛠️ +${gain}${wObj?' (-15 ⚡)':' — 60 $'}</button>
+  <button onclick="speedTask(${s.id},'${t.id}')" ${s.tasks[t.id]>=100||(G.coins||0)<15?'disabled':''}>⚡ 15 🪙</button></div>`}).join('')}
+ <div style="margin-top:12px">${stripHTML(s)}</div>
+ <button class="green" style="width:100%;margin-top:12px" onclick="publishVersion(${s.id})" ${avg<100?'disabled':''}>🚀 Publier la version ${s.version+1}${avg<100?' (termine les 7 tâches d\'abord)':''}</button>
+ </div>
+ <div class="card"><h3>🏠 Hébergement : ${hostingOf(s).name}</h3>
+ <p class="small">⚙️ Système : ${CMS[s.cms||'custom'].name}${s.cms=='engine'?' — qualité verrouillée (on ne peut pas l\'améliorer manuellement)':''}${s.cms=='builder'?' — +1 qualité par jour, popularité max 80':''} • Domaine : ${s.zone||'.free'} (${zoneOf(s).perDay} $ / jour)</p>
+ <p class="small">Capacité : ${hostingOf(s).cap?("jusqu'à "+hostingOf(s).cap+" visiteurs / jour"):"visiteurs illimités"} • Protection contre les attaques des rivaux : ${['aucune','-3 dégâts','-6 dégâts'][hostingOf(s).prot]} • Coût : ${hostingOf(s).perDay} $ / jour</p>
+ ${s.hosting<4?`<button class="primary" onclick="upgradeHosting(${s.id})" ${G.money<HOSTINGS[s.hosting+1].cost?'disabled':''}>⬆️ Passer en ${HOSTINGS[s.hosting+1].name} — ${HOSTINGS[s.hosting+1].cost} $ (puis ${HOSTINGS[s.hosting+1].perDay} $ / jour)</button>`:`<p class="small">⭐ Meilleur hébergement atteint.</p>`}
+ <p class="small" style="margin-top:10px">🚀 Trafic acheté : ${s.traffic?('+'+s.traffic.bonus+' visiteurs / jour, encore '+s.traffic.days+' jour(s)'):'aucun pack actif.'}</p>
+ ${s.traffic?'':`<div style="margin-top:6px">${(G.trafficOffers||[]).map(o=>`<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #eef3f5"><div style="flex:1"><b>🚀 ${o.name}</b><br><span class="small">+${o.bonus} visiteurs / jour pendant ${o.days} jours — ${o.cost} $</span></div><button class="primary" style="width:auto;padding:9px 14px;white-space:nowrap" ${G.money<o.cost?'disabled':''} onclick="buyTrafficOffer(${s.id},${o.id})">Acheter</button></div>`).join('')}</div>`}
+ </div>
+ <div class="card"><h3>📺 Publicité (${s.ads.length} / 3)</h3>
+ ${(s.ads||[]).map(a=>{let est=Math.round(siteVisitors(s)/1000*a.rate);return `<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #eef3f5"><div style="flex:1"><b>${a.name}</b><br><span class="small">${a.rate} $ / 1000 clics • ≈ ${est} $ / jour ${a.on?'':'• ⏸ en pause'}</span></div><button style="width:auto;padding:8px 12px" onclick="toggleAd(${s.id},${a.id})">${a.on?'⏸ Pause':'▶ Reprendre'}</button><button class="ghost" style="width:auto;padding:8px 12px" onclick="removeAd(${s.id},${a.id})">✖</button></div>`}).join('')||'<p class="small">Aucune pub sur ce site pour le moment.</p>'}
+ ${s.ads.length<3?`<div style="margin-top:6px">${(G.adOffers||[]).map(o=>`<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #eef3f5"><div style="flex:1"><b>💸 ${o.name}</b><br><span class="small">${o.rate} $ / 1000 clics • +40 $ tout de suite</span></div><button class="primary" style="width:auto;padding:9px 14px;white-space:nowrap" onclick="sellAd(${s.id},${o.id})">Vendre</button></div>`).join('')}</div>`:'<p class="small">Les 3 espaces de pub sont occupés.</p>'}
+ <p class="small">Chaque pub rapporte selon les visiteurs du site. Mets-la en pause quand tu veux, sans perdre l'emplacement. Plus il y a de pubs, plus la popularité grandit lentement.</p></div>
+ <div class="card"><h3>⚙️ Gérer ce site</h3><div class="actgrid">
+ <button onclick="upgradeSite(${s.id})" ${s.cms=='engine'?'disabled':''}>🔧 Améliorer la qualité (+10) — 180 $</button>
+ <button onclick="promoteSite(${s.id})">📣 Promouvoir (+12 popularité) — 150 $</button>
+ <button class="ghost" onclick="closeSite(${s.id})">Fermer le site (+100 $)</button>
+ </div><p class="small">Améliorer la qualité est impossible sur un site avec un Moteur (système verrouillé). Fermer un site te rembourse 100 $.</p></div>`;
+}
+function talentCard(c,hired,kind){
+ let sk=talentSkills(c);let en=talentEnergy(c);
+ return `<div class="tCard"><div class="body">
+ <div class="tHead"><div class="tava">${avatar(c.seed)}</div><div><b>${c.name}</b><span class="small">${c.role} • Niveau ${c.lvl}</span><div class="sal">${c.salary?`💰 ${c.salary} $ / jour`:'Fondateur du studio'}</div></div></div>
+ <p class="small" style="margin:10px 0 2px">⚡ Énergie</p><div class="bar energy"><i style="width:${en}%"></i></div>
+ ${c.seed=='hero-darkman'?'':(c.temp?`<p class="small" style="margin:8px 0 2px">💛 Loyauté ? — c'est un freelance</p>`:`<p class="small" style="margin:8px 0 2px">💛 Loyauté ${loyaltyOf(c)} %</p><div class="bar loyalty"><i style="width:${loyaltyOf(c)}%"></i></div>`)}
+ ${hired?`<p class="small" style="margin:8px 0 2px">⭐ Expérience ${(c.seed=='hero-darkman'?G.xpHero:c.xp)||0} / 4${c.seed=='hero-darkman'?' → Dev +1 et Design +1':' → +1 puissance'}</p><div class="bar xp"><i style="width:${(((c.seed=='hero-darkman'?G.xpHero:c.xp)||0)/4*100)}%"></i></div>`:''}
+ <div class="segbar">
+  <span style="background:#ff7043" title="Design">${sk.design}</span>
+  <span style="background:#42a5f5" title="Code">${sk.code}</span>
+  <span style="background:#ab47bc" title="Mise en page">${sk.layout}</span>
+  <span style="background:#66bb6a" title="Marketing">${sk.mkt}</span>
+ </div>
+ <div class="seglabels"><span>🎨 Design</span><span>💻 Code</span><span>🧩 Pages</span><span>📣 Mkt</span></div>
+ </div>
+ <div class="tFoot"><span>${hired?(c.temp?'<b>⏳ Freelance — '+c.daysLeft+' j restant(s)</b>':'<b>Au travail</b>'):'<b>Libre</b>'}</span><span>${c.salary?`💰 ${c.salary} $ / jour • `:''}⚡ +${c.power}</span></div>
+ <div style="padding:10px 13px">${hired?(c.seed=='hero-darkman'
+  ?`<button class="ghost" style="width:100%" disabled>C'est toi !</button>`
+  :c.temp
+  ?`<p class="small" style="text-align:center;margin:4px 0">💼 Freelance — mission de ${c.daysLeft} jour(s). On ne forme pas un freelance.</p><button class="ghost" style="width:100%" onclick="fire('${c.seed}')">Terminer la mission</button>`
+  :c.lvl>=10
+  ?`<p class="small" style="text-align:center;margin:4px 0">🏆 Niveau max atteint !</p><button class="ghost" style="width:100%" onclick="fire('${c.seed}')">Renvoyer</button>`
+  :`<p class="small" style="margin:0 0 6px">📚 Former : +1 niveau, +2 puissance, salaire +12 %</p><div style="display:flex;gap:6px"><button class="primary" style="flex:1;padding:9px 4px;font-size:13px" ${G.money<100*c.lvl?'disabled':''} onclick="trainMember('${c.seed}','money')">📚 ${100*c.lvl} $</button><button style="flex:1;padding:9px 4px;font-size:13px" ${(G.coins||0)<8*c.lvl?'disabled':''} onclick="trainMember('${c.seed}','coins')">🪙 ${8*c.lvl}</button></div><button class="ghost" style="width:100%;margin-top:6px" onclick="fire('${c.seed}')">Renvoyer</button>`)
+  :kind=='free'
+  ?`<button class="primary" onclick="hireFreelance('${c.seed}')">💼 Embaucher 3 jours — ${c.salary} $ / jour</button>`
+  :`<button class="primary" onclick="hire('${c.seed}')">Recruter ${c.name}</button>`}</div>
+ </div>`;
+}
+function renderTeam(){
+ let hero={name:"Toi",role:"Fondateur",spec:"Gestion",lvl:level(),power:G.dev+G.design,salary:0,seed:"hero-darkman",energy:96};
+ document.getElementById('myTeam').innerHTML=`<div class="gridTalents">${talentCard(hero,true)}${G.team.map(e=>talentCard(e,true)).join('')}</div>`;
+ document.getElementById('freelances').innerHTML=FREELANCERS.filter(c=>!G.team.find(e=>e.seed==c.seed)).length?`<div class="gridTalents">${FREELANCERS.filter(c=>!G.team.find(e=>e.seed==c.seed)).map(c=>talentCard(c,false,'free')).join('')}</div>`:`<div class="card"><p>Tous les freelances sont déjà dans ton équipe ! 💼</p></div>`;
+ document.getElementById('candidates').innerHTML=CANDIDATES.filter(c=>!G.team.find(e=>e.seed==c.seed)).length?`<div class="gridTalents">${CANDIDATES.filter(c=>!G.team.find(e=>e.seed==c.seed)).map(c=>talentCard(c,false)).join('')}</div>`:`<div class="card"><p>Toute l'équipe est déjà recrutée ! 🎉</p></div>`;
+}
+function renderStats(){
+ let box=document.getElementById('statsBox');if(!box)return;
+ let dayRev=dailyRevenue();
+ let siteItems=G.sites.map(s=>({label:s.name.length>12?s.name.slice(0,11)+'…':s.name,v:siteVisitors(s)}));
+ let histItems=G.visitorHist.map((v,i)=>({label:'J'+(G.day-G.visitorHist.length+1+i),v:v}));
+ box.innerHTML=`<div class="gridStats">
+ <div class="statCard"><small>👀 Visites aujourd'hui</small><b>${totalVisitors()}</b><span class="small">${totalVisitors()} visiteurs sur tes sites, en ce moment</span></div>
+ <div class="statCard"><small>💵 Profits des sites</small><b>${G.siteIncomeTotal} $</b><span class="small">au total • environ ${dayRev} $ / jour aujourd'hui</span></div>
+ <div class="statCard"><small>🖥️ Sites</small><b>${G.sites.length}</b><span class="small">${G.sites.filter(s=>s.ads.length>0).length} site(s) avec de la pub</span></div>
+ <div class="statCard"><small>👥 Employés</small><b>${G.team.length+1}</b><span class="small">dont toi • salaires : ${salaries()} $ / jour</span></div>
+ <div class="statCard"><small>⭐ Réputation</small><b>${G.rep}</b><span class="small">objectif : 1 000 • studio niveau ${level()} / 10</span></div>
+ <div class="statCard"><small>📋 Contrats réussis</small><b>${G.done}</b><span class="small">👀 Visites totales : ${G.visitorsTotal}</span></div>
+ </div>
+ <div class="card"><h3>📈 Visiteurs par jour, ces derniers jours</h3>${histItems.length?barsChartSVG(histItems,'#22b573'):'<p class="small">Clique sur le bouton 📅 Jour pour voir la courbe grandir.</p>'}</div>
+ <div class="card"><h3>🖥️ Visiteurs de chaque site</h3>${siteItems.length?siteItems.map(it=>`<div class="hbar"><span class="hn">${it.label}</span><div class="bar blue"><i style="width:${Math.round(it.v/Math.max(...siteItems.map(x=>x.v),1)*100)}%"></i></div><span class="hv">${it.v} / j</span></div>`).join(''):'<p class="small">Aucun site pour le moment.</p>'}</div>
+ <div class="card"><h3>🎯 Tes parts de marché par thème</h3>${SEGMENTS.map(s=>`<div class="hbar"><span class="hn">${s.emoji} ${s.name}</span><div class="bar share"><i style="width:${segShare(s.id)}%"></i></div><span class="hv">${segShare(s.id)} %</span></div>`).join('')}</div>`;
+}
+function renderMarket(){
+ document.getElementById('segments').innerHTML=SEGMENTS.map(s=>{let sh=segShare(s.id);let mine=G.sites.filter(x=>x.seg==s.id).length;
+  return `<div class="hbar"><span class="hn">${s.emoji} ${s.name}</span><div class="bar share"><i style="width:${sh}%"></i></div><span class="hv">${sh} %</span></div><p class="small" style="margin:0 0 8px">${mine} site(s) à toi sur ce thème</p>`}).join('')+
+  `<p class="small">Part de marché totale (tous thèmes) : ${Math.round(totalShare()*10)/10} % — elle fait grimper ton score au classement.</p>`;
+ document.getElementById('marketActions').innerHTML=`<div class="actgrid">
+  <button onclick="campagne()" ${G.cdMarket>0?'disabled':''}>📣 Campagne marketing — 250 $ ${G.cdMarket>0?'(attente : '+G.cdMarket+' j)':''}</button>
+  <button onclick="offreAgressive()" ${G.cdAggress>0?'disabled':''}>⚔️ Offre agressive contre le 1er rival — 400 $ ${G.cdAggress>0?'(attente : '+G.cdAggress+' j)':''}</button>
+  <button onclick="renforcerSecu()">🛡️ Renforcer la sécurité — 300 $</button>
+  <button onclick="fideliser()">❤️ Fidéliser tes visiteurs — 220 $</button></div>`;
+ document.getElementById('defenseInfo').innerHTML=`🛡️ Défense : <b>niveau ${G.defense} / 5</b> • ❤️ Fidélisation : <b>niveau ${G.loyalty} / 5</b><br><span class="small">La défense bloque les contre-attaques des rivaux (voir le journal dans le Menu). La fidélisation fait grandir la popularité de tes sites un peu plus vite chaque jour.</span>`;
+ document.getElementById('rivalsList').innerHTML=[...G.rivals].sort((a,b)=>b.score-a.score).map((r,i)=>`<p>${i+1}. <b>${r.name}</b> — score ${r.score}</p>`).join('');
+}
+function renderRanking(){
+ let rows=[{name:"⭐ TON STUDIO",score:playerScore(),me:true}].concat(G.rivals.map(r=>({name:r.name,score:r.score,me:false}))).sort((a,b)=>b.score-a.score);
+ document.getElementById('rankingTable').innerHTML=`<table class="rank"><tr><th>#</th><th>Studio</th><th>Score</th></tr>${rows.map((r,i)=>`<tr class="${r.me?'me':''}"><td>${i+1}</td><td>${r.name}</td><td>${r.score}</td></tr>`).join('')}</table>`;
+}
+function renderUpgrades(){
+ document.getElementById('mySkills').innerHTML=`Tes compétences : Dev ${G.dev} • Design ${G.design} • Outil actuel : ${TOOLS[G.tool].name} (+${TOOLS[G.tool].bonus})`;
+ document.getElementById('upgrades').innerHTML=
+  `<div class="card"><h3>🏢 Ton bureau : ${OFFICES[G.office].name}</h3><p>Équipe : <b>${permCount()+1} / ${OFFICES[G.office].max+1}</b> personnes (toi + ${permCount()} talent${permCount()>1?'s':''}). Un plus grand bureau accueille plus de monde — et donc plus de contrats terminés vite.</p>`+(OFFICES.map((o,i)=>i>G.office?`<div style="display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid #eef3f5"><div style="flex:1"><b>${o.name}</b><br><span class="small">Équipe max : ${o.max+1} personnes (+${o.max-OFFICES[G.office].max} places) • ${o.cost} $</span></div><button class="primary" style="width:auto;padding:11px 16px;white-space:nowrap" ${G.money<o.cost?'disabled':''} onclick="buyOffice(${i})">Améliorer</button></div>`:'').join('')||'<p class="small">Tu as déjà le plus grand bureau. 🏆</p>')+`</div>`+
+  `<div class="card"><h3>Outils (actuel : ${TOOLS[G.tool].name})</h3>`+(TOOLS.map((o,i)=>i>G.tool?`<p><b>${o.name}</b> — bonus puissance : +${o.bonus} • ${o.cost} $ &nbsp;<button onclick="buyTool(${i})">Acheter</button></p>`:'').join('')||'<p class="small">Tu as déjà le meilleur outil.</p>')+`</div>`;
+}
+
+/* --- Démarrage --- */
+load();render();if(!storageWorks()){storageOK=false;updateSaveStatus();toast('⚠️ Sauvegarde bloquée par ce navigateur : ouvre le fichier dans Safari pour garder ta partie.');}
+</script></body></html>
