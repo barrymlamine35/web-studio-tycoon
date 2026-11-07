@@ -518,6 +518,7 @@ function avatar(seed){
 }
 function workerAt(x,y,seed,scale){
  const skin=pick(seed,SKIN,1),hair=pick(seed,HAIR,3),shirt=pick(seed,SHIRT,5),st=seedNum(seed)%5;
+ if(AVATARS[seed]){const cid='wclip-'+String(seed).replace(/[^a-z0-9]/gi,'');return `<g transform="translate(${x} ${y}) scale(${scale})"><rect x="-26" y="34" width="52" height="34" rx="5" fill="${shirt}"/><path d="M-7 34 L0 41 L7 34 L4 32 L-4 32 Z" fill="#ffffff" opacity=".9"/><clipPath id="${cid}"><circle cx="0" cy="8" r="24"/></clipPath><image href="${AVATARS[seed]}" x="-24" y="-16" width="48" height="48" clip-path="url(#${cid})"/><rect x="-34" y="62" width="68" height="10" rx="3" fill="#5b7a8c"/><rect x="-20" y="40" width="40" height="26" rx="3" fill="#33424f"/><rect x="-16" y="44" width="32" height="17" fill="#9fd8ef"/></g>`;}
  let hairSvg= st==0?`<path d="M-24 2 Q-22 -20 0 -20 Q22 -20 24 2 L13 -2 Q11 -13 0 -13 Q-11 -13 -13 -2 Z" fill="${hair}"/>`
  : st==1?`<circle cx="0" cy="-14" r="11" fill="${hair}"/><circle cx="-14" cy="-8" r="7" fill="${hair}"/><circle cx="14" cy="-8" r="7" fill="${hair}"/>`
  : st==2?`<path d="M-24 2 Q-22 -20 0 -20 Q22 -20 24 2 L13 -2 Q11 -13 0 -13 Q-11 -13 -13 -2 Z" fill="${hair}"/><path d="M-24 0 Q-30 20 -26 34 L-16 34 Q-20 18 -14 0 Z" fill="${hair}"/><path d="M24 0 Q30 20 26 34 L16 34 Q20 18 14 0 Z" fill="${hair}"/>`
