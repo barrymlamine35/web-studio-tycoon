@@ -147,7 +147,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .cdot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18);display:inline-block}
 .cdot.done{background:#6366F1}
 .cdot.on{background:#22D3EE;box-shadow:0 0 0 3px rgba(34,211,238,.25)}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.min.js"></script><style>#authScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);padding:16px}#authMsg{color:#f87171}#authMsg.ok{color:#4ade80}</style></head><body><div id="authScreen" class="hidden"><div class="card" style="max-width:380px;width:100%;text-align:center;margin:auto"><div style="font-size:44px">🖥️</div><h1 style="margin:6px 0 4px">Web Studio Tycoon</h1><p class="small" id="authSub">Connecte-toi pour jouer à ton studio.</p><div style="display:flex;gap:8px;margin:14px 0 4px"><button id="authTabLogin" class="primary" style="flex:1" onclick="setAuthMode('login')">Se connecter</button><button id="authTabSignup" class="ghost" style="flex:1" onclick="setAuthMode('signup')">Créer un compte</button></div><div id="authPseudoRow" class="hidden"><input id="authPseudo" maxlength="20" placeholder="Ton pseudo (ex. Lamine)" style="width:100%;margin-top:10px"></div><input id="authEmail" type="email" placeholder="E-mail" style="width:100%;margin-top:10px"><input id="authPass" type="password" placeholder="Mot de passe" style="width:100%;margin-top:10px"><p id="authMsg" class="small" style="min-height:20px"></p><button id="authGo" class="green" style="width:100%" onclick="authGo()">Se connecter</button><button class="ghost" style="width:100%;margin-top:8px" onclick="authForgot()">Mot de passe oublié ?</button></div></div>
 <div class="app">
 <aside class="side">
  <div class="player">
@@ -176,6 +176,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
  <div class="objectif">🎯 <b>Objectif :</b> studio <b>niveau 10</b> et <b>1 000 de réputation</b>.<br>📅 Jour <b id="sDaySide">1</b> • 👀 <b id="sVisitorsSide">0</b> visiteurs/jour</div>
  <button class="primary" style="width:100%;margin-top:14px" onclick="showTab('help')">💡 Aide &amp; astuces</button>
  <button class="primary" style="width:100%;margin-top:10px" onclick="showTab('journal')">📖 Journal du studio</button>
+<div class="objectif" style="margin-top:10px">👤 <b id="accountEmail"></b><br><button class="ghost" style="width:100%;margin-top:8px" onclick="authLogout()">🚪 Se déconnecter</button></div>
 </aside>
 <div class="mainwrap">
 <header class="topbar">
@@ -299,6 +300,73 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 </nav>
 <div class="menuBack hidden" id="menuBack" onclick="closeMenu()"></div>
 <script>
+/* --- Compte Supabase (connexion / inscription) --- */
+var SUPABASE_URL='https://aijazoffjadvezzjxals.supabase.co';
+var SUPABASE_KEY='sb_publishable_A6vR-Mdq7O-eWBmwmlo9IQ_7Spqebp5';
+var supa=null;
+try{if(window.supabase){supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}}catch(e){supa=null;}
+var authMode='login';
+var gameBooted=false;
+function authShow(msg,ok){var m=document.getElementById('authMsg');if(m){m.textContent=msg||'';m.className='small'+(ok?' ok':'');}}
+function setAuthMode(mode){authMode=mode;
+ document.getElementById('authPseudoRow').classList.toggle('hidden',mode!=='signup');
+ document.getElementById('authTabLogin').className=mode==='login'?'primary':'ghost';
+ document.getElementById('authTabSignup').className=mode==='signup'?'primary':'ghost';
+ document.getElementById('authGo').textContent=mode==='signup'?'Créer mon compte':'Se connecter';
+ document.getElementById('authSub').textContent=mode==='signup'?'Crée ton compte pour jouer à ton studio.':'Connecte-toi pour jouer à ton studio.';
+ authShow('');}
+function authErrMsg(e){var m=(e&&e.message)||'';
+ if(m.indexOf('Email not confirmed')>=0)return "Tu dois d'abord confirmer ton e-mail : vérifie ta boîte mail et clique sur le lien reçu.";
+ if(m.indexOf('Invalid login credentials')>=0)return "E-mail ou mot de passe incorrect.";
+ if(m.indexOf('User already registered')>=0)return "Un compte existe déjà avec cet e-mail. Connecte-toi.";
+ if(m.indexOf('Password should be at least')>=0)return "Le mot de passe doit faire au moins 6 caractères.";
+ if(m.indexOf('Unable to validate email')>=0||m.indexOf('valid email')>=0)return "Adresse e-mail invalide.";
+ if(m.indexOf('Failed to fetch')>=0||m.indexOf('Network')>=0)return "Connexion Internet requise pour la connexion au compte.";
+ return m||"Une erreur est survenue. Réessaie.";}
+function bootGame(){if(gameBooted)return;gameBooted=true;
+ document.getElementById('authScreen').classList.add('hidden');
+ load();render();if(!storageWorks()){storageOK=false;updateSaveStatus();toast('⚠️ Sauvegarde bloquée par ce navigateur : ouvre le fichier dans Safari pour garder ta partie.');}}
+function checkAuth(){
+ var scr=document.getElementById('authScreen');
+ if(!supa){scr.classList.remove('hidden');setAuthMode('login');
+  authShow("Connexion Internet requise pour la connexion au compte.");
+  document.getElementById('authGo').textContent='Continuer hors ligne';
+  document.getElementById('authGo').onclick=function(){bootGame();};
+  return;}
+ supa.auth.getSession().then(function(r){
+  if(r&&r.data&&r.data.session){var em=r.data.session.user.email;
+   var ae=document.getElementById('accountEmail');if(ae)ae.textContent=em;
+   bootGame();}
+  else{scr.classList.remove('hidden');setAuthMode('login');}
+ }).catch(function(){scr.classList.remove('hidden');setAuthMode('login');});}
+function authGo(){
+ var email=document.getElementById('authEmail').value.trim();
+ var pass=document.getElementById('authPass').value;
+ if(!email||!pass){authShow("Renseigne ton e-mail et ton mot de passe.");return;}
+ authShow("Patiente…");
+ if(authMode==='signup'){
+  var pseudo=document.getElementById('authPseudo').value.trim()||'Fondateur';
+  supa.auth.signUp({email:email,password:pass,options:{data:{pseudo:pseudo}}}).then(function(r){
+   if(r.error){authShow(authErrMsg(r.error));return;}
+   authShow("Compte créé — vérifie ta boîte mail et clique sur le lien de confirmation, puis reviens te connecter.",true);
+  }).catch(function(e){authShow(authErrMsg(e));});
+ }else{
+  supa.auth.signInWithPassword({email:email,password:pass}).then(function(r){
+   if(r.error){authShow(authErrMsg(r.error));return;}
+   var em=r.data.user.email;var ae=document.getElementById('accountEmail');if(ae)ae.textContent=em;
+   bootGame();
+  }).catch(function(e){authShow(authErrMsg(e));});
+ }}
+function authForgot(){
+ var email=document.getElementById('authEmail').value.trim();
+ if(!email){authShow("Écris ton e-mail ci-dessus, puis clique sur « Mot de passe oublié ? ».");return;}
+ authShow("Patiente…");
+ supa.auth.resetPasswordForEmail(email,{redirectTo:'https://barrymlamine35.github.io/web-studio-tycoon/'}).then(function(r){
+  if(r.error){authShow(authErrMsg(r.error));return;}
+  authShow("E-mail envoyé — vérifie ta boîte mail pour réinitialiser ton mot de passe.",true);
+ }).catch(function(e){authShow(authErrMsg(e));});}
+function authLogout(){if(!supa){location.reload();return;}supa.auth.signOut().then(function(){location.reload();}).catch(function(){location.reload();});}
+
 /* --- Avatars dessinés (SVG original, 100 % hors ligne) --- */
 const SKIN=['#ffe0bd','#f1c27d','#e0ac69','#c68642','#8d5524'];
 const HAIR=['#222222','#5b3a1e','#b06a2a','#e8c66a','#d94f30','#4a6fa5','#7a4dff'];
@@ -1023,5 +1091,5 @@ function renderUpgrades(){
 }
 
 /* --- Démarrage --- */
-load();render();if(!storageWorks()){storageOK=false;updateSaveStatus();toast('⚠️ Sauvegarde bloquée par ce navigateur : ouvre le fichier dans Safari pour garder ta partie.');}
+checkAuth();
 </script></body></html>
