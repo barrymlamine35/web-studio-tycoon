@@ -170,7 +170,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
  <div class="player">
   <div class="pava" id="playerAvatar"></div>
   <div class="pinfo">
-   <h2>Toi — Fondateur</h2>
+   <h2 id="playerName">Toi</h2>
    <span class="lvlbadge" id="pLevel">Studio niveau 1</span>
    <div class="bar pink" style="margin:8px auto 0;max-width:180px"><i id="lvlBar" style="width:0%"></i></div>
    <div class="moneyrow">
@@ -181,6 +181,11 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
   </div>
  </div>
  <div id="accountBox" class="accBox hidden"></div>
+ <div id="localSaveBox" style="margin:0 4px 12px">
+  <button class="ghost" style="width:100%;min-height:40px" onclick="wstExportSave()">💾 Exporter ma partie</button>
+  <button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="document.getElementById('saveFileInput').click()">📂 Importer ma partie</button>
+  <input type="file" id="saveFileInput" accept=".json,application/json" style="display:none" onchange="wstImportFile(this)">
+ </div>
  <nav id="mainNav">
   <button class="navbtn on" data-tab="sites" onclick="showTab('sites',this)">🖥️ Sites <span class="cnt" id="cntSites">0</span></button>
   <button class="navbtn" data-tab="create" onclick="showTab('create',this)">➕ Créer un site</button>
@@ -355,7 +360,7 @@ function wstSbMsg(t,ok){var m=document.getElementById('loginMsg');if(!m)return;m
 function wstSbErr(e){var z=e&&e.message?String(e.message):"";if(/Email not confirmed/i.test(z))return"Tu dois d'abord confirmer ton e-mail (clique sur le lien re\u00e7u par mail).";if(/Invalid login credentials/i.test(z))return"E-mail ou mot de passe incorrect.";if(/already registered|already exists/i.test(z))return"Un compte existe d\u00e9j\u00e0 avec cet e-mail. Connecte-toi ou r\u00e9initialise ton mot de passe.";if(/Password should be/i.test(z))return"Mot de passe trop court : 8 caract\u00e8res minimum.";if(/invalid email|validate email|Unable to validate/i.test(z))return"Adresse e-mail invalide.";return"Une erreur est survenue. R\u00e9essaie.";}
 function wstShowLogin(){var s=document.getElementById('loginScreen');if(s)s.classList.remove('hidden');var a=document.getElementById('accountBox');if(a)a.classList.add('hidden');}
 var wstCurrentUser=null;
-function wstRenderAccount(user){var a=document.getElementById('accountBox');if(!a)return;if(!user){wstCurrentUser=null;a.classList.add('hidden');a.innerHTML="";return;}wstCurrentUser=user;var pseudo=user.user_metadata&&user.user_metadata.pseudo?user.user_metadata.pseudo:"";var em=user.email||"";var name=pseudo||em||"Joueur";a.innerHTML='<div class="accName">\uD83D\uDC64 <b>'+wstEsc(name)+'</b></div>'+((pseudo&&em)?'<div class="accMail">'+wstEsc(em)+'</div>':'')+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstEditPseudo()">\u270F\uFE0F Modifier le pseudo</button>'+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstLogout()">\uD83D\uDEAA Se d\u00e9connecter</button>';a.classList.remove('hidden');}
+function wstRenderAccount(user){var a=document.getElementById('accountBox');if(!a)return;if(!user){wstCurrentUser=null;var pn0=document.getElementById('playerName');if(pn0)pn0.textContent="Toi";a.classList.add('hidden');a.innerHTML="";return;}wstCurrentUser=user;var pseudo=user.user_metadata&&user.user_metadata.pseudo?user.user_metadata.pseudo:"";var em=user.email||"";var name=pseudo||em||"Joueur";var pn=document.getElementById('playerName');if(pn)pn.textContent=name;a.innerHTML='<div class="accName">\uD83D\uDC64 <b>'+wstEsc(name)+'</b></div>'+((pseudo&&em)?'<div class="accMail">'+wstEsc(em)+'</div>':'')+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstEditPseudo()">\u270F\uFE0F Modifier le pseudo</button>'+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstLogout()">\uD83D\uDEAA Se d\u00e9connecter</button>';a.classList.remove('hidden');}
 function wstEditPseudo(){
  var a=document.getElementById('accountBox');
  if(!a||!wstCurrentUser)return;
@@ -448,6 +453,39 @@ async function wstLogout(){
  try{await window.__wstSbSignOut();}catch(e){}
  try{wstRenderAccount(null);}catch(e){}
  wstShowLogin();wstSbMsg("");
+}
+function wstExportSave(){
+ try{
+  var data=null;
+  try{data=JSON.stringify(G);}catch(e){data=null;}
+  if(!data){try{data=localStorage.getItem('webStudioTycoonV1');}catch(e){}}
+  if(!data){toast("Rien \u00e0 exporter.");return;}
+  var blob=new Blob([data],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='web-studio-tycoon-jour'+(G&&typeof G.day==='number'?G.day:1)+'.json';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}try{a.remove();}catch(e){}},800);
+  toast("Partie export\u00e9e !");
+ }catch(e){toast("Export impossible sur cet appareil.");}
+}
+function wstImportFile(input){
+ try{
+  var f=input&&input.files&&input.files[0]?input.files[0]:null;
+  if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(){
+   try{
+    var obj=JSON.parse(rd.result);
+    if(!obj||typeof obj!=='object'||Array.isArray(obj)||typeof obj.day!=='number')throw new Error('bad');
+    G=obj;ensure();save();render();
+    toast("Partie import\u00e9e !");
+   }catch(e){toast("Fichier invalide.");}
+   try{input.value="";}catch(e){}
+  };
+  rd.onerror=function(){toast("Lecture du fichier impossible.");try{input.value="";}catch(e){}};
+  rd.readAsText(f);
+ }catch(e){toast("Import impossible sur cet appareil.");}
 }
 async function checkAuth(){
  try{
