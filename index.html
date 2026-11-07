@@ -11,8 +11,8 @@ button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):hover{transform:
 button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):active{transform:scale(.97)}
 button:disabled{opacity:.45;cursor:default}
 button:focus-visible{outline:2px solid #22D3EE;outline-offset:2px}
-button.primary{background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;border:none;width:100%;box-shadow:0 8px 22px rgba(99,102,241,.45)}
-button.green{background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;border:none;box-shadow:0 8px 22px rgba(34,197,94,.35)}
+button.primary{background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;border:1px solid transparent;width:100%;box-shadow:0 8px 22px rgba(99,102,241,.45)}
+button.green{background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;border:1px solid transparent;box-shadow:0 8px 22px rgba(34,197,94,.35)}
 button.ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
 button.danger{background:linear-gradient(135deg,#DC2626,#EF4444);color:#fff;border:none;width:100%;box-shadow:0 8px 22px rgba(239,68,68,.35)}
 button[style*="width:auto"]{min-height:40px}
@@ -85,7 +85,8 @@ main{padding:12px 12px 116px}
 .strip{display:flex;height:14px;overflow:hidden}
 .strip span{display:block;height:100%}
 .siteBtns{display:flex;gap:8px;padding:0 18px 18px}
-.siteBtns button{flex:1;padding:10px 6px;font-size:13px;min-height:40px}
+.siteStats{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin-top:10px;font-size:13px;color:#94A3B8}.siteStats b{color:#F1F5F9}
+.siteBtns button{flex:1;min-width:0;white-space:nowrap;padding:10px 6px;font-size:13px;min-height:44px}
 .tCard{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.10);border-radius:22px;overflow:hidden;box-shadow:0 8px 30px rgba(2,6,23,.45);display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
 .tCard:hover{transform:translateY(-2px)}
 .tCard .body{padding:18px;flex:1}
@@ -214,9 +215,9 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 <!-- SITES -->
 <section id="tab-sites">
  <div class="officeBanner" id="officeScene"></div>
- <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-  <button class="green" style="flex:1;min-width:170px" onclick="showTab('create')">➕ Créer un site</button>
-  <button class="ghost" style="flex:1;min-width:170px" onclick="showTab('contracts')">📋 Voir les contrats</button>
+ <div style="display:flex;gap:8px;margin-bottom:12px">
+  <button class="green" style="flex:1;min-width:0;white-space:nowrap" onclick="showTab('create')">➕ Créer un site</button>
+  <button class="ghost" style="flex:1;min-width:0;white-space:nowrap" onclick="showTab('contracts')">📋 Voir les contrats</button>
  </div>
  <div id="mySites"></div>
 </section>
@@ -539,11 +540,11 @@ function officeSVG(){
  const bgc=['#bfe6ea','#cfeee4','#d8ecfa','#fde8f1','#e9e2fa'];
  const bg=bgc[G.office]||bgc[0];
  const seats=OFFICES[G.office].max+1;
- const people=[{seed:'hero-darkman',name:'Toi'}].concat(G.team.map(e=>({seed:e.seed,name:e.name})));
+ const people=[{seed:'hero-darkman',name:'Toi',role:'Fondateur'}].concat(G.team.map(e=>({seed:e.seed,name:e.name,role:e.role||''})));
  let workers='';
  for(let i=0;i<seats;i++){
    const xx=seats==1?380:70+i*(620/(seats-1));
-   if(people[i]) workers+=workerAt(xx,96,people[i].seed,0.92)+`<text x="${xx}" y="212" text-anchor="middle" font-size="13" font-weight="bold" fill="#28505f">${people[i].name}</text>`;
+   if(people[i]) workers+=workerAt(xx,96,people[i].seed,0.92)+`<text x="${xx}" y="208" text-anchor="middle" font-size="13" font-weight="bold" fill="#28505f">${people[i].name}</text>${people[i].role?`<text x="${xx}" y="224" text-anchor="middle" font-size="10" fill="#5c707b">${people[i].role}</text>`:''}`;
    else workers+=`<g transform="translate(${xx} 116)"><rect x="-26" y="28" width="52" height="13" rx="5" fill="#a9bfc9"/><rect x="-20" y="40" width="40" height="22" rx="3" fill="#c3d3da"/><text x="0" y="98" text-anchor="middle" font-size="11" fill="#6d8894">place libre</text></g>`;
  }
  const sub=G.sites&&G.sites.length?('Tes sites en ligne : '+G.sites.length):(G.active?('Projet en cours : '+G.active.t):'Lance ton premier site !');
@@ -667,6 +668,10 @@ const TASK_DEF=[
  {id:"seo",name:"🔍 SEO",cls:"share"},
  {id:"social",name:"👥 Réseaux sociaux",cls:"pink"},
  {id:"mkt",name:"📣 Marketing direct",cls:"pop"}];
+const TASK_SKILL={design:'design',layout:'layout',code:'code',content:'mkt',seo:'mkt',social:'mkt',mkt:'mkt'};
+const TASK_SKILL_NAME={design:'Design',layout:'Mise en page',code:'Code',mkt:'Marketing'};
+function taskSkillVal(e,tid){return talentSkills(e)[TASK_SKILL[tid]||'design'];}
+function taskGain(e,tid){return 8+Math.round(taskSkillVal(e,tid)/2);}
 
 /* --- État de la partie --- */
 let G, selectedSiteId=null, selSeg='blogs', selType='contenu', createStep=1;
@@ -838,7 +843,7 @@ function workTask(id,taskId){let s=G.sites.find(x=>x.id==id);if(!s)return;
  let e=G.team.find(x=>x.seed==wSeed);
  if(!e){s.assign[taskId]='hero';save();render();renderSiteDetail();toast("⚠️ Ce membre n'est plus dans l'équipe — c'est toi qui reprends la tâche.");return}
  if((e.energy||0)<15){toast("😴 "+e.name+" est fatigué(e) : son énergie est trop basse. Attends demain.");return}
- let gain=8+Math.round(e.power/2);e.energy-=15;
+ let gain=taskGain(e,taskId);e.energy-=15;
  s.tasks[taskId]=Math.min(100,s.tasks[taskId]+gain);
  s.quality=Math.min(100,s.quality+1);
  e.xp=(e.xp||0)+1;let xpMsg='';
@@ -1076,7 +1081,7 @@ function renderSites(){
   <div class="siteHead"><div class="segico" style="background:${seg.color}">${seg.emoji}</div><div><b>${s.name}</b><span class="small">${s.type} • Version ${s.version}</span></div></div>
   ${sparkline(s.hist,seg.color)}
   <div class="siteNums cardNums"><div><b>${v}</b><small>visiteurs / jour</small></div><div><b>${siteRevenue(s)} $</b><small>revenus / jour</small></div></div>
-  <p class="small" style="margin-top:8px">⭐ Qualité ${s.quality} • 🔥 Popularité ${Math.round(s.popularity)} • 📺 Pub ${s.ads.length}/3 • 🎯 Part ${segShare(s.seg)} %</p>
+  <div class="siteStats"><span>⭐ Qualité <b>${s.quality}</b></span><span>🔥 Popularité <b>${Math.round(s.popularity)}</b></span><span>📺 Pub <b>${s.ads.length}/3</b></span><span>🎯 Part <b>${segShare(s.seg)} %</b></span></div>
   </div>${stripHTML(s)}
   <div class="siteBtns"><button onclick="openSite(${s.id})">🔎 Détails</button><button onclick="upgradeSite(${s.id})">🔧 Améliorer</button><button onclick="promoteSite(${s.id})">📣 Promouvoir</button></div>
   </div>`}).join('')+`</div>
@@ -1121,11 +1126,11 @@ function renderSiteDetail(){
  </div>
  <div class="card"><h3>🛠️ Tâches — version ${s.version+1} prête à ${avg} %</h3>
  ${TASK_DEF.map(t=>{let w=((s.assign||{})[t.id])||'hero';let wObj=w=='hero'?null:G.team.find(x=>x.seed==w);
-  let gain=wObj?(8+Math.round(wObj.power/2)):12;let tired=wObj&&(wObj.energy||0)<15;
+  let gain=wObj?taskGain(wObj,t.id):12;let tired=wObj&&(wObj.energy||0)<15;
   return `<div class="taskrow" style="flex-wrap:wrap"><span class="tname">${t.name}</span><div class="bar ${t.cls}"><i style="width:${s.tasks[t.id]}%"></i></div><span class="tnum">${s.tasks[t.id]} / 100</span>
   <select onchange="setTaskWorker(${s.id},'${t.id}',this.value)" style="padding:8px;border-radius:8px;border:1px solid #cfdde4;background:#fff;font-size:14px;max-width:150px">
   <option value="hero" ${w=='hero'?'selected':''}>👤 Toi</option>
-  ${G.team.map(e=>`<option value="${e.seed}" ${w==e.seed?'selected':''}>${e.temp?'💼 ':''}${e.name} (+${e.power} • ${e.energy||0}⚡)</option>`).join('')}
+  ${G.team.map(e=>`<option value="${e.seed}" ${w==e.seed?'selected':''}>${e.temp?'💼 ':''}${e.name} • ${TASK_SKILL_NAME[TASK_SKILL[t.id]]} ${taskSkillVal(e,t.id)} (${e.energy||0}⚡)</option>`).join('')}
   </select>
   <button onclick="workTask(${s.id},'${t.id}')" ${s.tasks[t.id]>=100||tired?'disabled':''}>🛠️ +${gain}${wObj?' (-15 ⚡)':' — 60 $'}</button>
   <button onclick="speedTask(${s.id},'${t.id}')" ${s.tasks[t.id]>=100||(G.coins||0)<15?'disabled':''}>⚡ 15 🪙</button></div>`}).join('')}
