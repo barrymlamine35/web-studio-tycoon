@@ -686,7 +686,7 @@ function storageWorks(){try{localStorage.setItem('__wst_test','1');localStorage.
 function save(){try{localStorage.setItem('webStudioTycoonV1',JSON.stringify(G));storageOK=true}catch(e){try{sessionStorage.setItem('webStudioTycoonV1',JSON.stringify(G));storageOK=true}catch(e2){memSave=JSON.stringify(G);storageOK=false}}updateSaveStatus()}
 function updateSaveStatus(){let el=document.getElementById('saveStatus');if(!el)return;el.textContent=storageOK?'💾 Sauvegarde automatique : OK — ta partie est gardée.':'⚠️ Sauvegarde bloquée par ton navigateur : le jeu marche, mais ta partie ne sera gardée que tant que la page reste ouverte. Ouvre le fichier dans Safari pour la garder.'}
 function load(){try{let x=null;try{x=localStorage.getItem('webStudioTycoonV1')}catch(e){}if(!x){try{x=sessionStorage.getItem('webStudioTycoonV1')}catch(e){}}G=x?JSON.parse(x):fresh()}catch(e){G=fresh()}ensure()}
-function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),3200)}
+var wstToastTimer=null;function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');try{if(wstToastTimer)clearTimeout(wstToastTimer);}catch(e){}wstToastTimer=setTimeout(()=>t.classList.add('hidden'),3200)}
 const LOG_CATS={contrat:'💼',site:'🌐',rival:'⚔️',equipe:'👥',argent:'💰',marche:'📣',defense:'🛡️',studio:'🏢',info:'🗒️'};
 function addLog(txt,cat){G.log.unshift({d:G.day,t:txt,c:cat||'info'});G.log=G.log.slice(0,60)}
 function renderJournal(){let box=document.getElementById('journalScreen');if(!box)return;
