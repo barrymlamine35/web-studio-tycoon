@@ -147,7 +147,24 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .cdot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18);display:inline-block}
 .cdot.done{background:#6366F1}
 .cdot.on{background:#22D3EE;box-shadow:0 0 0 3px rgba(34,211,238,.25)}
-</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.min.js"></script><style>#authScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);padding:16px}#authMsg{color:#f87171}#authMsg.ok{color:#4ade80}</style></head><body><div id="authScreen" class="hidden"><div class="card" style="max-width:380px;width:100%;text-align:center;margin:auto"><div style="font-size:44px">🖥️</div><h1 style="margin:6px 0 4px">Web Studio Tycoon</h1><p class="small" id="authSub">Connecte-toi pour jouer à ton studio.</p><div style="display:flex;gap:8px;margin:14px 0 4px"><button id="authTabLogin" class="primary" style="flex:1" onclick="setAuthMode('login')">Se connecter</button><button id="authTabSignup" class="ghost" style="flex:1" onclick="setAuthMode('signup')">Créer un compte</button></div><div id="authPseudoRow" class="hidden"><input id="authPseudo" maxlength="20" placeholder="Ton pseudo (ex. Lamine)" style="width:100%;margin-top:10px"></div><input id="authEmail" type="email" placeholder="E-mail" style="width:100%;margin-top:10px"><input id="authPass" type="password" placeholder="Mot de passe" style="width:100%;margin-top:10px"><p id="authMsg" class="small" style="min-height:20px"></p><button id="authGo" class="green" style="width:100%" onclick="authGo()">Se connecter</button><button class="ghost" style="width:100%;margin-top:8px" onclick="authForgot()">Mot de passe oublié ?</button></div></div>
+/* --- Connexion Supabase --- */
+#loginScreen{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(700px 320px at 85% -10%,rgba(99,102,241,.30),transparent 60%),#0A0F1E;overflow:auto}
+.loginCard{width:100%;max-width:420px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:22px 18px;box-shadow:0 16px 40px rgba(2,6,23,.6)}
+.loginCard h2{margin:0 0 4px;text-align:center;font-size:22px}
+.loginSub{text-align:center;color:#94A3B8;font-size:13px;margin:0 0 16px;line-height:1.5}
+.loginTabs{display:flex;gap:8px;margin-bottom:16px}
+.loginTabs button{flex:1;min-height:44px}
+.loginTabs button.on{background:#6366F1;border-color:#6366F1;color:#fff}
+.loginField{width:100%;margin-bottom:10px}
+.loginMsg{min-height:20px;text-align:center;font-size:13px;line-height:1.4;color:#FCA5A5;margin:12px 0 0}
+.loginNote{text-align:center;color:#64748B;font-size:12px;margin:10px 0 0;line-height:1.5}
+.linklike{background:none!important;border:none!important;box-shadow:none!important;color:#22D3EE;font-size:13px;min-height:36px;text-decoration:underline;padding:6px 10px}
+.accBox{margin:0 4px 12px;padding:10px 12px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(255,255,255,.05);font-size:13px;color:#CBD5E1;text-align:center}
+.accBox .accName{font-size:14px;color:#F1F5F9}
+.accBox .accMail{font-size:12px;color:#94A3B8;word-break:break-all;margin-top:2px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head><body>
 <div class="app">
 <aside class="side">
  <div class="player">
@@ -163,6 +180,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
    </div>
   </div>
  </div>
+ <div id="accountBox" class="accBox hidden"></div>
  <nav id="mainNav">
   <button class="navbtn on" data-tab="sites" onclick="showTab('sites',this)">🖥️ Sites <span class="cnt" id="cntSites">0</span></button>
   <button class="navbtn" data-tab="create" onclick="showTab('create',this)">➕ Créer un site</button>
@@ -176,7 +194,6 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
  <div class="objectif">🎯 <b>Objectif :</b> studio <b>niveau 10</b> et <b>1 000 de réputation</b>.<br>📅 Jour <b id="sDaySide">1</b> • 👀 <b id="sVisitorsSide">0</b> visiteurs/jour</div>
  <button class="primary" style="width:100%;margin-top:14px" onclick="showTab('help')">💡 Aide &amp; astuces</button>
  <button class="primary" style="width:100%;margin-top:10px" onclick="showTab('journal')">📖 Journal du studio</button>
-<div class="objectif" style="margin-top:10px">👤 <b id="accountEmail"></b><br><button class="ghost" style="width:100%;margin-top:8px" onclick="authLogout()">🚪 Se déconnecter</button></div>
 </aside>
 <div class="mainwrap">
 <header class="topbar">
@@ -288,6 +305,30 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 </main>
 </div>
 </div>
+<div id="loginScreen" class="hidden">
+ <div class="loginCard">
+  <h2>🎮 Web Studio Tycoon</h2>
+  <p class="loginSub">Connecte-toi pour jouer et garder ton compte.<br>Ta partie reste aussi sauvegardée sur ton téléphone.</p>
+  <div class="loginTabs">
+   <button id="tabLoginBtn" class="on" onclick="wstLoginMode('login')">Connexion</button>
+   <button id="tabRegBtn" onclick="wstLoginMode('register')">Créer un compte</button>
+  </div>
+  <div id="loginForm">
+   <input id="login-email" class="loginField" type="text" placeholder="Ton e-mail ou ton pseudo" autocomplete="username">
+   <input id="login-password" class="loginField" type="password" placeholder="Ton mot de passe" autocomplete="current-password">
+   <button class="primary" style="width:100%" onclick="wstAuthSubmit('login')">🔑 Se connecter</button>
+   <div style="text-align:center;margin-top:10px"><button class="linklike" onclick="wstForgotPw()">Mot de passe oublié ?</button></div>
+  </div>
+  <div id="regForm" class="hidden">
+   <input id="reg-name" class="loginField" type="text" placeholder="Ton pseudo" autocomplete="nickname" maxlength="24">
+   <input id="reg-email" class="loginField" type="email" placeholder="Ton e-mail" autocomplete="email">
+   <input id="reg-password" class="loginField" type="password" placeholder="Mot de passe (8 caractères min.)" autocomplete="new-password">
+   <button class="primary" style="width:100%" onclick="wstAuthSubmit('register')">🎉 Créer mon compte</button>
+  </div>
+  <p id="loginMsg" class="loginMsg"></p>
+  <p class="loginNote">Ton pseudo et ton e-mail sont enregistrés. Pour te connecter, tu peux utiliser ton e-mail ou ton pseudo (le pseudo est reconnu sur cet appareil).</p>
+ </div>
+</div>
 <div id="toast" class="toast hidden"></div>
 <div id="dayBanner" class="hidden"></div>
 <nav class="bottomnav">
@@ -300,73 +341,122 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 </nav>
 <div class="menuBack hidden" id="menuBack" onclick="closeMenu()"></div>
 <script>
-/* --- Compte Supabase (connexion / inscription) --- */
-var SUPABASE_URL='https://aijazoffjadvezzjxals.supabase.co';
-var SUPABASE_KEY='sb_publishable_A6vR-Mdq7O-eWBmwmlo9IQ_7Spqebp5';
-var supa=null;
-try{if(window.supabase){supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}}catch(e){supa=null;}
-var authMode='login';
-var gameBooted=false;
-function authShow(msg,ok){var m=document.getElementById('authMsg');if(m){m.textContent=msg||'';m.className='small'+(ok?' ok':'');}}
-function setAuthMode(mode){authMode=mode;
- document.getElementById('authPseudoRow').classList.toggle('hidden',mode!=='signup');
- document.getElementById('authTabLogin').className=mode==='login'?'primary':'ghost';
- document.getElementById('authTabSignup').className=mode==='signup'?'primary':'ghost';
- document.getElementById('authGo').textContent=mode==='signup'?'Créer mon compte':'Se connecter';
- document.getElementById('authSub').textContent=mode==='signup'?'Crée ton compte pour jouer à ton studio.':'Connecte-toi pour jouer à ton studio.';
- authShow('');}
-function authErrMsg(e){var m=(e&&e.message)||'';
- if(m.indexOf('Email not confirmed')>=0)return "Tu dois d'abord confirmer ton e-mail : vérifie ta boîte mail et clique sur le lien reçu.";
- if(m.indexOf('Invalid login credentials')>=0)return "E-mail ou mot de passe incorrect.";
- if(m.indexOf('User already registered')>=0)return "Un compte existe déjà avec cet e-mail. Connecte-toi.";
- if(m.indexOf('Password should be at least')>=0)return "Le mot de passe doit faire au moins 6 caractères.";
- if(m.indexOf('Unable to validate email')>=0||m.indexOf('valid email')>=0)return "Adresse e-mail invalide.";
- if(m.indexOf('Failed to fetch')>=0||m.indexOf('Network')>=0)return "Connexion Internet requise pour la connexion au compte.";
- return m||"Une erreur est survenue. Réessaie.";}
-function bootGame(){if(gameBooted)return;gameBooted=true;
- document.getElementById('authScreen').classList.add('hidden');
- load();render();if(!storageWorks()){storageOK=false;updateSaveStatus();toast('⚠️ Sauvegarde bloquée par ce navigateur : ouvre le fichier dans Safari pour garder ta partie.');}}
-function checkAuth(){
- var scr=document.getElementById('authScreen');
- if(!supa){scr.classList.remove('hidden');setAuthMode('login');
-  authShow("Connexion Internet requise pour la connexion au compte.");
-  document.getElementById('authGo').textContent='Continuer hors ligne';
-  document.getElementById('authGo').onclick=function(){bootGame();};
-  return;}
- supa.auth.getSession().then(function(r){
-  if(r&&r.data&&r.data.session){var em=r.data.session.user.email;
-   var ae=document.getElementById('accountEmail');if(ae)ae.textContent=em;
-   bootGame();}
-  else{scr.classList.remove('hidden');setAuthMode('login');}
- }).catch(function(){scr.classList.remove('hidden');setAuthMode('login');});}
-function authGo(){
- var email=document.getElementById('authEmail').value.trim();
- var pass=document.getElementById('authPass').value;
- if(!email||!pass){authShow("Renseigne ton e-mail et ton mot de passe.");return;}
- authShow("Patiente…");
- if(authMode==='signup'){
-  var pseudo=document.getElementById('authPseudo').value.trim()||'Fondateur';
-  supa.auth.signUp({email:email,password:pass,options:{data:{pseudo:pseudo}}}).then(function(r){
-   if(r.error){authShow(authErrMsg(r.error));return;}
-   authShow("Compte créé — vérifie ta boîte mail et clique sur le lien de confirmation, puis reviens te connecter.",true);
-  }).catch(function(e){authShow(authErrMsg(e));});
- }else{
-  supa.auth.signInWithPassword({email:email,password:pass}).then(function(r){
-   if(r.error){authShow(authErrMsg(r.error));return;}
-   var em=r.data.user.email;var ae=document.getElementById('accountEmail');if(ae)ae.textContent=em;
-   bootGame();
-  }).catch(function(e){authShow(authErrMsg(e));});
- }}
-function authForgot(){
- var email=document.getElementById('authEmail').value.trim();
- if(!email){authShow("Écris ton e-mail ci-dessus, puis clique sur « Mot de passe oublié ? ».");return;}
- authShow("Patiente…");
- supa.auth.resetPasswordForEmail(email,{redirectTo:'https://barrymlamine35.github.io/web-studio-tycoon/'}).then(function(r){
-  if(r.error){authShow(authErrMsg(r.error));return;}
-  authShow("E-mail envoyé — vérifie ta boîte mail pour réinitialiser ton mot de passe.",true);
- }).catch(function(e){authShow(authErrMsg(e));});}
-function authLogout(){if(!supa){location.reload();return;}supa.auth.signOut().then(function(){location.reload();}).catch(function(){location.reload();});}
-
+/* --- Supabase : compte joueur (connexion + création de compte) --- */
+var WST_SB_URL="https://aijazoffjadvezzjxals.supabase.co";
+var WST_SB_KEY="sb_publishable_A6vR-Mdq7O-eWBmwmlo9IQ_7Spqebp5";
+var WST_SITE_URL="https://barrymlamine35.github.io/web-studio-tycoon/";
+try{window.__wstSb=(window.supabase&&typeof window.supabase.createClient==="function")?window.supabase.createClient(WST_SB_URL,WST_SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}}):null;}catch(e){window.__wstSb=null;}
+window.__wstSbSession=function(){return new Promise(function(res){try{if(!window.__wstSb){res(null);return;}window.__wstSb.auth.getSession().then(function(r){res(r&&r.data?r.data.session:null);},function(){res(null);});}catch(e){res(null);}});};
+window.__wstSbSignOut=function(){return new Promise(function(res){try{if(!window.__wstSb){res();return;}window.__wstSb.auth.signOut().then(function(){res();},function(){res();});}catch(e){res();}});};
+try{if(window.__wstSb&&window.__wstSb.auth&&window.__wstSb.auth.onAuthStateChange){window.__wstSb.auth.onAuthStateChange(function(ev,sess){try{if(ev==="SIGNED_IN"&&sess&&sess.user){wstShowGame(sess.user);}else if(ev==="SIGNED_OUT"){try{wstRenderAccount(null);}catch(e){}wstShowLogin();}}catch(e){}});}}catch(e){}
+function wstOnline(){return typeof navigator!=="undefined"?navigator.onLine!==false:true;}
+function wstEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function wstSbMsg(t,ok){var m=document.getElementById('loginMsg');if(!m)return;m.textContent=t||"";m.style.color=ok?"#4ADE80":"#FCA5A5";}
+function wstSbErr(e){var z=e&&e.message?String(e.message):"";if(/Email not confirmed/i.test(z))return"Tu dois d'abord confirmer ton e-mail (clique sur le lien re\u00e7u par mail).";if(/Invalid login credentials/i.test(z))return"E-mail ou mot de passe incorrect.";if(/already registered|already exists/i.test(z))return"Un compte existe d\u00e9j\u00e0 avec cet e-mail. Connecte-toi ou r\u00e9initialise ton mot de passe.";if(/Password should be/i.test(z))return"Mot de passe trop court : 8 caract\u00e8res minimum.";if(/invalid email|validate email|Unable to validate/i.test(z))return"Adresse e-mail invalide.";return"Une erreur est survenue. R\u00e9essaie.";}
+function wstShowLogin(){var s=document.getElementById('loginScreen');if(s)s.classList.remove('hidden');var a=document.getElementById('accountBox');if(a)a.classList.add('hidden');}
+var wstCurrentUser=null;
+function wstRenderAccount(user){var a=document.getElementById('accountBox');if(!a)return;if(!user){wstCurrentUser=null;a.classList.add('hidden');a.innerHTML="";return;}wstCurrentUser=user;var pseudo=user.user_metadata&&user.user_metadata.pseudo?user.user_metadata.pseudo:"";var em=user.email||"";var name=pseudo||em||"Joueur";a.innerHTML='<div class="accName">\uD83D\uDC64 <b>'+wstEsc(name)+'</b></div>'+((pseudo&&em)?'<div class="accMail">'+wstEsc(em)+'</div>':'')+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstEditPseudo()">\u270F\uFE0F Modifier le pseudo</button>'+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstLogout()">\uD83D\uDEAA Se d\u00e9connecter</button>';a.classList.remove('hidden');}
+function wstEditPseudo(){
+ var a=document.getElementById('accountBox');
+ if(!a||!wstCurrentUser)return;
+ var pseudo=wstCurrentUser.user_metadata&&wstCurrentUser.user_metadata.pseudo?wstCurrentUser.user_metadata.pseudo:"";
+ var em=wstCurrentUser.email||"";
+ a.innerHTML='<div class="accName">\uD83D\uDC64 <b>'+wstEsc(pseudo||em||"Joueur")+'</b></div>'
+ +'<input id="pseudoEdit" class="loginField" type="text" maxlength="24" value="'+wstEsc(pseudo)+'" placeholder="Ton nouveau pseudo" style="margin-top:8px">'
+ +'<button class="primary" style="width:100%;margin-top:8px;min-height:40px" onclick="wstSavePseudo()">\uD83D\uDCBE Enregistrer</button>'
+ +'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstRenderAccount(wstCurrentUser)">\u2716 Annuler</button>';
+ var inp=document.getElementById('pseudoEdit');
+ if(inp){inp.focus();inp.select();}
+}
+async function wstSavePseudo(){
+ var inp=document.getElementById('pseudoEdit');
+ var np=inp?inp.value.trim():"";
+ if(!np){toast("Choisis un pseudo.");return;}
+ if(np.length>24){toast("Ton pseudo doit faire 24 caract\u00e8res maximum.");return;}
+ var d=window.__wstSb;
+ if(!d||!wstOnline()){toast("Connexion Internet requise pour modifier ton pseudo.");return;}
+ var oldPseudo=wstCurrentUser&&wstCurrentUser.user_metadata&&wstCurrentUser.user_metadata.pseudo?wstCurrentUser.user_metadata.pseudo:"";
+ var em=wstCurrentUser&&wstCurrentUser.email?wstCurrentUser.email:"";
+ if(np===oldPseudo){wstRenderAccount(wstCurrentUser);return;}
+ try{
+  var r=await d.auth.updateUser({data:{pseudo:np}});
+  if(r.error){toast("Une erreur est survenue. R\u00e9essaie.");return;}
+  try{var m=wstPseudoMap();var ok=String(oldPseudo||"").trim().toLowerCase();if(ok&&m[ok])delete m[ok];if(em)m[String(np).toLowerCase()]=em;localStorage.setItem('wstPseudoMap',JSON.stringify(m));}catch(e){}
+  var u=r.data&&r.data.user?r.data.user:wstCurrentUser;
+  wstCurrentUser=u;
+  wstRenderAccount(u);
+  toast("Pseudo mis \u00e0 jour !");
+ }catch(e){toast("Connexion Internet requise pour modifier ton pseudo.");}
+}
+function wstShowGame(user){var s=document.getElementById('loginScreen');if(s)s.classList.add('hidden');wstRenderAccount(user);}
+function wstLoginMode(mode){var lf=document.getElementById('loginForm'),rf=document.getElementById('regForm');if(lf)lf.classList.toggle('hidden',mode!=="login");if(rf)rf.classList.toggle('hidden',mode!=="register");var b1=document.getElementById('tabLoginBtn'),b2=document.getElementById('tabRegBtn');if(b1)b1.classList.toggle('on',mode==="login");if(b2)b2.classList.toggle('on',mode==="register");wstSbMsg("");}
+function wstVal(id){var e=document.getElementById(id);return e?e.value.trim():"";}
+function wstValPw(id){var e=document.getElementById(id);return e?e.value:"";}
+function wstEmailOk(em){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);}
+var wstAuthBusy=false;
+function wstPseudoMap(){try{var m=JSON.parse(localStorage.getItem('wstPseudoMap')||'{}');return m&&typeof m==="object"?m:{};}catch(e){return {};}}
+function wstPseudoFind(pseudo){try{var m=wstPseudoMap();var k=String(pseudo||"").trim().toLowerCase();return k&&m[k]?m[k]:null;}catch(e){return null;}}
+function wstPseudoSave(pseudo,email){try{if(!pseudo||!email)return;var m=wstPseudoMap();m[String(pseudo).trim().toLowerCase()]=email;localStorage.setItem('wstPseudoMap',JSON.stringify(m));}catch(e){}}
+async function wstAuthSubmit(mode){
+ if(wstAuthBusy)return;
+ var d=window.__wstSb;
+ if(!d||!wstOnline()){wstSbMsg("Connexion Internet requise pour la connexion au compte.");return;}
+ wstAuthBusy=true;
+ try{
+  if(mode==="login"){
+   var ident=wstVal('login-email'),pw=wstValPw('login-password');
+   var em=ident;
+   if(!wstEmailOk(ident)){var fnd=wstPseudoFind(ident);if(!fnd){wstSbMsg("Pseudo introuvable sur cet appareil. Connecte-toi avec ton e-mail.");wstAuthBusy=false;return;}em=fnd;}
+   if(pw.length<8){wstSbMsg("Mot de passe trop court : 8 caract\u00e8res minimum.");wstAuthBusy=false;return;}
+   var r=await d.auth.signInWithPassword({email:em,password:pw});
+   if(r.error){wstSbMsg(wstSbErr(r.error));wstAuthBusy=false;return;}
+   wstAuthBusy=false;wstSbMsg("Connexion r\u00e9ussie ! Bienvenue \uD83D\uDC4B",true);
+   var u=r.data&&r.data.user?r.data.user:null;
+   if(u)wstPseudoSave(u.user_metadata&&u.user_metadata.pseudo?u.user_metadata.pseudo:"",u.email||em);
+   setTimeout(function(){wstShowGame(u);},700);
+  }else{
+   var nm=wstVal('reg-name'),em2=wstVal('reg-email'),pw2=wstValPw('reg-password');
+   if(!nm){wstSbMsg("Choisis un pseudo pour cr\u00e9er ton compte.");wstAuthBusy=false;return;}
+   if(!wstEmailOk(em2)){wstSbMsg("Adresse e-mail invalide.");wstAuthBusy=false;return;}
+   if(pw2.length<8){wstSbMsg("Mot de passe trop court : 8 caract\u00e8res minimum.");wstAuthBusy=false;return;}
+   var r2=await d.auth.signUp({email:em2,password:pw2,options:{data:{pseudo:nm},emailRedirectTo:WST_SITE_URL}});
+   if(r2.error){wstSbMsg(wstSbErr(r2.error));wstAuthBusy=false;return;}
+   wstPseudoSave(nm,em2);
+   wstAuthBusy=false;
+   if(r2.data&&r2.data.session){wstSbMsg("Compte cr\u00e9\u00e9 avec succ\u00e8s ! \uD83C\uDF89",true);var u2=r2.data.user;setTimeout(function(){wstShowGame(u2);},700);return;}
+   if(r2.data&&r2.data.user&&Array.isArray(r2.data.user.identities)&&r2.data.user.identities.length===0){wstSbMsg("Un compte existe d\u00e9j\u00e0 avec cet e-mail. Connecte-toi ou r\u00e9initialise ton mot de passe.");return;}
+   wstLoginMode('login');
+   wstSbMsg("Compte cr\u00e9\u00e9 \u2014 v\u00e9rifie ta bo\u00eete mail et clique sur le lien de confirmation avant de te connecter.",true);
+  }
+ }catch(e){wstAuthBusy=false;wstSbMsg("Connexion Internet requise pour la connexion au compte.");}
+}
+async function wstForgotPw(){
+ var d=window.__wstSb;
+ var ident=wstVal('login-email');
+ if(!ident){wstSbMsg("Entre ton e-mail ou ton pseudo ci-dessus, puis reclique sur \u00ab Mot de passe oubli\u00e9 ? \u00bb.");return;}
+ var em=ident;
+ if(!wstEmailOk(ident)){var fnd=wstPseudoFind(ident);if(!fnd){wstSbMsg("Pseudo introuvable sur cet appareil. Entre ton e-mail.");return;}em=fnd;}
+ if(!d||!wstOnline()){wstSbMsg("Connexion Internet requise pour la connexion au compte.");return;}
+ try{
+  var r=await d.auth.resetPasswordForEmail(em,{redirectTo:WST_SITE_URL});
+  if(r.error){wstSbMsg("Une erreur est survenue. R\u00e9essaie.");return;}
+  wstSbMsg("Lien de r\u00e9initialisation envoy\u00e9 ! V\u00e9rifie ta bo\u00eete mail.",true);
+ }catch(e){wstSbMsg("Connexion Internet requise pour la connexion au compte.");}
+}
+async function wstLogout(){
+ try{if(typeof save==="function")save();}catch(e){}
+ try{await window.__wstSbSignOut();}catch(e){}
+ try{wstRenderAccount(null);}catch(e){}
+ wstShowLogin();wstSbMsg("");
+}
+async function checkAuth(){
+ try{
+  var s=await window.__wstSbSession();
+  if(s&&s.user){wstShowGame(s.user);return;}
+  wstShowLogin();
+  if(!window.__wstSb)wstSbMsg("Connexion Internet requise pour la connexion au compte.");
+ }catch(e){try{wstShowLogin();}catch(e2){}}
+}
 /* --- Avatars dessinés (SVG original, 100 % hors ligne) --- */
 const SKIN=['#ffe0bd','#f1c27d','#e0ac69','#c68642','#8d5524'];
 const HAIR=['#222222','#5b3a1e','#b06a2a','#e8c66a','#d94f30','#4a6fa5','#7a4dff'];
@@ -1091,5 +1181,5 @@ function renderUpgrades(){
 }
 
 /* --- Démarrage --- */
-checkAuth();
+load();render();checkAuth();if(!storageWorks()){storageOK=false;updateSaveStatus();toast('⚠️ Sauvegarde bloquée par ce navigateur : ouvre le fichier dans Safari pour garder ta partie.');}
 </script></body></html>
