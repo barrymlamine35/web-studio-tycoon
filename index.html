@@ -4,7 +4,7 @@
 <title>Web Studio Tycoon</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:"Inter",system-ui,sans-serif;background:radial-gradient(700px 320px at 85% -10%,rgba(99,102,241,.28),transparent 60%),linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);background-attachment:fixed;color:#F1F5F9;font-size:14px;min-height:100vh}
+body{margin:0;font-family:"Inter",system-ui,sans-serif;background:radial-gradient(700px 320px at 85% -10%,rgba(99,102,241,.28),transparent 60%),linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);background-attachment:fixed;color:#F1F5F9;font-size:clamp(13px,3.6vw,15px);min-height:100vh}
 h1,h2,h3{font-weight:800;color:#F1F5F9}
 button{font-family:inherit;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:12px 16px;font-weight:600;font-size:14px;background:rgba(255,255,255,.08);color:#F1F5F9;min-height:48px;box-shadow:0 4px 14px rgba(2,6,23,.35);transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease,background .15s ease}
 button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):hover{transform:scale(1.02)}
@@ -15,8 +15,8 @@ button.primary{background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;bor
 button.green{background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;border:1px solid transparent;box-shadow:0 8px 22px rgba(34,197,94,.35)}
 button.ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
 button.danger{background:linear-gradient(135deg,#DC2626,#EF4444);color:#fff;border:none;width:100%;box-shadow:0 8px 22px rgba(239,68,68,.35)}
-button[style*="width:auto"]{min-height:40px}
-#upgrades button{min-height:40px}
+button[style*="width:auto"]{min-height:44px}
+#upgrades button{min-height:44px}
 input,select{font-family:inherit;font-size:15px;padding:11px 12px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.07);color:#F1F5F9;color-scheme:dark}
 input::placeholder{color:#64748B}
 #hostingSelect,#cmsSelect,.taskrow select{background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.16)!important;color:#F1F5F9}
@@ -110,7 +110,7 @@ main{padding:12px 12px 116px}
 .taskrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
 .taskrow .tname{width:96px;flex:0 0 96px;font-weight:600;color:#F1F5F9;font-size:13px}
 .taskrow .bar{flex:1;margin:0}.taskrow .tnum{width:54px;flex:0 0 54px;text-align:right;font-weight:700;color:#E2E8F0}
-.taskrow button{padding:8px 14px;min-height:40px}
+.taskrow button{padding:8px 14px;min-height:44px}
 .statCard{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,.45);transition:transform .2s ease,box-shadow .2s ease}
 .statCard:hover{transform:translateY(-2px)}
 .statCard small{color:#94A3B8;font-weight:700;text-transform:uppercase;font-size:11px;letter-spacing:.08em}
@@ -256,6 +256,80 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .wsStep.cur .n{background:#ffa726;color:#fff}
 .wsStep .lb{flex:1;line-height:1.35}
 .wsStep .cost{font-size:12px;color:#fca5a5;font-weight:700;white-space:nowrap}
+
+/* --- v10 : polices adaptées, fluidité et visuel plus beau --- */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.card,.siteCard,.tCard,.statCard{box-shadow:0 10px 32px rgba(2,6,23,.5),inset 0 1px 0 rgba(255,255,255,.07);border-color:rgba(255,255,255,.11)}
+.card h3{letter-spacing:.01em}
+.card>h3{padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:10px}
+button{letter-spacing:.01em}
+button.primary:active,button.green:active,button.danger:active{filter:brightness(1.12)}
+.typeCard,.themeBtn{transition:border-color .15s ease,background .15s ease,box-shadow .15s ease,transform .15s ease}
+.typeCard:active,.themeBtn:active{transform:scale(.98)}
+.bnavbtn{transition:background .15s ease,color .15s ease,transform .15s ease}
+input:focus,select:focus{border-color:#22D3EE;outline:none;box-shadow:0 0 0 2px rgba(34,211,238,.25)}
+.officeBanner{box-shadow:0 10px 32px rgba(2,6,23,.5)}
+.wsStage{box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),0 10px 32px rgba(2,6,23,.5)}
+.wsTower{will-change:transform}
+.wsPanel{will-change:transform,opacity}
+main{overflow-x:hidden}
+@media(max-width:480px){
+.card,.siteCard .body,.tCard .body,.statCard{padding:14px}
+.card h3{font-size:15px}
+.siteNums b{font-size:18px}
+.statCard b{font-size:24px}
+.player h2{font-size:16px}
+.topbar h1{font-size:14px}
+.loginCard h2{font-size:20px}
+#dayBanner{font-size:22px;padding:14px 24px}
+#launchBtn{font-size:16px}
+.segico{font-size:20px}
+.tHead b,.siteHead b{font-size:14.5px}
+.actCard b{font-size:14px}
+.pava{width:76px;height:76px}
+.tava{width:56px;height:56px;flex-basis:56px}
+.hbar .hn{width:120px;flex-basis:120px}
+.taskrow .tname{width:84px;flex-basis:84px}
+.bnavbtn .ic{font-size:21px}
+}
+@media(max-width:390px){
+body{font-size:clamp(12.5px,3.6vw,14px)}
+.card h3{font-size:14.5px}
+.siteNums b{font-size:17px}
+.statCard b{font-size:22px}
+.topbar .tstat{font-size:12px}
+.pill{font-size:12px}
+.jline{font-size:12.5px}
+.msgMe{margin:6px 0 6px 20px}
+.msgClient{margin:6px 20px 6px 0}
+}
+@media(max-width:360px){
+body{font-size:13px}
+main{padding:10px 10px 116px}
+.card,.siteCard .body,.tCard .body,.statCard{padding:12px}
+.card h3{font-size:14px}
+.siteNums b{font-size:16px}
+.statCard b{font-size:21px}
+.player h2{font-size:15px}
+.topbar h1{font-size:13.5px}
+.loginCard h2{font-size:19px}
+#dayBanner{font-size:20px;padding:12px 20px}
+#launchBtn{font-size:15px}
+.navbtn{font-size:13.5px}
+.siteBtns button{font-size:12.5px}
+.segName{font-size:13px}
+.lvlTop{font-size:13px}
+.jday{font-size:13px}
+.hbar .hn{width:104px;flex-basis:104px;font-size:12px}
+.taskrow .tname{width:76px;flex-basis:76px;font-size:12px}
+.wsTowerWrap{width:180px}
+.wsMonitor{width:104px}
+.wsScreen{font-size:11px}
+.bnavbtn .ic{font-size:20px}
+.pava{width:68px;height:68px}
+.tava{width:52px;height:52px;flex-basis:52px}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head><body>
@@ -276,8 +350,8 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
  </div>
  <div id="accountBox" class="accBox hidden"></div>
  <div id="localSaveBox" style="margin:0 4px 12px">
-  <button class="ghost" style="width:100%;min-height:40px" onclick="wstExportSave()">💾 Exporter ma partie</button>
-  <button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="document.getElementById('saveFileInput').click()">📂 Importer ma partie</button>
+  <button class="ghost" style="width:100%;min-height:44px" onclick="wstExportSave()">💾 Exporter ma partie</button>
+  <button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="document.getElementById('saveFileInput').click()">📂 Importer ma partie</button>
   <input type="file" id="saveFileInput" accept=".json,application/json" style="display:none" onchange="wstImportFile(this)">
  </div>
  <nav id="mainNav">
@@ -481,7 +555,7 @@ function wstSbMsg(t,ok){var m=document.getElementById('loginMsg');if(!m)return;m
 function wstSbErr(e){var z=e&&e.message?String(e.message):"";if(/Email not confirmed/i.test(z))return"Tu dois d'abord confirmer ton e-mail (clique sur le lien re\u00e7u par mail).";if(/Invalid login credentials/i.test(z))return"E-mail ou mot de passe incorrect.";if(/already registered|already exists/i.test(z))return"Un compte existe d\u00e9j\u00e0 avec cet e-mail. Connecte-toi ou r\u00e9initialise ton mot de passe.";if(/Password should be/i.test(z))return"Mot de passe trop court : 8 caract\u00e8res minimum.";if(/invalid email|validate email|Unable to validate/i.test(z))return"Adresse e-mail invalide.";return"Une erreur est survenue. R\u00e9essaie.";}
 function wstShowLogin(){var s=document.getElementById('loginScreen');if(s)s.classList.remove('hidden');var a=document.getElementById('accountBox');if(a)a.classList.add('hidden');}
 var wstCurrentUser=null;
-function wstRenderAccount(user){var a=document.getElementById('accountBox');if(!a)return;if(!user){wstCurrentUser=null;var pn0=document.getElementById('playerName');if(pn0)pn0.textContent="Toi";a.innerHTML='<button class="ghost" style="width:100%;min-height:40px" onclick="wstShowLogin()">\uD83D\uDD11 Se connecter</button>';a.classList.remove('hidden');return;}wstCurrentUser=user;var pseudo=user.user_metadata&&user.user_metadata.pseudo?user.user_metadata.pseudo:"";var em=user.email||"";var name=pseudo||em||"Joueur";var pn=document.getElementById('playerName');if(pn)pn.textContent=name;a.innerHTML='<div class="accName">\uD83D\uDC64 <b>'+wstEsc(name)+'</b></div>'+((pseudo&&em)?'<div class="accMail">'+wstEsc(em)+'</div>':'')+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstEditPseudo()">\u270F\uFE0F Modifier le pseudo</button>'+'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstLogout()">\uD83D\uDEAA Se d\u00e9connecter</button>';a.classList.remove('hidden');}
+function wstRenderAccount(user){var a=document.getElementById('accountBox');if(!a)return;if(!user){wstCurrentUser=null;var pn0=document.getElementById('playerName');if(pn0)pn0.textContent="Toi";a.innerHTML='<button class="ghost" style="width:100%;min-height:44px" onclick="wstShowLogin()">\uD83D\uDD11 Se connecter</button>';a.classList.remove('hidden');return;}wstCurrentUser=user;var pseudo=user.user_metadata&&user.user_metadata.pseudo?user.user_metadata.pseudo:"";var em=user.email||"";var name=pseudo||em||"Joueur";var pn=document.getElementById('playerName');if(pn)pn.textContent=name;a.innerHTML='<div class="accName">\uD83D\uDC64 <b>'+wstEsc(name)+'</b></div>'+((pseudo&&em)?'<div class="accMail">'+wstEsc(em)+'</div>':'')+'<button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="wstEditPseudo()">\u270F\uFE0F Modifier le pseudo</button>'+'<button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="wstLogout()">\uD83D\uDEAA Se d\u00e9connecter</button>';a.classList.remove('hidden');}
 function wstEditPseudo(){
  var a=document.getElementById('accountBox');
  if(!a||!wstCurrentUser)return;
@@ -489,8 +563,8 @@ function wstEditPseudo(){
  var em=wstCurrentUser.email||"";
  a.innerHTML='<div class="accName">\uD83D\uDC64 <b>'+wstEsc(pseudo||em||"Joueur")+'</b></div>'
  +'<input id="pseudoEdit" class="loginField" type="text" maxlength="24" value="'+wstEsc(pseudo)+'" placeholder="Ton nouveau pseudo" style="margin-top:8px">'
- +'<button class="primary" style="width:100%;margin-top:8px;min-height:40px" onclick="wstSavePseudo()">\uD83D\uDCBE Enregistrer</button>'
- +'<button class="ghost" style="width:100%;margin-top:8px;min-height:40px" onclick="wstRenderAccount(wstCurrentUser)">\u2716 Annuler</button>';
+ +'<button class="primary" style="width:100%;margin-top:8px;min-height:44px" onclick="wstSavePseudo()">\uD83D\uDCBE Enregistrer</button>'
+ +'<button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="wstRenderAccount(wstCurrentUser)">\u2716 Annuler</button>';
  var inp=document.getElementById('pseudoEdit');
  if(inp){inp.focus();inp.select();}
 }
@@ -1076,7 +1150,7 @@ function renderWorkshop(){
  let scr=wsScreen(a,ws,plan);
  let cur=ws.done.length<steps.length?steps[ws.done.length]:null;
  let selBar='';
- if(wsSel){let sp=WS_PARTS[wsSel];selBar='<div class="wsSelBar"><span style="flex:1">🎯 <b>'+sp.name+'</b>'+(cur&&cur.part===wsSel?' — '+cur.label+(wsStepCost(cur)>0?' ('+wsStepCost(cur)+' $)':''):'')+'</span>'+(cur&&cur.part===wsSel?'<button class="primary" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" '+(ws.run?'disabled':'')+' onclick="wsDoSelected()">▶️ Faire</button>':'<span class="small">Étape en cours : '+(cur?cur.label+' ('+WS_PARTS[cur.part].name+')':'—')+'</span>')+'</div>';}else{selBar='<p class="small">👆 Touche un composant du PC (ou l’écran) pour le sélectionner.</p>';}
+ if(wsSel){let sp=WS_PARTS[wsSel];selBar='<div class="wsSelBar"><span style="flex:1">🎯 <b>'+sp.name+'</b>'+(cur&&cur.part===wsSel?' — '+cur.label+(wsStepCost(cur)>0?' ('+wsStepCost(cur)+' $)':''):'')+'</span>'+(cur&&cur.part===wsSel?'<button class="primary" style="width:auto;padding:9px 14px;min-height:44px;white-space:nowrap" '+(ws.run?'disabled':'')+' onclick="wsDoSelected()">▶️ Faire</button>':'<span class="small">Étape en cours : '+(cur?cur.label+' ('+WS_PARTS[cur.part].name+')':'—')+'</span>')+'</div>';}else{selBar='<p class="small">👆 Touche un composant du PC (ou l’écran) pour le sélectionner.</p>';}
  let isDonePart=function(p){return steps.some((s,ix)=>s.part===p&&ws.done.indexOf(ix)>=0)};
  let pcls=function(p,base){let c='wsPart '+base;if(ws.diag&&plan.fault===p&&!isDonePart(p))c+=' fault';else if(isDonePart(p))c+=' done';if(cur&&cur.part===p&&(cur.kind!='diag'||ws.diag))c+=' cur';if(wsSel===p)c+=' sel';return c};
  let pbadge=function(p){if(isDonePart(p))return '<b class="wsBadge">✅</b>';if(ws.diag&&plan.fault===p)return '<b class="wsBadge">⚠️</b>';return ''};
@@ -1104,7 +1178,7 @@ function renderWorkshop(){
   let done=ws.done.indexOf(ix)>=0;
   let isCur=!done&&ix===ws.done.length;
   let cls='wsStep'+(done?' done':isCur?' cur':'');
-  let btn=done?'<span style="color:#22b573;font-weight:800">✅ Fait</span>':isCur?'<button class="primary" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" '+(ws.run?'disabled':'')+' onclick="wsDoStep('+ix+')">▶️ Faire</button>':'<span class="small">🔒</span>';
+  let btn=done?'<span style="color:#22b573;font-weight:800">✅ Fait</span>':isCur?'<button class="primary" style="width:auto;padding:9px 14px;min-height:44px;white-space:nowrap" '+(ws.run?'disabled':'')+' onclick="wsDoStep('+ix+')">▶️ Faire</button>':'<span class="small">🔒</span>';
   return '<div class="'+cls+'"><span class="n">'+(ix+1)+'</span><span class="lb">'+s.label+'</span>'+(wsStepCost(s)>0?'<span class="cost">'+wsStepCost(s)+' $</span>':'')+btn+'</div>'}).join('');
  box.innerHTML=
  '<div class="card"><h3>🔧 Atelier — '+a.emoji+' '+a.t+'</h3><p>Client : <b>'+a.client+'</b> • Gain : <b>'+a.pay+' $</b> • Délai : <b>'+a.left+' jour(s)</b></p><div class="bar blue"><i style="width:'+pct+'%"></i></div><p class="small">'+pct+'% fait — '+ws.done.length+'/'+steps.length+' étapes • Chaque étape fait avancer la mission, pas besoin d\u2019avancer les jours.</p></div>'+
@@ -1160,9 +1234,9 @@ function shopSell(id){let it=SHOP_ITEMS.find(function(x){return x.id==id});if(!i
 function blackRisk(){if(Math.random()<0.15){let r=Math.random();if(r<0.4){let fine=200+Math.floor(Math.random()*301);G.money=Math.max(0,G.money-fine);addLog('🚔 La police a repéré ton marché noir ! Amende de '+fine+' $.','info');toast('🚔 Pris en flagrant délit ! Amende : '+fine+' $')}else if(r<0.7){G.rep=Math.max(0,G.rep-20);addLog('🚔 Rumeur : on te soupçonne de trafic sur le Darkweb. -20 réputation.','info');toast('🚔 La police te surveille ! -20 réputation')}else{BLACK_ITEMS.forEach(function(b){G.stock[b.id]=0});addLog('🚔 Descente de police : tes marchandises du Darkweb ont été confisquées !','info');toast('🚔 Confiscation ! Tes marchandises du Darkweb sont saisies.')}return true}return false}
 function blackBuy(id){let it=BLACK_ITEMS.find(function(x){return x.id==id});if(!it)return false;if(G.money<it.buy){toast('💰 Pas assez d\u2019argent pour '+it.name+' ('+it.buy+' $)');return false}G.money-=it.buy;G.stock[id]=(G.stock[id]||0)+1;addLog('🌑 Darkweb : '+it.name+' acheté '+it.buy+' $.','argent');blackRisk();save();render();renderDarkweb();toast('🌑 '+it.name+' acheté !');return true}
 function blackSell(id){let it=BLACK_ITEMS.find(function(x){return x.id==id});if(!it)return false;if((G.stock[id]||0)<=0){toast('📦 Tu n\u2019as pas de '+it.name+' en stock.');return false}G.stock[id]--;G.money+=it.sell;addLog('🌑 Darkweb : '+it.name+' revendu '+it.sell+' $.','argent');blackRisk();save();render();renderDarkweb();toast('💵 '+it.name+' revendu : +'+it.sell+' $ !');return true}
-function shopRow(it){let p=shopPrice(it.id),prev=(G.shopPrev&&typeof G.shopPrev[it.id]==='number')?G.shopPrev[it.id]:null;let tr=prev===null?'':(p>prev?' ▲':p<prev?' ▼':' —');let n=G.stock[it.id]||0;return '<div class="card" style="display:flex;gap:10px;align-items:center"><div style="font-size:30px">'+it.emoji+'</div><div style="flex:1"><h3 style="margin:0">'+it.name+'</h3><p style="margin:2px 0">💰 '+p+' $'+tr+' • Revente : '+shopSellPrice(it.id)+' $ • 📦 Stock : <b>'+n+'</b></p></div><div style="display:flex;flex-direction:column;gap:8px"><button class="primary" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" onclick="shopBuy(\''+it.id+'\')">🛒 Acheter</button><button class="ghost" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" '+(n<=0?'disabled':'')+' onclick="shopSell(\''+it.id+'\')">💵 Vendre</button></div></div>'}
+function shopRow(it){let p=shopPrice(it.id),prev=(G.shopPrev&&typeof G.shopPrev[it.id]==='number')?G.shopPrev[it.id]:null;let tr=prev===null?'':(p>prev?' ▲':p<prev?' ▼':' —');let n=G.stock[it.id]||0;return '<div class="card" style="display:flex;gap:10px;align-items:center"><div style="font-size:30px">'+it.emoji+'</div><div style="flex:1"><h3 style="margin:0">'+it.name+'</h3><p style="margin:2px 0">💰 '+p+' $'+tr+' • Revente : '+shopSellPrice(it.id)+' $ • 📦 Stock : <b>'+n+'</b></p></div><div style="display:flex;flex-direction:column;gap:8px"><button class="primary" style="width:auto;padding:9px 14px;min-height:44px;white-space:nowrap" onclick="shopBuy(\''+it.id+'\')">🛒 Acheter</button><button class="ghost" style="width:auto;padding:9px 14px;min-height:44px;white-space:nowrap" '+(n<=0?'disabled':'')+' onclick="shopSell(\''+it.id+'\')">💵 Vendre</button></div></div>'}
 function renderShop(){let box=document.getElementById('shopBox');if(!box)return;let h='<div class="card"><h3>🛒 Boutique</h3><p class="small">Achète des pièces et des logiciels, revends-les quand les prix montent. Les prix bougent chaque jour : achète bas, vends haut ! La revente rapporte 70 % du prix du jour. Les pièces en stock servent directement dans l\u2019atelier.</p></div>';h+=SHOP_CATS.map(function(c){return '<h3 style="margin:16px 2px 8px">'+c.name+'</h3>'+SHOP_ITEMS.filter(function(i){return i.cat==c.id}).map(shopRow).join('')}).join('');h+='<div class="card" style="border-color:#7c3aed"><h3>🌑 Marché noir</h3><p class="small">Envie de gros profits ? Le Darkweb est à part, dans l\u2019onglet 🌑 Darkweb en bas de l\u2019écran. ⚠️ Risqué : la police peut te tomber dessus.</p><button class="primary" onclick="showTab(\'darkweb\')">🌑 Voir le Darkweb</button></div>';box.innerHTML=h}
-function blackRow(it){let n=G.stock[it.id]||0;return '<div class="card" style="display:flex;gap:10px;align-items:center;border-color:#7c3aed"><div style="font-size:30px">'+it.emoji+'</div><div style="flex:1"><h3 style="margin:0">'+it.name+'</h3><p style="margin:2px 0">💰 Achat : '+it.buy+' $ • 💵 Revente : '+it.sell+' $ • 📦 Stock : <b>'+n+'</b></p><p class="small">Revente uniquement — pas utilisable en atelier.</p></div><div style="display:flex;flex-direction:column;gap:8px"><button class="primary" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" onclick="blackBuy(\''+it.id+'\')">🌑 Acheter</button><button class="ghost" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" '+(n<=0?'disabled':'')+' onclick="blackSell(\''+it.id+'\')">💵 Revendre</button></div></div>'}
+function blackRow(it){let n=G.stock[it.id]||0;return '<div class="card" style="display:flex;gap:10px;align-items:center;border-color:#7c3aed"><div style="font-size:30px">'+it.emoji+'</div><div style="flex:1"><h3 style="margin:0">'+it.name+'</h3><p style="margin:2px 0">💰 Achat : '+it.buy+' $ • 💵 Revente : '+it.sell+' $ • 📦 Stock : <b>'+n+'</b></p><p class="small">Revente uniquement — pas utilisable en atelier.</p></div><div style="display:flex;flex-direction:column;gap:8px"><button class="primary" style="width:auto;padding:9px 14px;min-height:44px;white-space:nowrap" onclick="blackBuy(\''+it.id+'\')">🌑 Acheter</button><button class="ghost" style="width:auto;padding:9px 14px;min-height:44px;white-space:nowrap" '+(n<=0?'disabled':'')+' onclick="blackSell(\''+it.id+'\')">💵 Revendre</button></div></div>'}
 function renderDarkweb(){let box=document.getElementById('darkwebBox');if(!box)return;let h='<div class="card" style="border-color:#7c3aed;background:#1a1025"><h3>🌑 Darkweb</h3><p>⚠️ <b>Risqué : la police peut te tomber dessus.</b> À chaque achat ou revente, 15 % de chances de te faire prendre : amende (200–500 $), −20 réputation, ou confiscation de tes marchandises.</p><p class="small">Tout ici est fictif et reste dans le jeu. Revente uniquement — ces articles ne servent pas dans l\u2019atelier.</p></div>';h+=BLACK_ITEMS.map(blackRow).join('');box.innerHTML=h}
 /* --- Sauvegarde (ne plante jamais : localStorage, puis sessionStorage, puis mémoire) --- */
 let storageOK=true,memSave=null;
@@ -1574,6 +1648,7 @@ const HELP=[
  {t:"💬 Renégocier :",x:"quand un imprévu arrive sur un contrat en cours (une page en plus, une pièce cassée…), le client t'écrit. Tu peux lui proposer +20 % sur le prix, une seule fois par contrat — s'il accepte, tu gagnes plus ; s'il refuse, tu perds 2 réputation."},
  {t:"🛒 Boutique :",x:"achète des pièces PC, des logiciels et des antivirus, puis revends-les quand les prix montent. Les prix bougent chaque jour : achète bas, vends haut ! La revente rapporte 70 % du prix du jour. Ouvre le Menu (☰) puis « Boutique ». Les pièces en stock servent directement dans l'atelier : pas besoin de les racheter."},
  {t:"🌑 Darkweb :",x:"le marché noir du jeu, dans l'onglet 🌑 Darkweb en bas de l'écran. Des articles fictifs à gros profits, revente uniquement. Mais attention : à chaque achat ou revente, 15 % de chances de te faire prendre par la police — amende, perte de réputation ou confiscation."},
+{t:"📱 Polices adaptées :",x:"les écritures s'adaptent à ton téléphone : plus petites sur un petit écran, un peu plus grandes sur une tablette. Les boutons restent grands pour bien toucher, et le jeu est plus fluide."},
 ];
 function renderHelp(){let h=HELP.map(i=>i.t?`<p><b>${i.t}</b> ${i.x}</p>`:`<p>${i.x}</p>`).join('');let a=document.getElementById('helpScreen');if(a)a.innerHTML=h;}
 function fmtNum(n){n=Math.round(n);if(n>=1000000)return (n/1000000).toFixed(1).replace(/\.0$/,'')+' M';if(n>=1000)return (n/1000).toFixed(1).replace(/\.0$/,'')+' K';return String(n);}
