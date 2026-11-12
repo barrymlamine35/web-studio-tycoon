@@ -55,6 +55,8 @@ main{padding:12px 12px 116px}
 .card:hover{transform:translateY(-2px)}
 .card h3{margin:0 0 6px;font-size:16px;color:#F1F5F9;font-weight:800}
 .card p{margin:6px 0;line-height:1.5;color:#CBD5E1}
+.card>button{margin-top:8px}
+.card>button+p{margin-top:8px}
 .small{font-size:12.5px;color:#94A3B8}
 .hidden{display:none!important}
 .bar{height:12px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden;margin:6px 0}
@@ -115,6 +117,30 @@ main{padding:12px 12px 116px}
 .hbar{display:flex;align-items:center;gap:9px;margin:7px 0}
 .hbar .hn{width:150px;flex:0 0 150px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#CBD5E1}
 .hbar .bar{flex:1;margin:0}.hbar .hv{width:64px;flex:0 0 64px;text-align:right;font-weight:700;font-size:13px;color:#F1F5F9}
+.segRow{display:block;width:100%;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;margin-top:8px;color:#F1F5F9}
+.segTop{display:flex;gap:8px;align-items:center}
+.segName{flex:1;font-weight:700;font-size:14px}
+.segPct{font-weight:700;font-size:13px;white-space:nowrap}
+.segBadge{font-size:12px;background:rgba(255,255,255,.10);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.segBar{display:block;height:8px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden;margin-top:7px}
+.segBar i{display:block;height:100%;background:#F59E0B;border-radius:999px}
+.actCard{display:block;width:100%;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;margin-top:8px;color:#F1F5F9}
+.actCard b{font-size:15px}
+.actCard .aprice{color:#F59E0B;font-weight:800;white-space:nowrap}
+.actCard p{margin:4px 0 0;font-size:13px;color:#CBD5E1}
+.lvlRow{margin-top:12px}
+.lvlTop{display:flex;justify-content:space-between;font-weight:700;font-size:14px;color:#F1F5F9}
+.lvlSegs{display:flex;gap:4px;margin-top:6px}
+.lvlSegs i{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.12)}
+.lvlSegs i.on{background:#22D3EE}
+.lvlSegs i.onL{background:#EC4899}
+.rivalRow{display:flex;gap:8px;align-items:center;padding:9px 0;border-top:1px solid rgba(255,255,255,.06)}
+.rivalRow:first-child{border-top:0}
+.rRank{width:22px;flex:0 0 22px;text-align:center;font-weight:800;color:#F59E0B}
+.rName{flex:1 1 30%;font-weight:600}
+.rBar{flex:1 1 40%;height:8px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden}
+.rBar i{display:block;height:100%;background:#22D3EE;border-radius:999px}
+.rScore{width:44px;flex:0 0 44px;text-align:right;font-weight:700}
 table.rank{width:100%;border-collapse:collapse;background:transparent}
 table.rank td,table.rank th{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;color:#F1F5F9}
 table.rank th{color:#94A3B8;text-transform:uppercase;font-size:11px;letter-spacing:.08em}
@@ -189,7 +215,8 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
  </div>
  <nav id="mainNav">
   <button class="navbtn on" data-tab="sites" onclick="showTab('sites',this)">🖥️ Sites <span class="cnt" id="cntSites">0</span></button>
-  <button class="navbtn" data-tab="create" onclick="showTab('create',this)">➕ Créer un site</button>
+  <button class="navbtn" data-tab="sites" onclick="showTab('sites');setTimeout(function(){var a=document.getElementById('appsSection');if(a&&a.scrollIntoView)a.scrollIntoView();},80)">📱 Applications <span class="cnt" id="cntApps">0</span></button>
+  <button class="navbtn" data-tab="create" onclick="showTab('create',this)">➕ Créer</button>
   <button class="navbtn" data-tab="team" onclick="showTab('team',this)">👥 Équipe <span class="cnt" id="cntTeam">1</span></button>
   <button class="navbtn" data-tab="stats" onclick="showTab('stats',this)">📊 Statistiques</button>
   <button class="navbtn" data-tab="contracts" onclick="showTab('contracts',this)">📋 Contrats <span class="cnt" id="cntContracts">0</span></button>
@@ -215,29 +242,37 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 <!-- SITES -->
 <section id="tab-sites">
  <div class="officeBanner" id="officeScene"></div>
- <div style="display:flex;gap:8px;margin-bottom:12px">
-  <button class="green" style="flex:1;min-width:0;white-space:nowrap" onclick="showTab('create')">➕ Créer un site</button>
-  <button class="ghost" style="flex:1;min-width:0;white-space:nowrap" onclick="showTab('contracts')">📋 Voir les contrats</button>
- </div>
  <div id="mySites"></div>
+ <div id="appsSection" style="margin-top:16px">
+ <h3 style="margin:4px 0 8px">📱 Mes applications</h3>
+ <div id="myApps"></div>
+ </div>
+ <div id="depannageSection" style="margin-top:16px">
+ <h3 style="margin:4px 0 8px">🔧 Dépannage</h3>
+ <div id="depannageBox"></div>
+ </div>
 </section>
 <!-- CREATION -->
 <section id="tab-create" class="hidden">
+ <div style="display:flex;gap:8px;margin-bottom:12px">
+  <button id="modeSiteBtn" class="green" style="flex:1;min-width:0;white-space:nowrap" onclick="setCreateMode('site')">🌐 Site web</button>
+  <button id="modeAppBtn" class="ghost" style="flex:1;min-width:0;white-space:nowrap" onclick="setCreateMode('app')">📱 Application</button>
+ </div>
  <div id="createProgress" class="createProgress"></div>
- <div class="card" id="cstep1"><h3>1️⃣ Nom de domaine</h3>
+ <div class="card" id="cstep1"><h3 id="cstep1Title">1️⃣ Nom de domaine</h3>
  <div style="display:flex;gap:8px;flex-wrap:wrap">
   <input id="domainInput" style="flex:2;min-width:160px" maxlength="16" placeholder="mon-super-site" oninput="renderCreatePreview()">
   <select id="domainExt" onchange="renderCreatePreview()">
    <option value=".free">.free</option><option value=".fr">.fr</option><option value=".com">.com</option><option value=".net">.net</option><option value=".org">.org</option>
   </select>
  </div>
- <p class="small">De 3 à 16 caractères : lettres, chiffres et tirets. Si tu laisses vide, le jeu choisira un nom pour toi dans le thème.</p>
+ <p class="small" id="domainHelp">De 3 à 16 caractères : lettres, chiffres et tirets. Si tu laisses vide, le jeu choisira un nom pour toi dans le thème.</p>
  <button class="primary" style="width:100%;margin-top:12px" onclick="createStep=2;renderCreate()">Continuer →</button></div>
- <div class="card" id="cstep2"><button class="ghost" style="margin-bottom:10px" onclick="createStep=1;renderCreate()">← Retour</button><h3>2️⃣ Type de site</h3><div class="gridTypes" id="typeGrid"></div></div>
- <div class="card" id="cstep3"><button class="ghost" style="margin-bottom:10px" onclick="createStep=2;renderCreate()">← Retour</button><h3>3️⃣ Thème du site</h3><div class="gridTypes" id="themeGrid"></div>
+ <div class="card" id="cstep2"><button class="ghost" style="margin-bottom:10px" onclick="createStep=1;renderCreate()">← Retour</button><h3 id="cstep2Title">2️⃣ Type de site</h3><div class="gridTypes" id="typeGrid"></div></div>
+ <div class="card" id="cstep3"><button class="ghost" style="margin-bottom:10px" onclick="createStep=2;renderCreate()">← Retour</button><h3 id="cstep3Title">3️⃣ Thème du site</h3><div class="gridTypes" id="themeGrid"></div>
  <p class="small">Le prix dépend du thème : c'est le coût de lancement, payé une seule fois.</p></div>
- <div class="card" id="cstep4"><button class="ghost" style="margin-bottom:10px" onclick="createStep=3;renderCreate()">← Retour</button><h3>4️⃣ Hébergement, système &amp; aperçu</h3>
- <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+ <div class="card" id="cstep4"><button class="ghost" style="margin-bottom:10px" onclick="createStep=3;renderCreate()">← Retour</button><h3 id="cstep4Title">4️⃣ Hébergement, système &amp; aperçu</h3>
+ <div id="siteOptionsRow" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
   <label class="small" style="flex:1;min-width:160px">🏠 Hébergement<br><select id="hostingSelect" onchange="renderCreatePreview()" style="width:100%;padding:9px;border-radius:8px;border:1px solid #cfdde4;background:#fff">
   <option value="0">Mutualisé — gratuit</option>
   <option value="1">Standard — 200 $ + 15 $ / jour</option>
@@ -252,10 +287,14 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
   </select></label>
  </div>
  <div id="createPreview"></div>
+ <div id="appPreview" style="display:none"></div>
+ <button id="launchAppBtn" class="green" style="width:100%;font-size:16px;display:none" onclick="createAppFromForm()">🚀 Lancer cette application</button>
  <button id="launchBtn" class="green" style="width:100%;font-size:16px" onclick="createSiteFromForm()">🚀 Lancer ce site</button></div>
 </section>
 <!-- DETAIL SITE -->
 <section id="tab-siteDetail" class="hidden"><div id="siteDetail"></div></section>
+<!-- DETAIL APPLICATION -->
+<section id="tab-appDetail" class="hidden"><div id="appDetail"></div></section>
 <!-- EQUIPE -->
 <section id="tab-team" class="hidden">
  <div id="myTeam" style="margin-bottom:14px"></div>
@@ -277,10 +316,10 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 </section>
 <!-- MARCHE -->
 <section id="tab-market" class="hidden">
- <div class="card"><h3>🎯 Parts de marché</h3>
+ <div class="card"><h3>📊 Tes parts de marché</h3>
  <div id="segments"></div></div>
  <div class="card"><h3>⚔️ Attaquer et se défendre</h3>
- <div id="marketActions"></div><p id="defenseInfo"></p></div>
+ <div id="marketActions"></div><div id="defenseInfo"></div></div>
  <div class="card"><h3>🏭 Les studios rivaux</h3>
  <div id="rivalsList"></div></div>
 </section>
@@ -547,7 +586,7 @@ function officeSVG(){
    if(people[i]) workers+=workerAt(xx,96,people[i].seed,0.92)+`<text x="${xx}" y="208" text-anchor="middle" font-size="13" font-weight="bold" fill="#28505f">${people[i].name}</text>${people[i].role?`<text x="${xx}" y="224" text-anchor="middle" font-size="10" fill="#5c707b">${people[i].role}</text>`:''}`;
    else workers+=`<g transform="translate(${xx} 116)"><rect x="-26" y="28" width="52" height="13" rx="5" fill="#a9bfc9"/><rect x="-20" y="40" width="40" height="22" rx="3" fill="#c3d3da"/><text x="0" y="98" text-anchor="middle" font-size="11" fill="#6d8894">place libre</text></g>`;
  }
- const sub=G.sites&&G.sites.length?('Tes sites en ligne : '+G.sites.length):(G.active?('Projet en cours : '+G.active.t):'Lance ton premier site !');
+ const sub=(G.sites&&G.sites.length)||(G.apps&&G.apps.length)?('Tes sites en ligne : '+G.sites.length+' • Tes apps : '+(G.apps?G.apps.length:0)):(G.active?('Projet en cours : '+G.active.t):'Lance ton premier site !');
  return `<svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg">
  <rect width="760" height="230" fill="${bg}"/>
  <rect y="182" width="760" height="48" fill="#9fc6cf"/>
@@ -579,6 +618,29 @@ const CONTRACT_TYPES=[
  {t:"Plateforme web",emoji:"🚀",min:6,work:150,pay:3900,rep:95,days:13},
  {t:"Projet grande entreprise",emoji:"🏢",min:8,work:220,pay:6550,rep:150,days:15},
  {t:"Application IA prestige",emoji:"🤖",min:9,work:300,pay:10900,rep:240,days:18}];
+/* --- Dépannage / maintenance : vrais systèmes et vrais antivirus --- */
+const DEPANNAGE_JOBS=[
+ {t:"Installer Windows 11",emoji:"💻",min:1,work:40,pay:400,rep:15,days:4},
+ {t:"Installer Windows 10",emoji:"💻",min:1,work:35,pay:350,rep:12,days:4},
+ {t:"Installer macOS",emoji:"🍎",min:1,work:45,pay:450,rep:18,days:4},
+ {t:"Installer Ubuntu",emoji:"🐧",min:1,work:30,pay:300,rep:12,days:3},
+ {t:"Réinstaller Android",emoji:"🤖",min:1,work:30,pay:300,rep:12,days:3},
+ {t:"Réinstaller iOS",emoji:"🍏",min:1,work:35,pay:350,rep:14,days:3},
+ {t:"Installer un antivirus Avast",emoji:"🛡️",min:1,work:20,pay:250,rep:8,days:2},
+ {t:"Installer un antivirus Norton",emoji:"🛡️",min:1,work:22,pay:280,rep:9,days:2},
+ {t:"Installer un antivirus Bitdefender",emoji:"🛡️",min:1,work:22,pay:280,rep:9,days:2},
+ {t:"Installer un antivirus McAfee",emoji:"🛡️",min:1,work:20,pay:260,rep:8,days:2},
+ {t:"Installer un antivirus Kaspersky",emoji:"🛡️",min:1,work:22,pay:280,rep:9,days:2},
+ {t:"Installer un antivirus Avira",emoji:"🛡️",min:1,work:20,pay:250,rep:8,days:2},
+ {t:"Configurer Windows Defender",emoji:"🛡️",min:1,work:20,pay:250,rep:8,days:2},
+ {t:"Supprimer un virus",emoji:"🦠",min:1,work:50,pay:500,rep:20,days:4},
+ {t:"Nettoyer un PC infecté",emoji:"🧹",min:1,work:55,pay:550,rep:22,days:5},
+ {t:"Réparer un PC qui ne démarre plus",emoji:"🔧",min:1,work:70,pay:700,rep:28,days:5},
+ {t:"Récupérer des données perdues",emoji:"💾",min:1,work:80,pay:800,rep:32,days:6},
+ {t:"Remplacer un disque dur",emoji:"💽",min:1,work:60,pay:600,rep:24,days:4},
+ {t:"Remplacer un écran",emoji:"🖥️",min:1,work:65,pay:650,rep:26,days:4},
+ {t:"Mettre à jour un système",emoji:"⬆️",min:1,work:30,pay:300,rep:12,days:3},
+ {t:"Configurer le Wi-Fi",emoji:"📶",min:1,work:20,pay:250,rep:8,days:2}];
 const CLIENTS=["Boulangerie Soleil","Café Nova","Studio Danse Luna","Boutique Kira","Taxi Rapido","École Horizon","Sport Club Atlas","Maison Flora","Tech Conseil Plus","Ferme Verte"];
 const CANDIDATES=[
  {name:"Maya",role:"Designer",spec:"Design",lvl:1,power:6,salary:25,seed:"maya1"},
@@ -670,17 +732,37 @@ const TASK_DEF=[
  {id:"mkt",name:"📣 Marketing direct",cls:"pop"}];
 const TASK_SKILL={design:'design',layout:'layout',code:'code',content:'mkt',seo:'mkt',social:'mkt',mkt:'mkt'};
 const TASK_SKILL_NAME={design:'Design',layout:'Mise en page',code:'Code',mkt:'Marketing'};
-function taskSkillVal(e,tid){return talentSkills(e)[TASK_SKILL[tid]||'design'];}
+/* --- Applications : types, plateformes et taches (comme dans la vraie vie) --- */
+const APP_TYPES=[
+ {id:"mobile",name:"Application mobile",icon:"\uD83D\uDCF1",desc:"Pour téléphone et tablette",cost:400,platforms:["android","ios"],ideas:["Mes Notes Faciles","Recettes du Jour","Mon Budget Malin","Météo de Poche"]},
+ {id:"desktop",name:"Application ordinateur",icon:"\uD83D\uDCBB",desc:"Pour Windows, macOS et Linux",cost:600,platforms:["windows","macos","linux"],ideas:["Studio Photo Pro","Gestionnaire de Tâches","Lecteur Musique Plus","Éditeur de Texte Simple"]},
+ {id:"web",name:"Application web",icon:"\uD83C\uDF10",desc:"Utilisable dans le navigateur",cost:300,platforms:["web"],ideas:["Outil en Ligne","Calculatrice Pro","Convertisseur Rapide","Tableau de Bord Web"]}];
+const APP_PLATFORMS=[
+ {id:"android",name:"Android",icon:"\uD83E\uDD16",cost:0},
+ {id:"ios",name:"iOS",icon:"\uD83C\uDF4F",cost:100},
+ {id:"windows",name:"Windows",icon:"\uD83E\uDE9F",cost:0},
+ {id:"macos",name:"macOS",icon:"\uD83C\uDF4E",cost:100},
+ {id:"linux",name:"Linux",icon:"\uD83D\uDC27",cost:0},
+ {id:"web",name:"Web",icon:"\uD83C\uDF0D",cost:0}];
+const APP_TASK_DEF=[
+ {id:"maquette",name:"\uD83D\uDCD0 Maquette",cls:"red"},
+ {id:"dev",name:"\uD83D\uDCBB Développement",cls:"purple"},
+ {id:"tests",name:"\uD83E\uDDEA Tests",cls:"blue"},
+ {id:"publication",name:"\uD83D\uDE80 Publication",cls:"pop"},
+ {id:"maj",name:"\uD83D\uDD04 Mises à jour",cls:""}];
+const APP_TASK_SKILL={maquette:'design',dev:'code',tests:'code',publication:'mkt',maj:'mkt'};
+function taskSkillVal(e,tid){return talentSkills(e)[TASK_SKILL[tid]||APP_TASK_SKILL[tid]||'design'];}
 function taskGain(e,tid){return 8+Math.round(taskSkillVal(e,tid)/2);}
 
 /* --- État de la partie --- */
-let G, selectedSiteId=null, selSeg='blogs', selType='contenu', createStep=1;
+let G, selectedSiteId=null, selectedAppId=null, selSeg='blogs', selType='contenu', createStep=1, createMode='site', selAppType='mobile', selAppPlatform='android';
 function freshRivals(){return RIVAL_DEF.map(r=>({...r}))}
-function fresh(){return{day:1,money:750000000,rep:0,dev:6,design:4,team:[],active:null,offers:genOffers(1),office:0,tool:0,done:0,won:false,coins:1000000,
- sites:[],rivals:freshRivals(),defense:0,loyalty:0,cdMarket:0,cdAggress:0,log:[],siteIncomeTotal:0,visitorsTotal:0,visitorHist:[],adOffers:genAdOffers(),trafficOffers:genTrafficOffers()}}
+function fresh(){return{day:1,money:750000000,rep:0,dev:6,design:4,team:[],active:null,offers:genOffers(1,true),office:0,tool:0,done:0,won:false,coins:1000000,
+ sites:[],apps:[],rivals:freshRivals(),defense:0,loyalty:0,cdMarket:0,cdAggress:0,log:[],siteIncomeTotal:0,visitorsTotal:0,visitorHist:[],adOffers:genAdOffers(),trafficOffers:genTrafficOffers()}}
 function defaultTasks(q){return{design:Math.min(90,Math.round(q*0.9)),layout:Math.min(85,Math.round(q*0.8)),code:Math.min(88,Math.round(q*0.85)),content:Math.min(80,Math.round(q*0.75)),seo:Math.min(70,Math.round(q*0.55)),social:Math.min(65,Math.round(q*0.5)),mkt:Math.min(70,Math.round(q*0.6))}}
 function ensure(){
  if(!Array.isArray(G.sites))G.sites=[];
+ if(!Array.isArray(G.apps))G.apps=[];
  if(!Array.isArray(G.rivals)||!G.rivals.length)G.rivals=freshRivals();
  if(typeof G.defense!=="number")G.defense=0;
  if(typeof G.loyalty!=="number")G.loyalty=0;
@@ -711,6 +793,19 @@ function ensure(){
   if(typeof s.ads==="number"){let n=s.ads;s.ads=[];for(let i=0;i<n;i++)s.ads.push({id:Date.now()+i+Math.random(),name:ADVERTISERS[i%ADVERTISERS.length],rate:20,on:true})}
   if(!Array.isArray(s.ads))s.ads=[];
  });
+ G.apps.forEach(a=>{
+  if(typeof a.downloads!=="number")a.downloads=0;
+  if(typeof a.popularity!=="number")a.popularity=12;
+  if(typeof a.version!=="number")a.version=1;
+  if(!a.type)a.type="Application mobile";
+  if(!a.platform)a.platform="Android";
+  if(!Array.isArray(a.hist)||!a.hist.length)a.hist=[a.downloads];
+  if(!a.tasks||typeof a.tasks!=="object")a.tasks=defaultAppTasks(a.quality||30);
+  APP_TASK_DEF.forEach(t=>{if(typeof a.tasks[t.id]!=="number")a.tasks[t.id]=Math.min(90,Math.round((a.quality||30)*0.7))});
+  if(!a.assign||typeof a.assign!=="object")a.assign={};
+  if(typeof a.ads==="number"){let n=a.ads;a.ads=[];for(let i=0;i<n;i++)a.ads.push({id:Date.now()+i+Math.random(),name:ADVERTISERS[i%ADVERTISERS.length],rate:20,on:true})}
+  if(!Array.isArray(a.ads))a.ads=[];
+ });
  G.team.forEach(e=>{if(typeof e.energy!=="number")e.energy=82+(seedNum(e.seed)%16);
   if(typeof e.loyalty!=="number")e.loyalty=loyaltyOf(e);
   if(typeof e.xp!=="number")e.xp=0;
@@ -726,7 +821,7 @@ function hostingOf(s){return HOSTINGS[typeof s.hosting==="number"?s.hosting:0]}
 function hostingCost(){return G.sites.reduce((a,s)=>a+hostingOf(s).perDay,0)}
 function zoneOf(s){return ZONES[((s.zone||'.free').slice(1))]||ZONES.free}
 function domainCost(){return G.sites.reduce((a,s)=>a+zoneOf(s).perDay,0)}
-function genOffers(lv){let a=[];for(let i=0;i<4;i++){let pool=CONTRACT_TYPES.filter(c=>c.min<=lv+1);let b=pool[Math.floor(Math.random()*pool.length)];a.push({...b,client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()})}return a}
+function genOffers(lv,forceDep){let a=[];for(let i=0;i<4;i++){if((forceDep&&i==0)||Math.random()<0.4){let j=DEPANNAGE_JOBS[Math.floor(Math.random()*DEPANNAGE_JOBS.length)];a.push({...j,cat:'depannage',client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()});continue;}let pool=CONTRACT_TYPES.filter(c=>c.min<=lv+1);let b=pool[Math.floor(Math.random()*pool.length)];a.push({...b,client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()})}return a}
 
 /* --- Sauvegarde (ne plante jamais : localStorage, puis sessionStorage, puis mémoire) --- */
 let storageOK=true,memSave=null;
@@ -743,14 +838,14 @@ function renderJournal(){let box=document.getElementById('journalScreen');if(!bo
  box.innerHTML='<p class="small">'+G.log.length+' entrée(s) — la plus récente en haut.</p>'+days.map(g=>'<div class="jday">📅 Jour '+g.d+'</div>'+g.items.map(e=>'<div class="jline"><span class="jico">'+(LOG_CATS[e.c]||'🗒️')+'</span><span>'+e.t+'</span></div>').join('')).join('')}
 
 /* --- Navigation --- */
-const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer un site",siteDetail:"🔎 Détail du site",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",ranking:"🏆 Classement",market:"🎯 Marché",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio"};
+const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer",siteDetail:"🔎 Détail du site",appDetail:"📱 Détail de l'application",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",ranking:"🏆 Classement",market:"🎯 Marché",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio"};
 function showTab(id,btn){
- ['sites','create','siteDetail','team','stats','contracts','ranking','market','office','help','journal'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
+ ['sites','create','siteDetail','appDetail','team','stats','contracts','ranking','market','office','help','journal'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
  document.querySelectorAll('#mainNav .navbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
  document.querySelectorAll('.bnavbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
  document.getElementById('screenTitle').textContent=TITLES[id]||'Web Studio Tycoon';
  closeMenu();
- if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='journal')renderJournal();
+ if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='appDetail')renderAppDetail(); if(id=='journal')renderJournal();
  window.scrollTo(0,0)}
 function toggleMenu(){document.querySelector('.side').classList.toggle('open');document.getElementById('menuBack').classList.toggle('hidden')}
 function closeMenu(){let s=document.querySelector('.side');if(s)s.classList.remove('open');let m=document.getElementById('menuBack');if(m)m.classList.add('hidden')}
@@ -761,13 +856,16 @@ function typeOf(id){return SITE_TYPES.find(t=>t.id==id)}
 function siteVisitors(s){let cap=hostingOf(s).cap;let v=Math.round(s.quality*s.popularity/2);if(cap>0)v=Math.min(v,cap);return v+(s.traffic?s.traffic.bonus:0)}
 function siteRevenue(s){let v=siteVisitors(s);let adRev=(Array.isArray(s.ads)?s.ads:[]).filter(a=>a.on).reduce((t,a)=>t+Math.round(v/1000*a.rate),0);return Math.round(v*0.05)+adRev}
 function sponsorIncome(){return Math.floor(G.rep/10)}
-function dailyRevenue(){return G.sites.reduce((a,s)=>a+siteRevenue(s),0)}
+function dailyRevenue(){return G.sites.reduce((a,s)=>a+siteRevenue(s),0)+G.apps.reduce((a,x)=>a+appRevenue(x),0)}
+function totalDownloads(){return G.apps.reduce((a,x)=>a+appDownloads(x),0)}
+function appDownloads(a){return Math.round(a.quality*a.popularity/2)}
+function appRevenue(a){let d=appDownloads(a);let adRev=(Array.isArray(a.ads)?a.ads:[]).filter(x=>x.on).reduce((t,x)=>t+Math.round(d/1000*x.rate),0);return Math.round(d*0.08)+adRev}
 function totalVisitors(){return G.sites.reduce((a,s)=>a+siteVisitors(s),0)}
 function rivalFactor(){let avg=G.rivals.reduce((a,r)=>a+r.score,0)/Math.max(1,G.rivals.length);return Math.min(2.2,Math.max(.7,avg/480))}
 function segPower(id){return G.sites.filter(s=>s.seg==id).reduce((a,s)=>a+s.quality*1.5+s.popularity+siteVisitors(s)/40,0)}
 function segShare(id){let p=segPower(id);if(p<=0)return 0;let r=segOf(id).rival*rivalFactor();return Math.round(1000*p/(p+r))/10}
 function totalShare(){return SEGMENTS.reduce((a,s)=>a+segShare(s.id),0)}
-function playerScore(){return Math.round(G.rep+G.done*25+totalVisitors()/10+totalShare()*4+level()*50+G.sites.length*40)}
+function playerScore(){return Math.round(G.rep+G.done*25+totalVisitors()/10+totalShare()*4+level()*50+G.sites.length*40+G.apps.length*40)}
 function talentSkills(c){
  let base=c.lvl*4+Math.round(c.power/2);
  let d={design:base,code:base,layout:base,mkt:base};
@@ -878,11 +976,88 @@ function publishVersion(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
  s.tasks={design:35,layout:30,code:38,content:32,seo:25,social:22,mkt:28};
  addLog(s.name+" passe en version "+s.version+" : qualité +5, popularité +8, +6 réputation et +5 🪙. Les visiteurs voient la différence.",'site');save();render();renderSiteDetail();toast("🚀 "+s.name+" : version "+s.version+" publiée ! +6 réputation et +5 🪙")}
 
+/* --- Applications : création, tâches, publication, publicité --- */
+function appTypeOf(id){return APP_TYPES.find(t=>t.id==id)||APP_TYPES[0]}
+function appPlatformOf(id){return APP_PLATFORMS.find(p=>p.id==id)||APP_PLATFORMS[0]}
+function defaultAppTasks(q){return{maquette:Math.min(90,Math.round(q*0.9)),dev:Math.min(85,Math.round(q*0.8)),tests:Math.min(80,Math.round(q*0.75)),publication:Math.min(70,Math.round(q*0.6)),maj:Math.min(65,Math.round(q*0.5))}}
+function createApp(typeId,platformId,name){
+ let t=appTypeOf(typeId);let p=appPlatformOf(platformId);
+ if(!t.platforms.includes(p.id))p=appPlatformOf(t.platforms[0]);
+ let total=t.cost+p.cost;
+ if(G.money<total){toast("💰 Il te faut "+total+" $ pour lancer cette application");return false}
+ G.money-=total;
+ let used=G.apps.map(a=>a.name);
+ let finalName=name||t.ideas.find(n=>!used.includes(n))||(t.name+" "+(G.apps.length+1));
+ let quality=Math.min(95,Math.round(22+G.dev+G.design+TOOLS[G.tool].bonus+power()/3+Math.random()*12));
+ let a={id:Date.now()+Math.random(),name:finalName,type:t.name,platform:p.name,quality:quality,popularity:12,downloads:0,version:1,hist:[],tasks:defaultAppTasks(quality),assign:{},ads:[]};
+ a.downloads=appDownloads(a);a.hist=[a.downloads];G.apps.push(a);addLog("Nouvelle application en ligne : "+finalName+" ("+t.name+" • "+p.name+") — lancement payé "+total+" $. Les premiers téléchargements arrivent.",'site');
+ save();render();toast("📱 Application lancée : "+finalName+" !");return true}
+function createAppFromForm(){
+ let raw=(document.getElementById('domainInput').value||"").trim();
+ if(raw&&!/^[a-zà-ÿ0-9][a-zà-ÿ0-9 ',\-]{1,23}$/i.test(raw)){toast("⚠️ Nom d'application invalide : 2 à 24 caractères.");return}
+ let name=raw||"";
+ if(name&&G.apps.find(a=>a.name==name)){toast("⚠️ Ce nom est déjà pris par une de tes applications.");return}
+ if(createApp(selAppType,selAppPlatform,name)){createStep=1;document.getElementById('domainInput').value="";showTab('sites')}}
+function openApp(id){selectedAppId=id;showTab('appDetail')}
+function tasksAppAvg(a){return Math.round(APP_TASK_DEF.reduce((s,t)=>s+a.tasks[t.id],0)/APP_TASK_DEF.length)}
+function workAppTask(id,taskId){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ if(a.tasks[taskId]>=100){toast("✅ Cette tâche est déjà terminée");return}
+ let wSeed=((a.assign||{})[taskId])||'hero';
+ if(wSeed=='hero'){let cost=60;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+  G.money-=cost;a.tasks[taskId]=Math.min(100,a.tasks[taskId]+12);
+  a.quality=Math.min(100,a.quality+1);
+  G.xpHero=(G.xpHero||0)+1;let xpMsg='';
+  if(G.xpHero>=4){G.xpHero=0;G.dev+=1;G.design+=1;xpMsg=" • ⭐ Tu gagnes en expérience : Dev +1 et Design +1 !"}
+  save();render();renderAppDetail();toast("🛠️ Tu as avancé la tâche de +12 sur "+a.name+xpMsg);return}
+ let e=G.team.find(x=>x.seed==wSeed);
+ if(!e){a.assign[taskId]='hero';save();render();renderAppDetail();toast("⚠️ Ce membre n'est plus dans l'équipe — c'est toi qui reprends la tâche.");return}
+ if((e.energy||0)<15){toast("😴 "+e.name+" est fatigué(e) : son énergie est trop basse. Attends demain.");return}
+ let gain=taskGain(e,taskId);e.energy-=15;
+ a.tasks[taskId]=Math.min(100,a.tasks[taskId]+gain);
+ a.quality=Math.min(100,a.quality+1);
+ e.xp=(e.xp||0)+1;let xpMsg='';
+ if(e.xp>=4){e.xp=0;e.power+=1;xpMsg=" • ⭐ "+e.name+" gagne en expérience : +1 puissance !"}
+ save();render();renderAppDetail();toast("🛠️ "+e.name+" a avancé la tâche de +"+gain+" sur "+a.name+" (-15 ⚡)"+xpMsg)}
+function setAppTaskWorker(id,taskId,seed){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ if(!a.assign)a.assign={};a.assign[taskId]=seed;save();renderAppDetail()}
+function speedAppTask(id,taskId){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ if(a.tasks[taskId]>=100){toast("✅ Cette tâche est déjà terminée");return}
+ if((G.coins||0)<15){toast("🪙 Il te faut 15 pièces — termine des contrats ou publie des versions de site.");return}
+ G.coins-=15;a.tasks[taskId]=100;a.quality=Math.min(100,a.quality+1);
+ save();render();renderAppDetail();toast("⚡ Tâche terminée en un éclair sur "+a.name+" ! (-15 🪙)")}
+function publishAppVersion(id){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ if(tasksAppAvg(a)<100){toast("⚠️ Termine d'abord les 5 tâches à 100 %");return}
+ a.version++;a.quality=Math.min(100,a.quality+5);a.popularity=Math.min(100,a.popularity+8);G.rep+=6;G.coins=(G.coins||0)+5;
+ a.tasks={maquette:35,dev:30,tests:32,publication:25,maj:22};
+ addLog(a.name+" passe en version "+a.version+" : qualité +5, popularité +8, +6 réputation et +5 🪙. Les utilisateurs voient la différence.",'site');save();render();renderAppDetail();toast("🚀 "+a.name+" : version "+a.version+" publiée ! +6 réputation et +5 🪙")}
+function sellAppAd(id,offerId){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ if(!Array.isArray(a.ads))a.ads=[];
+ if(a.ads.length>=3){toast("📺 Cette application a déjà ses 3 espaces de pub");return}
+ let o=(G.adOffers||[]).find(x=>x.id==offerId);if(!o){toast("⚠️ Cette offre n'est plus disponible.");return}
+ a.ads.push({id:Date.now()+Math.random(),name:o.name,rate:o.rate,on:true});G.money+=40;addLog("Pub vendue sur "+a.name+" : "+o.name+" ("+o.rate+" $ / 1000 clics, +40 $ tout de suite). Les revenus commencent demain.",'marche');
+ G.adOffers=G.adOffers.filter(x=>x.id!=offerId);G.adOffers.push(genAdOffer());
+ save();render();renderAppDetail();toast("💸 Pub vendue sur "+a.name+" : "+o.name+" ("+o.rate+" $ / 1000 clics, +40 $ tout de suite)")}
+function toggleAppAd(id,adId){let a=G.apps.find(x=>x.id==id);if(!a)return;let x=(a.ads||[]).find(y=>y.id==adId);if(!x)return;x.on=!x.on;addLog((x.on?"Pub reprise sur ":"Pub mise en pause sur ")+a.name+" : "+x.name+".",'marche');save();render();renderAppDetail();toast(x.on?"▶️ Pub reprise : "+x.name:"⏸️ Pub en pause : "+x.name)}
+function removeAppAd(id,adId){let a=G.apps.find(x=>x.id==id);if(!a)return;let x=(a.ads||[]).find(y=>y.id==adId);a.ads=(a.ads||[]).filter(y=>y.id!=adId);if(x)addLog("Pub retirée de "+a.name+" : "+x.name+". L'espace est libre pour un nouvel annonceur.",'marche');save();render();renderAppDetail();toast("🗑️ Espace de pub libéré sur "+a.name)}
+function upgradeApp(id){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ let cost=180;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ if(a.quality>=100){toast("⭐ Cette application est déjà au maximum de qualité");return}
+ G.money-=cost;a.quality=Math.min(100,a.quality+10);
+ APP_TASK_DEF.forEach(t=>a.tasks[t.id]=Math.min(100,a.tasks[t.id]+7));
+ addLog(a.name+" améliorée : qualité +10 (180 $). Elle est plus belle et plus rapide.",'site');save();render();renderAppDetail();toast("🔧 "+a.name+" : qualité +10")}
+function promoteApp(id){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ let cost=150;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
+ if(a.popularity>=100){toast("⭐ Cette application est déjà au maximum de popularité");return}
+ G.money-=cost;a.popularity=Math.min(100,a.popularity+12);addLog(a.name+" promue : popularité +12 (150 $). Plus de monde va la découvrir.",'site');save();render();renderAppDetail();toast("📣 "+a.name+" : popularité +12")}
+function closeApp(id){let a=G.apps.find(x=>x.id==id);if(!a)return;
+ if(!confirm("Fermer l'application "+a.name+" ? Tu récupères 100 $."))return;
+ G.money+=100;addLog("Application fermée : "+a.name+". Tu récupères 100 $.",'site');G.apps=G.apps.filter(x=>x.id!=id);selectedAppId=null;save();render();showTab('sites');toast("Application fermée : "+a.name)}
+
 /* --- Marché : campagnes, attaques, défense --- */
 function campagne(){
  if(G.cdMarket>0){toast("⏳ Campagne encore en attente : "+G.cdMarket+" jour(s)");return}
  let cost=250;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
- if(!G.sites.length){toast("🌐 Crée d'abord au moins un site (menu Créer un site)");return}
+ if(!G.sites.length){toast("🌐 Crée d'abord au moins un site (onglet Créer)");return}
  G.money-=cost;G.cdMarket=3;G.rep+=5;
  G.sites.forEach(s=>s.popularity=Math.min(100,s.popularity+8));
  addLog("Campagne marketing lancée (250 $) : tous tes sites gagnent +8 en popularité, +5 réputation. Tes bannières sont partout sur le web aujourd'hui.",'marche');save();render();toast("📣 Campagne lancée ! Popularité +8 sur tous tes sites, +5 réputation")}
@@ -944,6 +1119,16 @@ function tickRivals(){
    let dmg=Math.max(1,7-3*hostingOf(hit).prot);
    hit.popularity=Math.max(5,hit.popularity-dmg);
    addLog(r.name+" a lancé une campagne contre "+hit.name+" : popularité -"+dmg+". Améliore l'hébergement de ce site ou renforce ta sécurité pour te protéger.",'rival');}}}
+function tickApps(){
+ let income=0;
+ G.apps.forEach(a=>{
+  let growth=a.quality>=50?2:(a.quality>=30?1:0.5);
+  growth+=G.loyalty*0.4; growth-=a.ads.length*0.3;
+  a.popularity=Math.max(5,Math.min(100,Math.round((a.popularity+growth)*10)/10));
+  a.downloads=appDownloads(a);a.hist.push(a.downloads);a.hist=a.hist.slice(-8); income+=appRevenue(a);});
+ G.money+=income;
+ if(G.apps.length){let top=G.apps.slice().sort((x,y)=>appDownloads(y)-appDownloads(x))[0];addLog("Bilan du jour : tes applications ont rapporté +"+income+" $ avec "+totalDownloads()+" téléchargements. La plus téléchargée : "+top.name+" ("+appDownloads(top)+" téléchargements).",'argent');}
+ return income}
 function nextDay(){
  let lvlBefore=level();
  G.day++;let sal=salaries()+hostingCost()+domainCost();G.money-=sal;
@@ -955,7 +1140,7 @@ function nextDay(){
  if(G.active){G.active.progress+=power();G.active.left--;
   if(G.active.progress>=G.active.work){let c=G.active;G.money+=c.pay;G.rep+=c.rep;G.done++;G.coins=(G.coins||0)+10;G.active=null;addLog("Contrat terminé pour "+c.client+" : "+c.t+" — "+c.pay+" $ encaissés, +"+c.rep+" réputation et +10 🪙. Le client est ravi !",'contrat');toast(`🎉 Contrat terminé ! +${c.pay} $ et +${c.rep} réputation et +10 🪙`)}
   else if(G.active.left<0){G.rep=Math.max(0,G.rep-15);G.active=null;addLog("Contrat perdu pour retard : le client a annulé, -15 réputation. Les délais, c'est sacré…",'contrat');toast("⏰ Trop tard ! Contrat perdu, -15 réputation")}}
- let inc=tickSites(); tickRivals();
+ let inc=tickSites()+tickApps(); tickRivals();
  let sponsor=sponsorIncome();if(sponsor>0){G.money+=sponsor;addLog("Sponsors : +"+sponsor+" $ aujourd'hui grâce à ta réputation ("+G.rep+"). C'est de l'argent qui tombe chaque matin.",'argent')}
  if(Math.random()<.35)G.offers=genOffers(level());
  if(Math.random()<.35)G.adOffers=genAdOffers();
@@ -996,7 +1181,7 @@ function resetGame(){if(confirm("Recommencer une nouvelle partie ?")){G=fresh();
 /* --- Aide : une seule source, affichee dans le Menu et dans l'ecran Aide --- */
 const HELP=[
 {t:"1️⃣ Sites :",x:"l'écran principal montre tous tes sites en cartes : version, graphique de visiteurs, revenus et avancement. Clique sur « Détails » pour ouvrir un site."},
-{t:"2️⃣ Créer un site :",x:"menu « Créer un site » — choisis un nom de domaine, un type, un thème, puis lance-le. Ton site rapporte des visiteurs et de l'argent chaque jour."},
+{t:"2️⃣ Créer un site :",x:"onglet « Créer » — choisis un nom de domaine, un type, un thème, puis lance-le. Ton site rapporte des visiteurs et de l'argent chaque jour."},
 {t:"3️⃣ Détail d'un site :",x:"les 7 tâches (design, mise en page, programmation, contenu, SEO, réseaux sociaux, marketing) avancent avec les boutons +. Quand les 7 tâches sont à 100 %, publie une nouvelle version : ton site devient meilleur."},
 {t:"4️⃣ Publicité :",x:"dans le détail d'un site, vends des espaces de pub à des annonceurs (3 max par site) : chaque pub rapporte selon tes visiteurs, et tu peux la mettre en pause ou la retirer quand tu veux."},
 {t:"5️⃣ Contrats :",x:"choisis un contrat, puis clique sur le bouton 📅 Jour pour travailler. Sois à 100 % avant la fin du délai pour être payé."},
@@ -1033,8 +1218,10 @@ const HELP=[
 {t:"📚 Formation du héros :",x:"Améliore tes propres compétences pour travailler plus vite, sur les contrats comme sur tes sites. Paie en dollars ou en pièces 🪙."},
 {t:"💾 Partie :",x:"Sauvegarde automatique sur ton téléphone — ta partie en cours est gardée, avec tes sites, tes parts de marché et ton classement."},
 {t:"📖 Journal du studio :",x:"tout ce qui arrive à ton studio est noté dans le journal — contrats, sites, attaques des rivaux, embauches, argent. Ouvre le Menu (☰) puis « Journal du studio » pour le relire, jour par jour."},
-{t:"😴 Aucun site pour le moment :",x:"Lance ton premier site avec le bouton vert « Créer un site » : même un petit blog commence à rapporter chaque jour. Tu peux aussi commencer par un contrat pour gagner tes premiers dollars."},
+{t:"😴 Aucun site pour le moment :",x:"Lance ton premier site avec l'onglet « Créer » en bas de l'écran : même un petit blog commence à rapporter chaque jour. Tu peux aussi commencer par un contrat pour gagner tes premiers dollars."},
 {t:"💤 Aucun contrat en cours :",x:"Choisis un contrat ci-dessous, puis clique sur le bouton 📅 Jour pour avancer."},
+{t:"📱 Applications :",x:"crée des applications comme des sites : choisis un type (mobile, ordinateur, web) et une plateforme (Android, iOS, Windows, macOS, Linux, Web), puis travaille sur les 5 tâches — maquette, développement, tests, publication et mises à jour. Une application rapporte avec les téléchargements et les pubs."},
+{t:"🔧 Dépannage :",x:"sur l'écran d'accueil, tu trouveras des missions de dépannage (et aussi dans les contrats) : installer Windows, macOS ou Ubuntu, installer un antivirus (Avast, Norton, Bitdefender…), supprimer un virus, réparer un PC ou récupérer des données. Ce sont des missions plus petites et plus rapides que les gros contrats de sites."},
 ];
 function renderHelp(){let h=HELP.map(i=>i.t?`<p><b>${i.t}</b> ${i.x}</p>`:`<p>${i.x}</p>`).join('');let a=document.getElementById('helpScreen');if(a)a.innerHTML=h;}
 function fmtNum(n){n=Math.round(n);if(n>=1000000)return (n/1000000).toFixed(1).replace(/\.0$/,'')+' M';if(n>=1000)return (n/1000).toFixed(1).replace(/\.0$/,'')+' K';return String(n);}
@@ -1055,17 +1242,19 @@ function render(){
  document.getElementById('sVisitorsSide').textContent=totalVisitors();
  document.getElementById('playerAvatar').innerHTML=avatar('hero-darkman');
  document.getElementById('cntSites').textContent=G.sites.length;
+ let ca=document.getElementById('cntApps');if(ca)ca.textContent=G.apps.length;
  document.getElementById('cntTeam').textContent=(permCount()+1)+' / '+(OFFICES[G.office].max+1);
  document.getElementById('cntContracts').textContent=G.offers.length+(G.active?' +1':"");
  document.getElementById('officeScene').innerHTML=officeSVG();
  let ab=document.getElementById('activeBox');
  if(G.active){let pct=Math.min(100,Math.round(G.active.progress/G.active.work*100));
-  ab.innerHTML=`<div class="card" style="border-color:#22b573"><h3>🚧 Contrat en cours : ${G.active.emoji} ${G.active.t}</h3><p>Client : <b>${G.active.client}</b> • Gain : <b>${G.active.pay} $</b> • Délai restant : <b>${G.active.left} jour(s)</b></p><div class="bar blue"><i style="width:${pct}%"></i></div><p class="small">${pct}% fait — Puissance par jour : ${power()} • Salaires/jour : ${salaries()} $</p></div>`;
+  ab.innerHTML=`<div class="card" style="border-color:#22b573"><h3>🚧 Contrat en cours : ${G.active.emoji} ${G.active.t}${G.active.cat=='depannage'?' — 🔧 Dépannage':''}</h3><p>Client : <b>${G.active.client}</b> • Gain : <b>${G.active.pay} $</b> • Délai restant : <b>${G.active.left} jour(s)</b></p><div class="bar blue"><i style="width:${pct}%"></i></div><p class="small">${pct}% fait — Puissance par jour : ${power()} • Salaires/jour : ${salaries()} $</p></div>`;
  } else ab.innerHTML=`<div class="card"><h3>💤 Aucun contrat en cours</h3><p class="small">Puissance : ${power()} • Salaires/jour : ${salaries()} $ • Contrats réussis : ${G.done} • Revenus de tes sites au total : ${G.siteIncomeTotal} $ • Sponsors : +${sponsorIncome()} $ / jour</p><div class="bar"><i style="width:${Math.min(100,G.rep/10)}%"></i></div><p class="small">Progression vers la victoire : ${G.rep} / 1 000 réputation</p></div>`;
  document.getElementById('contracts').innerHTML=G.offers.map(c=>{
-  let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p>${locked?`<p class="small">🔒 Débloqué au studio niveau ${c.min}</p>`:''}</div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre ce contrat'}</button><button ${locked||G.active||c.negotiated?'disabled':''} onclick="negotiateOffer(${c.id})">${c.negotiated?'✅ Négocié : '+c.pay+' $':'💬 Négocier — chance '+negoChance()+' %'}</button>${c.negotiated?'':`<p class="small">💬 Négocier peut ajouter +25 à 40 % au prix — mais si le client refuse, il retire son offre. La chance dépend de ta réputation.</p>`}</div>`}).join('');
- renderSites();renderCreate();renderMarket();renderRanking();renderTeam();renderUpgrades();renderStats();renderHelp();renderJournal();
+  let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p>${c.cat=='depannage'?'<p class="small">🔧 Dépannage — mission de maintenance</p>':''}${locked?`<p class="small">🔒 Débloqué au studio niveau ${c.min}</p>`:''}</div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre ce contrat'}</button><button ${locked||G.active||c.negotiated?'disabled':''} onclick="negotiateOffer(${c.id})">${c.negotiated?'✅ Négocié : '+c.pay+' $':'💬 Négocier — chance '+negoChance()+' %'}</button>${c.negotiated?'':`<p class="small">💬 Négocier peut ajouter +25 à 40 % au prix — mais si le client refuse, il retire son offre. La chance dépend de ta réputation.</p>`}</div>`}).join('');
+ renderSites();renderApps();renderDepannage();renderCreate();renderMarket();renderRanking();renderTeam();renderUpgrades();renderStats();renderHelp();renderJournal();
  if(selectedSiteId)renderSiteDetail();
+ if(selectedAppId)renderAppDetail();
 }
 function stripHTML(s){
  let t=s.tasks;let tot=Math.max(1,TASK_DEF.reduce((a,x)=>a+(t[x.id]||0),0));
@@ -1073,8 +1262,14 @@ function stripHTML(s){
  let cols={design:'#ef5350',layout:'#42a5f5',code:'#ab47bc',content:'#66bb6a',seo:'#ffa726',social:'#e91e63',mkt:'#ff7043'};
  return `<div class="strip">`+TASK_DEF.map(x=>`<span style="width:${w(x.id)}%;background:${cols[x.id]}"></span>`).join('')+`</div>`;
 }
+function stripAppHTML(a){
+ let t=a.tasks;let tot=Math.max(1,APP_TASK_DEF.reduce((s,x)=>s+(t[x.id]||0),0));
+ let w=k=>Math.max(3,Math.round((t[k]||0)/tot*100));
+ let cols={maquette:'#ef5350',dev:'#ab47bc',tests:'#42a5f5',publication:'#ff7043',maj:'#66bb6a'};
+ return `<div class="strip">`+APP_TASK_DEF.map(x=>`<span style="width:${w(x.id)}%;background:${cols[x.id]}"></span>`).join('')+`</div>`;
+}
 function renderSites(){
- if(!G.sites.length){document.getElementById('mySites').innerHTML='';return}
+ if(!G.sites.length){document.getElementById('mySites').innerHTML='<p class="small">Aucun site pour le moment — crée ton premier site dans l\'onglet Créer !</p>';return}
  let eff=G.sites.filter(s=>s.traffic).map(s=>`🚀 <b>${s.name}</b> : +${s.traffic.bonus} visiteurs / jour, encore ${s.traffic.days} jour(s)`).join('<br>');
  document.getElementById('mySites').innerHTML=(eff?`<div class="card" style="border-color:#ffa726"><h3>✨ Effets actifs</h3><p>${eff}</p></div>`:'')+`<div class="gridSites">`+G.sites.map(s=>{let seg=segOf(s.seg);let v=siteVisitors(s);
   return `<div class="siteCard"><div class="siteTop" style="background:${seg.color}"></div><div class="body">
@@ -1087,10 +1282,52 @@ function renderSites(){
   </div>`}).join('')+`</div>
   <p class="small" style="margin-top:8px">La bande colorée en bas de chaque carte montre l'avancement des tâches : <span style="color:#ef5350">■</span> design, <span style="color:#42a5f5">■</span> mise en page, <span style="color:#ab47bc">■</span> programmation, <span style="color:#66bb6a">■</span> contenu, <span style="color:#ffa726">■</span> SEO, <span style="color:#e91e63">■</span> réseaux sociaux, <span style="color:#ff7043">■</span> marketing.</p>`;
 }
+function renderApps(){
+ let box=document.getElementById('myApps');if(!box)return;
+ if(!G.apps.length){box.innerHTML='<p class="small">Aucune application pour le moment — crée ta première app dans l\'onglet Créer : mobile, ordinateur ou web, puis publie-la sur le store !</p>';return}
+ box.innerHTML=`<div class="gridSites">`+G.apps.map(a=>{let d=appDownloads(a);
+  return `<div class="siteCard"><div class="siteTop" style="background:#22D3EE"></div><div class="body">
+  <div class="siteHead"><div class="segico" style="background:#22D3EE">📱</div><div><b>${a.name}</b><span class="small">${a.type} • ${a.platform} • Version ${a.version}</span></div></div>
+  ${sparkline(a.hist,'#22D3EE')}
+  <div class="siteNums cardNums"><div><b>${d}</b><small>téléchargements / jour</small></div><div><b>${appRevenue(a)} $</b><small>revenus / jour</small></div></div>
+  <div class="siteStats"><span>⭐ Qualité <b>${a.quality}</b></span><span>🔥 Popularité <b>${Math.round(a.popularity)}</b></span><span>📺 Pub <b>${a.ads.length}/3</b></span><span>🛠️ Tâches <b>${tasksAppAvg(a)} %</b></span></div>
+  </div>${stripAppHTML(a)}
+  <div class="siteBtns"><button onclick="openApp(${a.id})">🔎 Détails</button><button onclick="upgradeApp(${a.id})">🔧 Améliorer</button><button onclick="promoteApp(${a.id})">📣 Promouvoir</button></div>
+  </div>`}).join('')+`</div>
+  <p class="small" style="margin-top:8px">La bande colorée en bas de chaque carte montre l'avancement des tâches : <span style="color:#ef5350">■</span> maquette, <span style="color:#ab47bc">■</span> développement, <span style="color:#42a5f5">■</span> tests, <span style="color:#ff7043">■</span> publication, <span style="color:#66bb6a">■</span> mises à jour.</p>`;
+}
+function renderDepannage(){
+ let box=document.getElementById('depannageBox');if(!box)return;
+ let deps=G.offers.filter(o=>o.cat=='depannage');
+ if(!deps.length){box.innerHTML='<p class="small">Aucune mission pour le moment — reviens demain.</p>';return}
+ box.innerHTML=deps.map(c=>{let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p></div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre cette mission'}</button></div>`}).join('');
+}
+function setCreateMode(m){createMode=(m=='app'?'app':'site');createStep=1;renderCreate();}
 function renderCreate(){
  let tg=document.getElementById('typeGrid');if(!tg)return;
  ['cstep1','cstep2','cstep3','cstep4'].forEach((id,i)=>{let el=document.getElementById(id);if(el)el.classList.toggle('hidden',i+1!=createStep)});
  let pr=document.getElementById('createProgress');if(pr)pr.innerHTML='Étape '+createStep+' sur 4<span class="cdots">'+[1,2,3,4].map(n=>'<span class="cdot'+(n==createStep?' on':(n<createStep?' done':''))+'"></span>').join('')+'</span>';
+ let mb1=document.getElementById('modeSiteBtn'),mb2=document.getElementById('modeAppBtn');
+ if(mb1)mb1.className=createMode=='site'?'green':'ghost';
+ if(mb2)mb2.className=createMode=='app'?'green':'ghost';
+ let di=document.getElementById('domainInput');if(di){di.maxLength=createMode=='app'?24:16;di.placeholder=createMode=='app'?'ma-super-app':'mon-super-site';}
+ let de=document.getElementById('domainExt');if(de)de.style.display=createMode=='app'?'none':'';
+ let dh=document.getElementById('domainHelp');if(dh)dh.textContent=createMode=='app'?"De 2 à 24 caractères : lettres, chiffres, espaces et tirets. Si tu laisses vide, le jeu choisira un nom pour toi.":"De 3 à 16 caractères : lettres, chiffres et tirets. Si tu laisses vide, le jeu choisira un nom pour toi dans le thème.";
+ let t1=document.getElementById('cstep1Title');if(t1)t1.textContent=createMode=='app'?"1️⃣ Nom de l'application":"1️⃣ Nom de domaine";
+ let t2=document.getElementById('cstep2Title');if(t2)t2.textContent=createMode=='app'?"2️⃣ Type d'application":"2️⃣ Type de site";
+ let t3=document.getElementById('cstep3Title');if(t3)t3.textContent=createMode=='app'?"3️⃣ Plateforme":"3️⃣ Thème du site";
+ let t4=document.getElementById('cstep4Title');if(t4)t4.textContent=createMode=='app'?"4️⃣ Aperçu & lancement":"4️⃣ Hébergement, système & aperçu";
+ let sor=document.getElementById('siteOptionsRow');if(sor)sor.style.display=createMode=='app'?'none':'flex';
+ let cp=document.getElementById('createPreview');if(cp)cp.style.display=createMode=='app'?'none':'';
+ let lb=document.getElementById('launchBtn');if(lb)lb.style.display=createMode=='app'?'none':'';
+ let ap=document.getElementById('appPreview');if(ap)ap.style.display=createMode=='app'?'':'none';
+ let lab=document.getElementById('launchAppBtn');if(lab)lab.style.display=createMode=='app'?'':'none';
+ if(createMode=='app'){
+  tg.innerHTML=APP_TYPES.map(t=>`<button type="button" class="typeCard ${t.id==selAppType?'on':''}" onclick="selAppType='${t.id}';selAppPlatform='${t.platforms[0]}';createStep=3;renderCreate()"><div class="prev"><i style="width:55%"></i><i style="width:80%"></i><i style="width:40%"></i></div><b>${t.icon} ${t.name}</b><br><span class="small">${t.desc}</span></button>`).join('');
+  let at=appTypeOf(selAppType)||APP_TYPES[0];
+  document.getElementById('themeGrid').innerHTML=APP_PLATFORMS.filter(p=>at.platforms.includes(p.id)).map(p=>`<button type="button" class="themeBtn ${p.id==selAppPlatform?'on':''}" onclick="selAppPlatform='${p.id}';createStep=4;renderCreate()">${p.icon}<small>${p.name}<br>${p.cost?('Coût : '+p.cost+' $'):'Gratuit'}</small></button>`).join('');
+  renderAppPreview();return;
+ }
  tg.innerHTML=SITE_TYPES.map(t=>`<button type="button" class="typeCard ${t.id==selType?'on':''}" onclick="selType='${t.id}';createStep=3;renderCreate()"><div class="prev"><i style="width:55%"></i><i style="width:80%"></i><i style="width:40%"></i></div><b>${t.icon} ${t.name}</b><br><span class="small">${t.desc}</span></button>`).join('');
  document.getElementById('themeGrid').innerHTML=SEGMENTS.map(s=>`<button type="button" class="themeBtn ${s.id==selSeg?'on':''}"${s.id==selSeg?'':` style="background:${s.color}14;border-color:${s.color}66"`} onclick="selSeg='${s.id}';createStep=4;renderCreate()">${s.emoji}<small>${s.name}<br>Lancement : ${s.cost} $</small></button>`).join('');
  renderCreatePreview();
@@ -1110,6 +1347,18 @@ function renderCreatePreview(){
  <p>💰 Lancement : thème <b>${seg.cost} $</b> + domaine <b>${zone.cost} $</b> + hébergement <b>${HOSTINGS[h].cost} $</b> + système <b>${CMS[cms].cost} $</b> = <b>${total} $</b> (tu as ${fmtMoney(G.money)}) ${G.money>=total?'✅ Tu peux le lancer !':'— il te manque <b>'+(total-G.money)+' $</b> : fais un contrat pour gagner de l\'argent.'}<br><span class="small">Ensuite, ce site te coûtera ${perDay} $ par jour (domaine + hébergement) et rapportera selon sa qualité et sa popularité.</span></p>`;
  let btn=document.getElementById('launchBtn');
  if(btn){btn.disabled=G.money<total;btn.textContent=G.money>=total?'🚀 Lancer ce site ('+total+' $)':'🔒 Il te manque '+(total-G.money)+' $ — fais un contrat d\'abord';}
+}
+function renderAppPreview(){
+ let box=document.getElementById('appPreview');if(!box)return;
+ let t=appTypeOf(selAppType)||APP_TYPES[0];
+ let p=appPlatformOf(selAppPlatform)||APP_PLATFORMS[0];
+ let raw=((document.getElementById('domainInput')||{}).value||"").trim();
+ let name=raw||(t.ideas.find(n=>!G.apps.map(a=>a.name).includes(n))||t.ideas[0]);
+ let total=t.cost+p.cost;
+ box.innerHTML=`<div class="mock"><div class="siteHead"><div class="segico" style="background:#22D3EE">📱</div><div><b>${name}</b><br><span class="small">${t.name} • ${p.name}</span></div></div><div class="skl mid"></div><div class="skl"></div><div class="skl short"></div></div>
+ <p>💰 Lancement : type <b>${t.cost} $</b> + plateforme <b>${p.cost} $</b> = <b>${total} $</b> (tu as ${fmtMoney(G.money)}) ${G.money>=total?'✅ Tu peux la lancer !':'— il te manque <b>'+(total-G.money)+' $</b> : fais un contrat pour gagner de l\'argent.'}<br><span class="small">Ensuite, ton application rapportera avec les téléchargements (environ 0,08 $ par téléchargement) et les pubs. Les tâches — maquette, développement, tests, publication et mises à jour — se font dans le détail de l'application.</span></p>`;
+ let btn=document.getElementById('launchAppBtn');
+ if(btn){btn.disabled=G.money<total;btn.textContent=G.money>=total?'🚀 Lancer cette application ('+total+' $)':'🔒 Il te manque '+(total-G.money)+' $ — fais un contrat d\'abord';}
 }
 function renderSiteDetail(){
  let box=document.getElementById('siteDetail');if(!box)return;
@@ -1154,6 +1403,42 @@ function renderSiteDetail(){
  <button class="ghost" onclick="closeSite(${s.id})">Fermer le site (+100 $)</button>
  </div><p class="small">Améliorer la qualité est impossible sur un site avec un Moteur (système verrouillé). Fermer un site te rembourse 100 $.</p></div>`;
 }
+function renderAppDetail(){
+ let box=document.getElementById('appDetail');if(!box)return;
+ let a=G.apps.find(x=>x.id==selectedAppId);
+ if(!a){box.innerHTML=`<div class="card"><h3>Aucune application sélectionnée</h3><p>Retourne à l'accueil et clique sur « Détails » sur une carte d'application.</p><button class="primary" onclick="showTab('sites')">← Retour à mes applications</button></div>`;return}
+ let d=appDownloads(a);let avg=tasksAppAvg(a);
+ box.innerHTML=`<button class="ghost" style="margin-bottom:10px" onclick="showTab('sites')">← Retour à mes applications</button>
+ <div class="card"><div class="siteHead"><div class="segico" style="background:#22D3EE">📱</div><div><b style="font-size:19px">${a.name}</b><br><span class="small">${a.type} • ${a.platform} • Version ${a.version}</span></div></div>
+ <div class="mock"><div class="skl mid" style="background:#bae6fd"></div><div class="skl"></div><div class="skl"></div><div class="skl short"></div><p class="small">Aperçu simplifié de ton application.</p></div>
+ <div class="siteNums"><div><b>${d}</b><small>téléchargements / jour</small></div><div><b>${appRevenue(a)} $</b><small>revenus / jour</small></div><div><b>${a.ads.length} / 3</b><small>espaces de pub</small></div></div>
+ <p>⭐ Qualité : <b>${a.quality} / 100</b></p><div class="bar"><i style="width:${a.quality}%"></i></div>
+ <p>🔥 Popularité : <b>${Math.round(a.popularity)} / 100</b></p><div class="bar pop"><i style="width:${Math.round(a.popularity)}%"></i></div>
+ ${sparkline(a.hist,'#22D3EE')}
+ </div>
+ <div class="card"><h3>🛠️ Tâches — version ${a.version+1} prête à ${avg} %</h3>
+ ${APP_TASK_DEF.map(t=>{let w=((a.assign||{})[t.id])||'hero';let wObj=w=='hero'?null:G.team.find(x=>x.seed==w);
+  let gain=wObj?taskGain(wObj,t.id):12;let tired=wObj&&(wObj.energy||0)<15;
+  return `<div class="taskrow" style="flex-wrap:wrap"><span class="tname">${t.name}</span><div class="bar ${t.cls}"><i style="width:${a.tasks[t.id]}%"></i></div><span class="tnum">${a.tasks[t.id]} / 100</span>
+  <select onchange="setAppTaskWorker(${a.id},'${t.id}',this.value)" style="padding:8px;border-radius:8px;border:1px solid #cfdde4;background:#fff;font-size:14px;max-width:150px">
+  <option value="hero" ${w=='hero'?'selected':''}>👤 Toi</option>
+  ${G.team.map(e=>`<option value="${e.seed}" ${w==e.seed?'selected':''}>${e.temp?'💼 ':''}${e.name} • ${TASK_SKILL_NAME[APP_TASK_SKILL[t.id]]} ${taskSkillVal(e,t.id)} (${e.energy||0}⚡)</option>`).join('')}
+  </select>
+  <button onclick="workAppTask(${a.id},'${t.id}')" ${a.tasks[t.id]>=100||tired?'disabled':''}>🛠️ +${gain}${wObj?' (-15 ⚡)':' — 60 $'}</button>
+  <button onclick="speedAppTask(${a.id},'${t.id}')" ${a.tasks[t.id]>=100||(G.coins||0)<15?'disabled':''}>⚡ 15 🪙</button></div>`}).join('')}
+ <div style="margin-top:12px">${stripAppHTML(a)}</div>
+ <button class="green" style="width:100%;margin-top:12px" onclick="publishAppVersion(${a.id})" ${avg<100?'disabled':''}>🚀 Publier la version ${a.version+1}${avg<100?' (termine les 5 tâches d\'abord)':''}</button>
+ </div>
+ <div class="card"><h3>📺 Publicité (${a.ads.length} / 3)</h3>
+ ${(a.ads||[]).map(x=>{let est=Math.round(appDownloads(a)/1000*x.rate);return `<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #eef3f5"><div style="flex:1"><b>${x.name}</b><br><span class="small">${x.rate} $ / 1000 clics • ≈ ${est} $ / jour ${x.on?'':'• ⏸ en pause'}</span></div><button style="width:auto;padding:8px 12px" onclick="toggleAppAd(${a.id},${x.id})">${x.on?'⏸ Pause':'▶ Reprendre'}</button><button class="ghost" style="width:auto;padding:8px 12px" onclick="removeAppAd(${a.id},${x.id})">✖</button></div>`}).join('')||'<p class="small">Aucune pub sur cette application pour le moment.</p>'}
+ ${a.ads.length<3?`<div style="margin-top:6px">${(G.adOffers||[]).map(o=>`<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #eef3f5"><div style="flex:1"><b>💸 ${o.name}</b><br><span class="small">${o.rate} $ / 1000 clics • +40 $ tout de suite</span></div><button class="primary" style="width:auto;padding:9px 14px;white-space:nowrap" onclick="sellAppAd(${a.id},${o.id})">Vendre</button></div>`).join('')}</div>`:'<p class="small">Les 3 espaces de pub sont occupés.</p>'}
+ <p class="small">Chaque pub rapporte selon les téléchargements de l'application. Mets-la en pause quand tu veux, sans perdre l'emplacement.</p></div>
+ <div class="card"><h3>⚙️ Gérer cette application</h3><div class="actgrid">
+ <button onclick="upgradeApp(${a.id})">🔧 Améliorer la qualité (+10) — 180 $</button>
+ <button onclick="promoteApp(${a.id})">📣 Promouvoir (+12 popularité) — 150 $</button>
+ <button class="ghost" onclick="closeApp(${a.id})">Fermer l'application (+100 $)</button>
+ </div><p class="small">Fermer une application te rembourse 100 $.</p></div>`;
+}
 function talentCard(c,hired,kind){
  let sk=talentSkills(c);let en=talentEnergy(c);
  return `<div class="tCard"><div class="body">
@@ -1176,7 +1461,7 @@ function talentCard(c,hired,kind){
   ?`<p class="small" style="text-align:center;margin:4px 0">💼 Freelance — mission de ${c.daysLeft} jour(s). On ne forme pas un freelance.</p><button class="ghost" style="width:100%" onclick="fire('${c.seed}')">Terminer la mission</button>`
   :c.lvl>=10
   ?`<p class="small" style="text-align:center;margin:4px 0">🏆 Niveau max atteint !</p><button class="ghost" style="width:100%" onclick="fire('${c.seed}')">Renvoyer</button>`
-  :`<p class="small" style="margin:0 0 6px">📚 Former : +1 niveau, +2 puissance, salaire +12 %</p><div style="display:flex;gap:6px"><button class="primary" style="flex:1;padding:9px 4px;font-size:13px" ${G.money<100*c.lvl?'disabled':''} onclick="trainMember('${c.seed}','money')">📚 ${100*c.lvl} $</button><button style="flex:1;padding:9px 4px;font-size:13px" ${(G.coins||0)<8*c.lvl?'disabled':''} onclick="trainMember('${c.seed}','coins')">🪙 ${8*c.lvl}</button></div><button class="ghost" style="width:100%;margin-top:6px" onclick="fire('${c.seed}')">Renvoyer</button>`)
+  :`<p class="small" style="margin:0 0 6px">📚 Former : +1 niveau, +2 puissance, salaire +12 %</p><div style="display:flex;gap:6px"><button class="primary" style="flex:1;padding:9px 4px;font-size:13px" ${G.money<100*c.lvl?'disabled':''} onclick="trainMember('${c.seed}','money')">📚 ${100*c.lvl} $</button><button style="flex:1;padding:9px 4px;font-size:13px" ${(G.coins||0)<8*c.lvl?'disabled':''} onclick="trainMember('${c.seed}','coins')">🪙 ${8*c.lvl}</button></div><button class="ghost" style="width:100%;margin-top:8px" onclick="fire('${c.seed}')">Renvoyer</button>`)
   :kind=='free'
   ?`<button class="primary" onclick="hireFreelance('${c.seed}')">💼 Embaucher 3 jours — ${c.salary} $ / jour</button>`
   :`<button class="primary" onclick="hire('${c.seed}')">Recruter ${c.name}</button>`}</div>
@@ -1197,6 +1482,7 @@ function renderStats(){
  <div class="statCard"><small>👀 Visites aujourd'hui</small><b>${totalVisitors()}</b><span class="small">${totalVisitors()} visiteurs sur tes sites, en ce moment</span></div>
  <div class="statCard"><small>💵 Profits des sites</small><b>${G.siteIncomeTotal} $</b><span class="small">au total • environ ${dayRev} $ / jour aujourd'hui</span></div>
  <div class="statCard"><small>🖥️ Sites</small><b>${G.sites.length}</b><span class="small">${G.sites.filter(s=>s.ads.length>0).length} site(s) avec de la pub</span></div>
+ <div class="statCard"><small>📱 Applications</small><b>${G.apps.length}</b><span class="small">${totalDownloads()} téléchargements / jour • revenus apps : ${G.apps.reduce((a,x)=>a+appRevenue(x),0)} $ / jour</span></div>
  <div class="statCard"><small>👥 Employés</small><b>${G.team.length+1}</b><span class="small">dont toi • salaires : ${salaries()} $ / jour</span></div>
  <div class="statCard"><small>⭐ Réputation</small><b>${G.rep}</b><span class="small">objectif : 1 000 • studio niveau ${level()} / 10</span></div>
  <div class="statCard"><small>📋 Contrats réussis</small><b>${G.done}</b><span class="small">👀 Visites totales : ${G.visitorsTotal}</span></div>
@@ -1206,17 +1492,23 @@ function renderStats(){
  <div class="card"><h3>🎯 Tes parts de marché par thème</h3>${SEGMENTS.map(s=>`<div class="hbar"><span class="hn">${s.emoji} ${s.name}</span><div class="bar share"><i style="width:${segShare(s.id)}%"></i></div><span class="hv">${segShare(s.id)} %</span></div>`).join('')}</div>`;
 }
 function renderMarket(){
- document.getElementById('segments').innerHTML=SEGMENTS.map(s=>{let sh=segShare(s.id);let mine=G.sites.filter(x=>x.seg==s.id).length;
-  return `<div class="hbar"><span class="hn">${s.emoji} ${s.name}</span><div class="bar share"><i style="width:${sh}%"></i></div><span class="hv">${sh} %</span></div><p class="small" style="margin:0 0 8px">${mine} site(s) à toi sur ce thème</p>`}).join('')+
-  `<p class="small">Part de marché totale (tous thèmes) : ${Math.round(totalShare()*10)/10} % — elle fait grimper ton score au classement.</p>`;
- document.getElementById('marketActions').innerHTML=`<div class="actgrid">
-  <button onclick="campagne()" ${G.cdMarket>0?'disabled':''}>📣 Campagne marketing — 250 $ ${G.cdMarket>0?'(attente : '+G.cdMarket+' j)':''}</button>
-  <button onclick="offreAgressive()" ${G.cdAggress>0?'disabled':''}>⚔️ Offre agressive contre le 1er rival — 400 $ ${G.cdAggress>0?'(attente : '+G.cdAggress+' j)':''}</button>
-  <button onclick="renforcerSecu()">🛡️ Renforcer la sécurité — 300 $</button>
-  <button onclick="fideliser()">❤️ Fidéliser tes visiteurs — 220 $</button></div>`;
- document.getElementById('defenseInfo').innerHTML=`🛡️ Défense : <b>niveau ${G.defense} / 5</b> • ❤️ Fidélisation : <b>niveau ${G.loyalty} / 5</b><br><span class="small">La défense bloque les contre-attaques des rivaux (voir le journal dans le Menu). La fidélisation fait grandir la popularité de tes sites un peu plus vite chaque jour.</span>`;
- document.getElementById('rivalsList').innerHTML=[...G.rivals].sort((a,b)=>b.score-a.score).map((r,i)=>`<p>${i+1}. <b>${r.name}</b> — score ${r.score}</p>`).join('');
+ let tot=Math.round(totalShare()*10)/10;
+ document.getElementById('segments').innerHTML=
+  `<p style="margin:0 0 4px"><b>Part totale : ${tot} %</b></p><div class="bar share" style="margin:0 0 4px"><i style="width:${Math.min(100,tot)}%"></i></div><p class="small" style="margin:0 0 4px">Plus ta part grandit, plus ton score au classement monte.</p>`+
+  SEGMENTS.map(s=>{let sh=segShare(s.id);let mine=G.sites.filter(x=>x.seg==s.id).length;
+   return `<button type="button" class="segRow" onclick="openCreateTheme('${s.id}')"><span class="segTop"><span class="segName">${s.emoji} ${s.name}</span><span class="segPct">${sh} %</span><span class="segBadge">${mine} site${mine>1?'s':''}</span></span><span class="segBar"><i style="width:${sh}%"></i></span></button>`}).join('');
+ document.getElementById('marketActions').innerHTML=
+  `<button type="button" class="actCard" onclick="campagne()" ${G.cdMarket>0?'disabled':''}><b>📣 Campagne marketing</b> <span class="aprice">— 250 $</span>${G.cdMarket>0?' <span class="small">(attente : '+G.cdMarket+' j)</span>':''}<p>Tous tes sites gagnent +8 en popularité.</p></button>`+
+  `<button type="button" class="actCard" onclick="offreAgressive()" ${G.cdAggress>0?'disabled':''}><b>⚔️ Offre agressive contre le 1er rival</b> <span class="aprice">— 400 $</span>${G.cdAggress>0?' <span class="small">(attente : '+G.cdAggress+' j)</span>':''}<p>Le 1er rival perd 35 points, +8 réputation pour toi.</p></button>`+
+  `<button type="button" class="actCard" onclick="renforcerSecu()" ${G.defense>=5?'disabled':''}><b>🛡️ Renforcer la sécurité</b> <span class="aprice">— 300 $</span><p>Ta défense monte d'un niveau (max 5).</p></button>`+
+  `<button type="button" class="actCard" onclick="fideliser()" ${G.loyalty>=5?'disabled':''}><b>❤️ Fidéliser tes visiteurs</b> <span class="aprice">— 220 $</span><p>Tes sites gagnent en popularité plus vite.</p></button>`;
+ document.getElementById('defenseInfo').innerHTML=
+  `<div class="lvlRow"><div class="lvlTop"><span>🛡️ Défense</span><span>niveau ${G.defense} / 5</span></div><div class="lvlSegs">${[0,1,2,3,4].map(i=>`<i class="${i<G.defense?'on':''}"></i>`).join('')}</div><p class="small" style="margin:4px 0 0">Bloque les contre-attaques des rivaux.</p></div>`+
+  `<div class="lvlRow"><div class="lvlTop"><span>❤️ Fidélisation</span><span>niveau ${G.loyalty} / 5</span></div><div class="lvlSegs">${[0,1,2,3,4].map(i=>`<i class="${i<G.loyalty?'onL':''}"></i>`).join('')}</div><p class="small" style="margin:4px 0 0">La popularité de tes sites grandit plus vite chaque jour.</p></div>`;
+ let mx=Math.max(1,...G.rivals.map(r=>r.score));
+ document.getElementById('rivalsList').innerHTML=[...G.rivals].sort((a,b)=>b.score-a.score).map((r,i)=>`<div class="rivalRow"><span class="rRank">${i+1}</span><span class="rName">${r.name}</span><span class="rBar"><i style="width:${Math.round(r.score/mx*100)}%"></i></span><span class="rScore">${r.score}</span></div>`).join('');
 }
+function openCreateTheme(id){selSeg=id;createMode='site';createStep=3;showTab('create')}
 function renderRanking(){
  let rows=[{name:"⭐ TON STUDIO",score:playerScore(),me:true}].concat(G.rivals.map(r=>({name:r.name,score:r.score,me:false}))).sort((a,b)=>b.score-a.score);
  document.getElementById('rankingTable').innerHTML=`<table class="rank"><tr><th>#</th><th>Studio</th><th>Score</th></tr>${rows.map((r,i)=>`<tr class="${r.me?'me':''}"><td>${i+1}</td><td>${r.name}</td><td>${r.score}</td></tr>`).join('')}</table>`;
