@@ -821,7 +821,11 @@ function hostingOf(s){return HOSTINGS[typeof s.hosting==="number"?s.hosting:0]}
 function hostingCost(){return G.sites.reduce((a,s)=>a+hostingOf(s).perDay,0)}
 function zoneOf(s){return ZONES[((s.zone||'.free').slice(1))]||ZONES.free}
 function domainCost(){return G.sites.reduce((a,s)=>a+zoneOf(s).perDay,0)}
-function genOffers(lv,forceDep){let a=[];for(let i=0;i<4;i++){if((forceDep&&i==0)||Math.random()<0.4){let j=DEPANNAGE_JOBS[Math.floor(Math.random()*DEPANNAGE_JOBS.length)];a.push({...j,cat:'depannage',client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()});continue;}let pool=CONTRACT_TYPES.filter(c=>c.min<=lv+1);let b=pool[Math.floor(Math.random()*pool.length)];a.push({...b,client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()})}return a}
+function genOffers(lv,forceDep){let a=[];for(let i=0;i<4;i++){if(i<2||Math.random()<0.4){let j=DEPANNAGE_JOBS[Math.floor(Math.random()*DEPANNAGE_JOBS.length)];a.push({...j,cat:'depannage',client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()});continue;}let pool=CONTRACT_TYPES.filter(c=>c.min<=lv+1);let b=pool[Math.floor(Math.random()*pool.length)];a.push({...b,client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id:Date.now()+i+Math.random()})}return a}
+let _offerSeq=0;
+function depCount(){return G.offers.filter(o=>o.cat=='depannage').length}
+function genOneOffer(lv,forceDep){let id=Date.now()+(_offerSeq++)+Math.random();if(forceDep||Math.random()<0.4){let j=DEPANNAGE_JOBS[Math.floor(Math.random()*DEPANNAGE_JOBS.length)];return{...j,cat:'depannage',client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id}}let pool=CONTRACT_TYPES.filter(c=>c.min<=lv+1);let b=pool[Math.floor(Math.random()*pool.length)];return{...b,client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id}}
+function refillOffers(){while(G.offers.length<3||depCount()<2)G.offers.push(genOneOffer(level(),depCount()<2))}
 
 /* --- Sauvegarde (ne plante jamais : localStorage, puis sessionStorage, puis mémoire) --- */
 let storageOK=true,memSave=null;
@@ -1077,7 +1081,7 @@ function fideliser(){
  G.money-=cost;G.loyalty++;save();render();toast("❤️ Visiteurs plus fidèles : niveau "+G.loyalty)}
 
 /* --- Contrats, négociation, journée --- */
-function accept(id){if(G.active){toast("⚠️ Termine d'abord ton contrat en cours !");return}let c=G.offers.find(o=>o.id==id);G.active={...c,progress:0,left:c.days};G.offers=G.offers.filter(o=>o.id!=id);if(G.offers.length<3)G.offers.push(...genOffers(level()).slice(0,1));addLog("Nouveau contrat signé avec "+c.client+" : "+c.t+" — "+c.pay+" $ si tu finis en "+c.days+" jours. Au travail !",'contrat');save();render();toast("✅ Contrat accepté : "+c.t)}
+function accept(id){if(G.active){toast("⚠️ Termine d'abord ton contrat en cours !");return}let c=G.offers.find(o=>o.id==id);G.active={...c,progress:0,left:c.days};G.offers=G.offers.filter(o=>o.id!=id);refillOffers();addLog("Nouveau contrat signé avec "+c.client+" : "+c.t+" — "+c.pay+" $ si tu finis en "+c.days+" jours. Au travail !",'contrat');save();render();toast("✅ Contrat accepté : "+c.t)}
 function negoChance(){return Math.min(90,55+Math.floor(G.rep/25))}
 function negotiateOffer(id){
  let o=G.offers.find(x=>x.id==id);if(!o)return;
@@ -1089,7 +1093,7 @@ function negotiateOffer(id){
   save();render();toast("💬 Négociation réussie ! +"+bonus+" % → "+o.pay+" $ pour ce contrat.");
  }else{
   G.offers=G.offers.filter(x=>x.id!=id);
-  if(G.offers.length<3)G.offers.push(...genOffers(level()).slice(0,1));
+  refillOffers();
   addLog(o.client+" a refusé de négocier et a retiré son offre « "+o.t+" ». Tant pis, une autre arrivera.",'contrat');save();render();toast("😤 Le client a refusé de négocier et a retiré son offre.");
  }
 }
