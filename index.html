@@ -189,6 +189,67 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .accBox{margin:0 4px 12px;padding:10px 12px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(255,255,255,.05);font-size:13px;color:#CBD5E1;text-align:center}
 .accBox .accName{font-size:14px;color:#F1F5F9}
 .accBox .accMail{font-size:12px;color:#94A3B8;word-break:break-all;margin-top:2px}
+
+/* --- Atelier depannage 3D --- */
+.wsStage{perspective:900px;background:#141b26;border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:14px 10px 10px;margin-bottom:12px;overflow:hidden}
+.wsRow{display:flex;gap:8px;align-items:flex-end;justify-content:center}
+.wsTowerWrap{width:200px;height:260px;position:relative;flex:0 0 auto;touch-action:none}
+.wsTower{width:150px;height:250px;position:absolute;left:15px;top:5px;transform-style:preserve-3d;transform:rotateX(-6deg) rotateY(22deg)}
+.wsFace{position:absolute;box-sizing:border-box;border:1px solid #4a5568}
+.wsFront{width:150px;height:250px;transform:translateZ(70px);background:#313b48}
+.wsTop{width:150px;height:140px;top:55px;transform:rotateX(90deg) translateZ(125px);background:#39434f}
+.wsSide{width:140px;height:250px;left:5px;transform:rotateY(-90deg) translateZ(75px);background:#12241c;transform-style:preserve-3d}
+.wsPanel{width:140px;height:250px;left:5px;transform:rotateY(-90deg) translateZ(79px);background:#232c38;transition:transform .5s ease,opacity .5s ease;z-index:3}
+.wsPanel.open{transform:rotateY(-90deg) translateZ(79px) translateY(-270px);opacity:0;pointer-events:none}
+.wsPower{position:absolute;left:50%;top:18px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:#22b573;border:2px solid #0e3d27}
+.wsLed{position:absolute;left:50%;top:54px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#22d3ee}
+.wsVent{height:5px;background:#1e293b;border-radius:3px;margin:8px 22px 0}
+.wsBrand{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:10px;letter-spacing:2px;color:#94a3b8;font-weight:700}
+.wsScrew{position:absolute;width:10px;height:10px;border-radius:50%;background:#4a5568}
+.wsPart{position:absolute;cursor:pointer;border:2px solid transparent;border-radius:4px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;color:#fff}
+.wsPart.cur{border-color:#ffa726;border-style:dashed}
+.wsPart.done{border-color:#22b573}
+.wsPart.fault{border-color:#ff5252;box-shadow:0 0 12px #ff5252}
+.wsPart.sel{border-color:#ffb020;box-shadow:0 0 0 2px #ffb020,0 0 16px rgba(255,176,32,.6)}
+.wsBoard{transform:translateZ(2px)}
+.wsCpu{transform:translateZ(10px)}
+.wsRam{transform:translateZ(8px)}
+.wsGpu{transform:translateZ(10px)}
+.wsSsd{transform:translateZ(8px)}
+.wsFan{transform:translateZ(12px)}
+.wsPsu{transform:translateZ(8px)}
+.wsWifi{transform:translateZ(8px)}
+.wsBadge{position:absolute;top:-9px;right:-9px;font-size:13px;line-height:1}
+.wsBoard{inset:8px;background:#1e7a4c}
+.wsBoard span{position:absolute;left:0;right:0;top:2px;font-size:8px;color:rgba(255,255,255,.65);font-weight:700}
+.wsCpu{top:16px;left:16px;width:44px;height:44px;background:#c7d0d8;color:#1e293b;font-size:10px}
+.wsRam{top:16px;width:12px;height:66px;background:#2b7de9}
+.wsGpu{top:104px;left:12px;width:116px;height:22px;background:#37474f;font-size:9px}
+.wsSsd{top:140px;left:14px;width:52px;height:28px;background:#8d6e63;font-size:9px}
+.wsFan{top:140px;right:12px;width:44px;height:44px;border-radius:50%;background:#455a64;font-size:18px}
+.wsPsu{bottom:10px;left:12px;width:76px;height:38px;background:#546e7a;font-size:9px}
+.wsWifi{top:16px;right:8px;width:30px;height:20px;background:#7b1fa2;font-size:9px}
+.wsMonitor{width:130px;flex:0 0 auto}
+.wsScreen{min-height:104px;background:#0b1520;color:#7cfc9a;border:2px solid #334155;border-radius:8px;padding:10px;font-size:12.5px;line-height:1.5;display:flex;flex-direction:column;justify-content:center;gap:6px;overflow:hidden}
+.wsScreen.bad{border-color:#ff5252;color:#ff8a80}
+.wsScreen.fault{border-color:#e5484d;box-shadow:0 0 0 2px #e5484d,0 0 18px rgba(229,72,77,.55)}
+.wsScreen.sel{border-color:#ffb020;box-shadow:0 0 0 2px #ffb020,0 0 16px rgba(255,176,32,.5)}
+.wsScreen.ok{border-color:#22b573}
+.wsScreen.run{border-color:#2b7de9;color:#90caf9}
+.wsScreenBar{height:8px;background:#1e293b;border-radius:4px;overflow:hidden}
+.wsScreenBar i{display:block;height:100%;background:#22b573}
+.wsStand{width:8px;height:14px;background:#334155;margin:0 auto}
+.wsBase{width:100px;height:6px;background:#334155;border-radius:3px;margin:0 auto}
+.wsDesk{height:14px;background:#4a3524;border-radius:6px;margin-top:8px}
+.wsStep{display:flex;gap:10px;align-items:center;padding:11px 12px;border:1px solid rgba(255,255,255,.10);border-radius:14px;margin-top:8px;background:rgba(255,255,255,.04)}
+.wsStep.done{border-color:#22b573}
+.wsStep.cur{border-color:#ffa726}
+.wsSelBar{display:flex;gap:8px;align-items:center;padding:10px 12px;border:1px solid #ffb020;border-radius:14px;margin-top:8px;background:rgba(255,176,32,.08)}
+.wsStep .n{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+.wsStep.done .n{background:#22b573;color:#fff}
+.wsStep.cur .n{background:#ffa726;color:#fff}
+.wsStep .lb{flex:1;line-height:1.35}
+.wsStep .cost{font-size:12px;color:#fca5a5;font-weight:700;white-space:nowrap}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head><body>
@@ -308,6 +369,8 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
  <div id="activeBox"></div>
  <div id="contracts"></div>
 </section>
+<!-- ATELIER -->
+<section id="tab-workshop" class="hidden"><div id="workshopBox"></div></section>
 <!-- CLASSEMENT -->
 <section id="tab-ranking" class="hidden">
  <div class="card"><h3>🏆 Classement des studios</h3>
@@ -826,6 +889,124 @@ let _offerSeq=0;
 function depCount(){return G.offers.filter(o=>o.cat=='depannage').length}
 function genOneOffer(lv,forceDep){let id=Date.now()+(_offerSeq++)+Math.random();if(forceDep||Math.random()<0.4){let j=DEPANNAGE_JOBS[Math.floor(Math.random()*DEPANNAGE_JOBS.length)];return{...j,cat:'depannage',client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id}}let pool=CONTRACT_TYPES.filter(c=>c.min<=lv+1);let b=pool[Math.floor(Math.random()*pool.length)];return{...b,client:CLIENTS[Math.floor(Math.random()*CLIENTS.length)],id}}
 function refillOffers(){while(G.offers.length<3||depCount()<2)G.offers.push(genOneOffer(level(),depCount()<2))}
+/* --- Atelier depannage 3D (style PC Creator) --- */
+const WS_PARTS={ssd:{name:'SSD',cost:120},ram:{name:'RAM',cost:60},psu:{name:'Alimentation',cost:80},fan:{name:'Ventilateur',cost:25},screen:{name:'Écran',cost:90},gpu:{name:'Carte graphique',cost:200},cpu:{name:'Processeur',cost:0},board:{name:'Carte mère',cost:0},wifi:{name:'Wi-Fi',cost:0},data:{name:'Données',cost:0}};
+let wsRotY=32,wsRotX=-6,wsSel=null,wsDrag=null,wsTimer=null,wsPanelOpen=false;
+function depPlan(t){
+ if(t.indexOf('Installer Windows')===0||t=='Installer macOS'||t=='Installer Ubuntu'){let sys=t.replace('Installer ','');return{fault:'screen',missing:'💻 Aucun système installé',faultLabel:'Aucun système installé',steps:[
+  {label:'Sauvegarder les données',part:'data',cost:0,kind:'save',mon:'Sauvegarde des données...'},
+  {label:'Installer '+sys,part:'screen',cost:0,kind:'install',mon:'Installation de '+sys+'...'},
+  {label:'Installer les pilotes',part:'board',cost:0,kind:'install',mon:'Installation des pilotes...'},
+  {label:'Tester le PC',part:'screen',cost:0,kind:'test',mon:'Test du PC...'}]}}
+ if(t=='Réinstaller Android'||t=='Réinstaller iOS'){let sys=t.replace('Réinstaller ','');return{fault:'screen',missing:'📱 Système à réinstaller',faultLabel:'Système à réinstaller',steps:[
+  {label:'Sauvegarder les données',part:'data',cost:0,kind:'save',mon:'Sauvegarde des données...'},
+  {label:'Réinstaller '+sys,part:'screen',cost:0,kind:'install',mon:'Réinstallation de '+sys+'...'},
+  {label:'Restaurer les données',part:'data',cost:0,kind:'save',mon:'Restauration des données...'},
+  {label:'Tester',part:'screen',cost:0,kind:'test',mon:'Test...'}]}}
+ if(t.indexOf('Installer un antivirus')===0||t=='Configurer Windows Defender'){let av=t.indexOf('Avast')>=0?'Avast':t.indexOf('Norton')>=0?'Norton':t.indexOf('Bitdefender')>=0?'Bitdefender':t.indexOf('McAfee')>=0?'McAfee':t.indexOf('Kaspersky')>=0?'Kaspersky':t.indexOf('Avira')>=0?'Avira':'Windows Defender';return{fault:'screen',missing:'🛡️ Aucun antivirus installé',faultLabel:'Aucun antivirus installé',steps:[
+  {label:'Diagnostiquer',part:'screen',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:av=='Windows Defender'?'Configurer Windows Defender':'Installer l\u2019antivirus '+av,part:'screen',cost:0,kind:'install',mon:av=='Windows Defender'?'Configuration de Windows Defender...':'Installation de '+av+'...'},
+  {label:'Lancer l\u2019analyse',part:'screen',cost:0,kind:'scan',mon:'Analyse antivirus...'},
+  {label:'Nettoyer les menaces',part:'screen',cost:0,kind:'scan',mon:'Nettoyage des menaces...'}]}}
+ if(t=='Supprimer un virus'||t=='Nettoyer un PC infecté'){return{fault:'screen',missing:'🦠 Le PC est infecté',faultLabel:'Virus détecté',steps:[
+  {label:'Diagnostiquer',part:'screen',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:'Installer l\u2019antivirus',part:'screen',cost:0,kind:'install',mon:'Installation de l\u2019antivirus...'},
+  {label:'Nettoyer le virus',part:'screen',cost:0,kind:'scan',mon:'Nettoyage du virus...'},
+  {label:'Redémarrer et tester',part:'screen',cost:0,kind:'test',mon:'Redémarrage et test...'}]}}
+ if(t=='Réparer un PC qui ne démarre plus'){return{fault:'psu',missing:'💻 Écran noir — le PC ne démarre pas',faultLabel:'Alimentation en panne',steps:[
+  {label:'Diagnostiquer',part:'psu',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:'Remplacer l\u2019alimentation',part:'psu',cost:80,kind:'replace',mon:'Remplacement de l\u2019alimentation...'},
+  {label:'Tester le démarrage',part:'screen',cost:0,kind:'test',mon:'Test du démarrage...'}]}}
+ if(t=='Récupérer des données perdues'){return{fault:'ssd',missing:'💾 Disque introuvable',faultLabel:'Disque dur en panne',steps:[
+  {label:'Diagnostiquer',part:'ssd',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:'Récupérer les données',part:'ssd',cost:0,kind:'recover',mon:'Récupération des données...'},
+  {label:'Vérifier les fichiers',part:'screen',cost:0,kind:'test',mon:'Vérification des fichiers...'}]}}
+ if(t=='Remplacer un disque dur'){return{fault:'ssd',missing:'💾 Disque dur en panne',faultLabel:'Disque dur en panne',steps:[
+  {label:'Diagnostiquer',part:'ssd',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:'Remplacer le disque dur',part:'ssd',cost:120,kind:'replace',mon:'Remplacement du disque...'},
+  {label:'Réinstaller le système',part:'screen',cost:0,kind:'install',mon:'Réinstallation du système...'},
+  {label:'Tester',part:'screen',cost:0,kind:'test',mon:'Test du PC...'}]}}
+ if(t=='Remplacer un écran'){return{fault:'screen',missing:'🖥️ Écran cassé',faultLabel:'Écran cassé',steps:[
+  {label:'Diagnostiquer',part:'screen',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:'Remplacer l\u2019écran',part:'screen',cost:90,kind:'replace',mon:'Remplacement de l\u2019écran...'},
+  {label:'Tester',part:'screen',cost:0,kind:'test',mon:'Test du PC...'}]}}
+ if(t=='Mettre à jour un système'){return{fault:'screen',missing:'⬆️ Système à mettre à jour',faultLabel:'Système à mettre à jour',steps:[
+  {label:'Sauvegarder les données',part:'data',cost:0,kind:'save',mon:'Sauvegarde des données...'},
+  {label:'Installer la mise à jour',part:'screen',cost:0,kind:'install',mon:'Installation de la mise à jour...'},
+  {label:'Redémarrer et tester',part:'screen',cost:0,kind:'test',mon:'Redémarrage et test...'}]}}
+ if(t=='Configurer le Wi-Fi'){return{fault:'wifi',missing:'📶 Pas de Wi-Fi',faultLabel:'Wi-Fi non configuré',steps:[
+  {label:'Diagnostiquer',part:'wifi',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:'Configurer le réseau',part:'wifi',cost:0,kind:'config',mon:'Configuration du réseau...'},
+  {label:'Tester la connexion',part:'screen',cost:0,kind:'test',mon:'Test de la connexion...'}]}}
+ return{fault:'board',missing:'🔧 Panne à trouver',faultLabel:'Panne à trouver',steps:[
+  {label:'Diagnostiquer',part:'board',cost:0,kind:'diag',mon:'Diagnostic en cours...'},
+  {label:'Réparer',part:'board',cost:0,kind:'replace',mon:'Réparation...'},
+  {label:'Tester',part:'screen',cost:0,kind:'test',mon:'Test du PC...'}]}}
+function ensureWs(){if(!G.active)return null;if(!G.active.ws||typeof G.active.ws!=='object')G.active.ws={diag:false,done:[],run:null,lastOk:''};if(!Array.isArray(G.active.ws.done))G.active.ws.done=[];return G.active.ws}
+function wsScreen(a,ws,plan){let allDone=ws.done.length>=plan.steps.length;if(ws.run){let st=plan.steps[ws.run.i];return{txt:st.mon+' '+ws.run.pct+' %',cls:'run'}}if(allDone)return{txt:'✅ Prêt à livrer !',cls:'ok'};if(ws.diag&&plan.fault=='screen'&&!plan.steps.some((s,ix)=>s.kind=='install'&&ws.done.indexOf(ix)>=0))return{txt:'⚠️ '+plan.faultLabel,cls:'bad'};if(ws.lastOk)return{txt:'✅ '+ws.lastOk,cls:'ok'};if(!ws.diag)return{txt:plan.missing,cls:'off'};return{txt:'⚠️ '+plan.faultLabel,cls:'bad'}}
+function openWorkshop(){if(!G.active||G.active.cat!='depannage'){toast('🔧 Prends d\u2019abord une mission dépannage !');return false}ensureWs();wsSel=null;showTab('workshop');return true}
+function wsTogglePanel(){wsPanelOpen=!wsPanelOpen;let p=document.getElementById('wsPanel');if(p)p.classList.toggle('open',wsPanelOpen);let b=document.getElementById('wsPanelBtn');if(b)b.textContent=wsPanelOpen?'🔒 Fermer le panneau':'🔓 Ouvrir le panneau'}
+function wsApplyRot(){let t=document.getElementById('wsTower');if(t)t.style.transform='rotateX('+wsRotX+'deg) rotateY('+wsRotY+'deg)'}
+function wsRotate(d){wsRotY=Math.max(-70,Math.min(70,wsRotY+d));wsApplyRot()}
+function wsDragStart(e){wsDrag={x:e.clientX,y:e.clientY,rotY:wsRotY,rotX:wsRotX}}
+function wsDragMove(e){if(!wsDrag)return;wsRotY=Math.max(-70,Math.min(70,wsDrag.rotY+(e.clientX-wsDrag.x)*0.5));wsRotX=Math.max(-18,Math.min(12,wsDrag.rotX+(e.clientY-wsDrag.y)*0.25));wsApplyRot()}
+function wsDragEnd(){wsDrag=null}
+function wsSelectPart(part){let a=G.active;if(!a||a.cat!='depannage')return false;wsSel=part;renderWorkshop();return true}
+function wsDoSelected(){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(!ws||ws.run){toast('⏳ Étape en cours...');return false}let plan=depPlan(a.t);let i=ws.done.length;let st=plan.steps[i];if(!st){toast('✅ Toutes les étapes sont faites — livre le PC !');return false}if(wsSel&&st.part===wsSel)return wsDoStep(i);toast('👆 Touche d\u2019abord le bon composant : '+WS_PARTS[st.part].name+'.');return false}
+function wsDiagnose(){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(ws.diag){toast('🔍 Panne déjà trouvée : '+depPlan(a.t).faultLabel);return true}ws.diag=true;save();renderWorkshop();toast('🔍 Panne trouvée : '+depPlan(a.t).faultLabel);return true}
+function wsTapPart(part){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(!ws)return false;return wsSelectPart(part)}
+function wsDoStep(i){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(!ws||ws.run)return false;let plan=depPlan(a.t);let st=plan.steps[i];if(!st||ws.done.indexOf(i)>=0)return false;if(i!==ws.done.length){toast('🔧 Fais les étapes dans l\u2019ordre !');return false}if(st.cost>0&&G.money<st.cost){toast('💰 Pas assez d\u2019argent pour cette pièce ('+st.cost+' $)');return false}if(st.cost>0){G.money-=st.cost;addLog('Pièce achetée : '+st.label+' ('+st.cost+' $) pour le PC de '+a.client+'.','argent')}ws.run={i:i,pct:0};if(typeof setInterval==='function'){wsTimer=setInterval(function(){if(!ws.run){if(wsTimer){clearInterval(wsTimer);wsTimer=null}return}ws.run.pct+=8;if(ws.run.pct>=100){clearInterval(wsTimer);wsTimer=null;wsFinishStep()}else{let b=document.getElementById('wsRunBar');if(b)b.style.width=ws.run.pct+'%';let t2=document.getElementById('wsRunTxt');if(t2)t2.textContent=st.mon+' '+ws.run.pct+' %'}},60)}save();render();return true}
+function wsFinishStep(){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(!ws||!ws.run)return false;if(wsTimer){try{clearInterval(wsTimer)}catch(e){}wsTimer=null}let i=ws.run.i;ws.run=null;let plan=depPlan(a.t);let st=plan.steps[i];if(!st)return false;if(ws.done.indexOf(i)<0)ws.done.push(i);if(st.kind=='diag')ws.diag=true;let n=plan.steps.length;let gain=(i==n-1)?Math.max(0,a.work-a.progress):Math.round(a.work/n);a.progress=Math.min(a.work,a.progress+gain);if(st.kind!='diag')ws.lastOk=st.label;save();render();return true}
+function deliverPC(){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();let plan=depPlan(a.t);if(!ws||ws.done.length<plan.steps.length){toast('🔧 Termine d\u2019abord toutes les étapes !');return false}let c=a;G.money+=c.pay;G.rep+=c.rep;G.done++;G.coins=(G.coins||0)+10;G.active=null;wsSel=null;addLog('PC livré à '+c.client+' : '+c.t+' — '+c.pay+' $ encaissés, +'+c.rep+' réputation et +10 🪙. Le client est ravi !','contrat');save();render();showTab('sites');toast('🎉 PC livré ! +'+c.pay+' $ et +'+c.rep+' réputation et +10 🪙');return true}
+function renderWorkshop(){
+ let box=document.getElementById('workshopBox');if(!box)return;
+ let a=G.active;
+ if(!a||a.cat!='depannage'){box.innerHTML='<div class="card"><h3>🔧 Atelier</h3><p class="small">Aucune mission dépannage en cours — prends une mission dans les contrats, puis reviens ici réparer le PC !</p><button class="primary" onclick="showTab(\'contracts\')">📋 Voir les contrats</button></div>';return}
+ let ws=ensureWs();let plan=depPlan(a.t);let steps=plan.steps;
+ let pct=Math.min(100,Math.round(a.progress/a.work*100));
+ let allDone=ws.done.length>=steps.length;
+ let scr=wsScreen(a,ws,plan);
+ let cur=ws.done.length<steps.length?steps[ws.done.length]:null;
+ let selBar='';
+ if(wsSel){let sp=WS_PARTS[wsSel];selBar='<div class="wsSelBar"><span style="flex:1">🎯 <b>'+sp.name+'</b>'+(cur&&cur.part===wsSel?' — '+cur.label+(cur.cost>0?' ('+cur.cost+' $)':''):'')+'</span>'+(cur&&cur.part===wsSel?'<button class="primary" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" '+(ws.run?'disabled':'')+' onclick="wsDoSelected()">▶️ Faire</button>':'<span class="small">Étape en cours : '+(cur?cur.label+' ('+WS_PARTS[cur.part].name+')':'—')+'</span>')+'</div>';}else{selBar='<p class="small">👆 Touche un composant du PC (ou l’écran) pour le sélectionner.</p>';}
+ let isDonePart=function(p){return steps.some((s,ix)=>s.part===p&&ws.done.indexOf(ix)>=0)};
+ let pcls=function(p,base){let c='wsPart '+base;if(ws.diag&&plan.fault===p&&!isDonePart(p))c+=' fault';else if(isDonePart(p))c+=' done';if(cur&&cur.part===p&&(cur.kind!='diag'||ws.diag))c+=' cur';if(wsSel===p)c+=' sel';return c};
+ let pbadge=function(p){if(isDonePart(p))return '<b class="wsBadge">✅</b>';if(ws.diag&&plan.fault===p)return '<b class="wsBadge">⚠️</b>';return ''};
+ let scene='<div class="wsStage"><div class="wsRow">'+
+ '<div class="wsTowerWrap" onpointerdown="wsDragStart(event)" onpointermove="wsDragMove(event)" onpointerup="wsDragEnd(event)" onpointerleave="wsDragEnd(event)">'+
+ '<div class="wsTower" id="wsTower" style="transform:rotateX('+wsRotX+'deg) rotateY('+wsRotY+'deg)">'+
+ '<div class="wsFace wsTop"></div>'+
+ '<div class="wsFace wsFront"><div class="wsPower"></div><div class="wsLed"></div><div class="wsVent"></div><div class="wsVent"></div><div class="wsVent"></div><span class="wsBrand">STUDIO PC</span></div>'+
+ '<div class="wsFace wsSide">'+
+ '<div class="'+pcls('board','wsBoard')+'" onclick="event.stopPropagation();wsTapPart(\'board\')"><span>Carte mère</span>'+pbadge('board')+'</div>'+
+ '<div class="'+pcls('cpu','wsCpu')+'" onclick="event.stopPropagation();wsTapPart(\'cpu\')">CPU'+pbadge('cpu')+'</div>'+
+ '<div class="'+pcls('ram','wsRam')+'" style="left:70px" onclick="event.stopPropagation();wsTapPart(\'ram\')"></div>'+
+ '<div class="'+pcls('ram','wsRam')+'" style="left:86px" onclick="event.stopPropagation();wsTapPart(\'ram\')"></div>'+
+ '<div class="'+pcls('gpu','wsGpu')+'" onclick="event.stopPropagation();wsTapPart(\'gpu\')">GPU'+pbadge('gpu')+'</div>'+
+ '<div class="'+pcls('ssd','wsSsd')+'" onclick="event.stopPropagation();wsTapPart(\'ssd\')">SSD'+pbadge('ssd')+'</div>'+
+ '<div class="'+pcls('fan','wsFan')+'" onclick="event.stopPropagation();wsTapPart(\'fan\')">🌀'+pbadge('fan')+'</div>'+
+ '<div class="'+pcls('psu','wsPsu')+'" onclick="event.stopPropagation();wsTapPart(\'psu\')">Alimentation'+pbadge('psu')+'</div>'+
+ '<div class="'+pcls('wifi','wsWifi')+'" onclick="event.stopPropagation();wsTapPart(\'wifi\')">📶'+pbadge('wifi')+'</div>'+
+ '</div>'+
+ '<div class="wsFace wsPanel'+(wsPanelOpen?' open':'')+'" id="wsPanel"><span class="wsScrew" style="top:10px;left:10px"></span><span class="wsScrew" style="top:10px;right:10px"></span><span class="wsScrew" style="bottom:10px;left:10px"></span><span class="wsScrew" style="bottom:10px;right:10px"></span></div>'+
+ '</div></div>'+
+ '<div class="wsMonitor" onclick="wsTapPart(\'screen\')"><div class="wsScreen '+scr.cls+(ws.diag&&plan.fault=='screen'&&!allDone?' fault':'')+(wsSel=='screen'?' sel':'')+'" id="wsScreen"><span id="wsRunTxt">'+scr.txt+'</span>'+(ws.run?'<span class="wsScreenBar"><i id="wsRunBar" style="width:'+ws.run.pct+'%"></i></span>':'')+'</div><div class="wsStand"></div><div class="wsBase"></div></div>'+
+ '</div><div class="wsDesk"></div></div>';
+ let stepsHtml=steps.map((s,ix)=>{
+  let done=ws.done.indexOf(ix)>=0;
+  let isCur=!done&&ix===ws.done.length;
+  let cls='wsStep'+(done?' done':isCur?' cur':'');
+  let btn=done?'<span style="color:#22b573;font-weight:800">✅ Fait</span>':isCur?'<button class="primary" style="width:auto;padding:9px 14px;min-height:40px;white-space:nowrap" '+(ws.run?'disabled':'')+' onclick="wsDoStep('+ix+')">▶️ Faire</button>':'<span class="small">🔒</span>';
+  return '<div class="'+cls+'"><span class="n">'+(ix+1)+'</span><span class="lb">'+s.label+'</span>'+(s.cost>0?'<span class="cost">'+s.cost+' $</span>':'')+btn+'</div>'}).join('');
+ box.innerHTML=
+ '<div class="card"><h3>🔧 Atelier — '+a.emoji+' '+a.t+'</h3><p>Client : <b>'+a.client+'</b> • Gain : <b>'+a.pay+' $</b> • Délai : <b>'+a.left+' jour(s)</b></p><div class="bar blue"><i style="width:'+pct+'%"></i></div><p class="small">'+pct+'% fait — '+ws.done.length+'/'+steps.length+' étapes • Chaque étape fait avancer la mission, pas besoin d\u2019avancer les jours.</p></div>'+
+ scene+
+ '<div class="card"><h3>🖥️ Le PC de '+a.client+'</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="wsPanelBtn" onclick="wsTogglePanel()">'+(wsPanelOpen?'🔒 Fermer le panneau':'🔓 Ouvrir le panneau')+'</button><button onclick="wsRotate(-15)">↺ Tourner</button><button onclick="wsRotate(15)">Tourner ↻</button></div><p class="small">↔️ Fais glisser le PC pour tourner autour : gauche/droite pour orbiter, haut/bas pour incliner.</p>'+selBar+'<button class="primary" onclick="wsDiagnose()">🔍 Diagnostiquer (gratuit)</button><p class="small">Pièces : SSD 120 $ • RAM 60 $ • Alimentation 80 $ • Ventilateur 25 $ • Écran 90 $ • Carte graphique 200 $</p></div>'+
+ '<div class="card"><h3>📋 Étapes de la réparation</h3>'+stepsHtml+'</div>'+
+ (allDone?'<button class="green" style="width:100%;font-size:17px;margin-top:12px" onclick="deliverPC()">📦 Livrer le PC — +'+a.pay+' $</button>':'')+
+ '<button class="ghost" style="width:100%;margin-top:8px" onclick="showTab(\'sites\')">← Retour à l\u2019accueil</button>';
+}
+
 
 /* --- Sauvegarde (ne plante jamais : localStorage, puis sessionStorage, puis mémoire) --- */
 let storageOK=true,memSave=null;
@@ -842,14 +1023,16 @@ function renderJournal(){let box=document.getElementById('journalScreen');if(!bo
  box.innerHTML='<p class="small">'+G.log.length+' entrée(s) — la plus récente en haut.</p>'+days.map(g=>'<div class="jday">📅 Jour '+g.d+'</div>'+g.items.map(e=>'<div class="jline"><span class="jico">'+(LOG_CATS[e.c]||'🗒️')+'</span><span>'+e.t+'</span></div>').join('')).join('')}
 
 /* --- Navigation --- */
-const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer",siteDetail:"🔎 Détail du site",appDetail:"📱 Détail de l'application",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",ranking:"🏆 Classement",market:"🎯 Marché",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio"};
+const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer",siteDetail:"🔎 Détail du site",appDetail:"📱 Détail de l'application",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",ranking:"🏆 Classement",market:"🎯 Marché",workshop:"🔧 Atelier",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio"};
+let currentTab='sites';
 function showTab(id,btn){
- ['sites','create','siteDetail','appDetail','team','stats','contracts','ranking','market','office','help','journal'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
+ currentTab=id;
+ ['sites','create','siteDetail','appDetail','team','stats','contracts','workshop','ranking','market','office','help','journal'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
  document.querySelectorAll('#mainNav .navbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
  document.querySelectorAll('.bnavbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
  document.getElementById('screenTitle').textContent=TITLES[id]||'Web Studio Tycoon';
  closeMenu();
- if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='appDetail')renderAppDetail(); if(id=='journal')renderJournal();
+ if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='appDetail')renderAppDetail(); if(id=='journal')renderJournal(); if(id=='workshop')renderWorkshop();
  window.scrollTo(0,0)}
 function toggleMenu(){document.querySelector('.side').classList.toggle('open');document.getElementById('menuBack').classList.toggle('hidden')}
 function closeMenu(){let s=document.querySelector('.side');if(s)s.classList.remove('open');let m=document.getElementById('menuBack');if(m)m.classList.add('hidden')}
@@ -1141,8 +1324,8 @@ function nextDay(){
  G.team.forEach(e=>{if(e.temp)e.daysLeft--});
  let leaving=G.team.filter(e=>e.temp&&e.daysLeft<=0);
  if(leaving.length){G.team=G.team.filter(e=>!(e.temp&&e.daysLeft<=0));leaving.forEach(e=>addLog(e.name+" (freelance) a terminé sa mission de 3 jours et quitte le studio. Merci pour le coup de main !",'equipe'))}
- if(G.active){G.active.progress+=power();G.active.left--;
-  if(G.active.progress>=G.active.work){let c=G.active;G.money+=c.pay;G.rep+=c.rep;G.done++;G.coins=(G.coins||0)+10;G.active=null;addLog("Contrat terminé pour "+c.client+" : "+c.t+" — "+c.pay+" $ encaissés, +"+c.rep+" réputation et +10 🪙. Le client est ravi !",'contrat');toast(`🎉 Contrat terminé ! +${c.pay} $ et +${c.rep} réputation et +10 🪙`)}
+ if(G.active){if(G.active.cat!='depannage')G.active.progress+=power();G.active.left--;
+  if(G.active.cat!='depannage'&&G.active.progress>=G.active.work){let c=G.active;G.money+=c.pay;G.rep+=c.rep;G.done++;G.coins=(G.coins||0)+10;G.active=null;addLog("Contrat terminé pour "+c.client+" : "+c.t+" — "+c.pay+" $ encaissés, +"+c.rep+" réputation et +10 🪙. Le client est ravi !",'contrat');toast(`🎉 Contrat terminé ! +${c.pay} $ et +${c.rep} réputation et +10 🪙`)}
   else if(G.active.left<0){G.rep=Math.max(0,G.rep-15);G.active=null;addLog("Contrat perdu pour retard : le client a annulé, -15 réputation. Les délais, c'est sacré…",'contrat');toast("⏰ Trop tard ! Contrat perdu, -15 réputation")}}
  let inc=tickSites()+tickApps(); tickRivals();
  let sponsor=sponsorIncome();if(sponsor>0){G.money+=sponsor;addLog("Sponsors : +"+sponsor+" $ aujourd'hui grâce à ta réputation ("+G.rep+"). C'est de l'argent qui tombe chaque matin.",'argent')}
@@ -1226,6 +1409,8 @@ const HELP=[
 {t:"💤 Aucun contrat en cours :",x:"Choisis un contrat ci-dessous, puis clique sur le bouton 📅 Jour pour avancer."},
 {t:"📱 Applications :",x:"crée des applications comme des sites : choisis un type (mobile, ordinateur, web) et une plateforme (Android, iOS, Windows, macOS, Linux, Web), puis travaille sur les 5 tâches — maquette, développement, tests, publication et mises à jour. Une application rapporte avec les téléchargements et les pubs."},
 {t:"🔧 Dépannage :",x:"sur l'écran d'accueil, tu trouveras des missions de dépannage (et aussi dans les contrats) : installer Windows, macOS ou Ubuntu, installer un antivirus (Avast, Norton, Bitdefender…), supprimer un virus, réparer un PC ou récupérer des données. Ce sont des missions plus petites et plus rapides que les gros contrats de sites."},
+{t:"🔧 Atelier :",x:"quand une mission dépannage est en cours, ouvre l'atelier : diagnostique la panne, touche la pièce en panne ou suis les étapes, puis livre le PC. Chaque étape fait avancer la mission — pas besoin d'avancer les jours."},
+{t:"🖥️ PC 3D :",x:"dans l'atelier, fais glisser le PC pour tourner autour (orbite) : gauche/droite pour tourner, haut/bas pour incliner. Touche un composant pour le sélectionner (il se surligne en orange), puis fais l'action dessus avec le bouton. Le bouton « Ouvrir le panneau » montre l'intérieur du PC."},
 ];
 function renderHelp(){let h=HELP.map(i=>i.t?`<p><b>${i.t}</b> ${i.x}</p>`:`<p>${i.x}</p>`).join('');let a=document.getElementById('helpScreen');if(a)a.innerHTML=h;}
 function fmtNum(n){n=Math.round(n);if(n>=1000000)return (n/1000000).toFixed(1).replace(/\.0$/,'')+' M';if(n>=1000)return (n/1000).toFixed(1).replace(/\.0$/,'')+' K';return String(n);}
@@ -1252,13 +1437,16 @@ function render(){
  document.getElementById('officeScene').innerHTML=officeSVG();
  let ab=document.getElementById('activeBox');
  if(G.active){let pct=Math.min(100,Math.round(G.active.progress/G.active.work*100));
-  ab.innerHTML=`<div class="card" style="border-color:#22b573"><h3>🚧 Contrat en cours : ${G.active.emoji} ${G.active.t}${G.active.cat=='depannage'?' — 🔧 Dépannage':''}</h3><p>Client : <b>${G.active.client}</b> • Gain : <b>${G.active.pay} $</b> • Délai restant : <b>${G.active.left} jour(s)</b></p><div class="bar blue"><i style="width:${pct}%"></i></div><p class="small">${pct}% fait — Puissance par jour : ${power()} • Salaires/jour : ${salaries()} $</p></div>`;
+  let _isDep=G.active.cat=='depannage',_ws=_isDep?ensureWs():null,_plan=_isDep?depPlan(G.active.t):null,_allDone=!!(_ws&&_plan&&_ws.done.length>=_plan.steps.length);
+  let _sub=_isDep?(pct+'% fait — avance dans l\u2019atelier 🔧 '+(_ws?_ws.done.length:0)+'/'+(_plan?_plan.steps.length:0)+' étapes) • Salaires/jour : '+salaries()+' $'):(pct+'% fait — Puissance par jour : '+power()+' • Salaires/jour : '+salaries()+' $');
+  ab.innerHTML=`<div class="card" style="border-color:#22b573"><h3>🚧 Contrat en cours : ${G.active.emoji} ${G.active.t}${_isDep?' — 🔧 Dépannage':''}</h3><p>Client : <b>${G.active.client}</b> • Gain : <b>${G.active.pay} $</b> • Délai restant : <b>${G.active.left} jour(s)</b></p><div class="bar blue"><i style="width:${pct}%"></i></div><p class="small">${_sub}</p>${_isDep?'<button class="primary" onclick="openWorkshop()">🔧 Ouvrir l\u2019atelier</button>':''}${_allDone?'<button class="green" onclick="deliverPC()">📦 Livrer le PC — +'+G.active.pay+' $</button>':''}</div>`;
  } else ab.innerHTML=`<div class="card"><h3>💤 Aucun contrat en cours</h3><p class="small">Puissance : ${power()} • Salaires/jour : ${salaries()} $ • Contrats réussis : ${G.done} • Revenus de tes sites au total : ${G.siteIncomeTotal} $ • Sponsors : +${sponsorIncome()} $ / jour</p><div class="bar"><i style="width:${Math.min(100,G.rep/10)}%"></i></div><p class="small">Progression vers la victoire : ${G.rep} / 1 000 réputation</p></div>`;
  document.getElementById('contracts').innerHTML=G.offers.map(c=>{
   let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p>${c.cat=='depannage'?'<p class="small">🔧 Dépannage — mission de maintenance</p>':''}${locked?`<p class="small">🔒 Débloqué au studio niveau ${c.min}</p>`:''}</div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre ce contrat'}</button><button ${locked||G.active||c.negotiated?'disabled':''} onclick="negotiateOffer(${c.id})">${c.negotiated?'✅ Négocié : '+c.pay+' $':'💬 Négocier — chance '+negoChance()+' %'}</button>${c.negotiated?'':`<p class="small">💬 Négocier peut ajouter +25 à 40 % au prix — mais si le client refuse, il retire son offre. La chance dépend de ta réputation.</p>`}</div>`}).join('');
  renderSites();renderApps();renderDepannage();renderCreate();renderMarket();renderRanking();renderTeam();renderUpgrades();renderStats();renderHelp();renderJournal();
  if(selectedSiteId)renderSiteDetail();
  if(selectedAppId)renderAppDetail();
+ if(currentTab=='workshop')renderWorkshop();
 }
 function stripHTML(s){
  let t=s.tasks;let tot=Math.max(1,TASK_DEF.reduce((a,x)=>a+(t[x.id]||0),0));
@@ -1303,8 +1491,10 @@ function renderApps(){
 function renderDepannage(){
  let box=document.getElementById('depannageBox');if(!box)return;
  let deps=G.offers.filter(o=>o.cat=='depannage');
- if(!deps.length){box.innerHTML='<p class="small">Aucune mission pour le moment — reviens demain.</p>';return}
- box.innerHTML=deps.map(c=>{let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p></div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre cette mission'}</button></div>`}).join('');
+ let _head='';
+ if(G.active&&G.active.cat=='depannage'){let _w=ensureWs(),_p=depPlan(G.active.t),_pc=Math.min(100,Math.round(G.active.progress/G.active.work*100));_head=`<div class="card" style="border-color:#22b573"><h3>🔧 Mission en cours : ${G.active.emoji} ${G.active.t}</h3><p>Client : <b>${G.active.client}</b> • Gain : <b>${G.active.pay} $</b> • ${_pc}% fait (${_w.done.length}/${_p.steps.length} étapes)</p><button class="primary" onclick="openWorkshop()">🔧 Ouvrir l\u2019atelier</button></div>`}
+ if(!deps.length){box.innerHTML=_head+'<p class="small">Aucune mission pour le moment — reviens demain.</p>';return}
+ box.innerHTML=_head+deps.map(c=>{let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p></div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre cette mission'}</button></div>`}).join('');
 }
 function setCreateMode(m){createMode=(m=='app'?'app':'site');createStep=1;renderCreate();}
 function renderCreate(){
