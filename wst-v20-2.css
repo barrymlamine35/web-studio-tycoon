@@ -1,0 +1,186 @@
+/* ============================================================
+   wst-v20.css — Étape 1 : fluidité (aucun changement de look visible)
+   Chargé APRÈS wst-v19.css.
+   ============================================================ */
+
+/* 1) Le flou (backdrop-filter) est très coûteux sur mobile quand il
+      est répété sur des dizaines de cartes. On le garde uniquement
+      sur les éléments fixes (menu, barre du haut, barre du bas, toast,
+      connexion) et on le retire des cartes et des listes. Le fond
+      reste le même (var(--glass)), sur un dégradé sombre : à l'œil,
+      la différence est quasi nulle. */
+.card,.tile,.siteCard,.tCard,.statCard,
+.msgRow,.msgClient,.pinBtn,.typeCard,.wsStage{
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+
+/* 2) Les longues listes ne dessinent que ce qui est à l'écran. */
+#contracts .card,#mySites .card,#myApps .card,#journalScreen .card{
+  content-visibility:auto;
+  contain-intrinsic-size:auto 150px;
+}
+
+/* 3) Défilement tactile plus doux, sans effet de rebond parasite. */
+html{-webkit-text-size-adjust:100%}
+body{overscroll-behavior-y:none}
+.side{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+
+/* 4) Les éléments qui s'animent passent sur le GPU. */
+.bottomnav,.toast,.side{will-change:transform}
+.wsTower{will-change:transform;backface-visibility:hidden}
+
+/* 5) Pas de zoom au double-tap sur les boutons (réaction immédiate). */
+button,.bnavbtn,.tile,.typeCard{touch-action:manipulation}
+
+/* ============================================================
+   ÉTAPE 2 — ATELIER 3D (on ne modifie AUCUN transform existant :
+   on ajoute des faces, de la lumière, des ombres et du relief)
+   ============================================================ */
+
+/* Scène : lumière douce en haut à gauche, reflet bleu au sol */
+.wsStage{
+  perspective-origin:50% 38%;
+  background-image:
+    radial-gradient(120% 90% at 25% 0%,rgba(99,102,241,.24),transparent 60%),
+    radial-gradient(80% 45% at 50% 100%,rgba(34,211,238,.12),transparent 70%);
+}
+
+/* Ombre au sol : ne tourne pas avec la tour, glisse et s'étire. */
+.wsShadow{
+  position:absolute;left:50%;bottom:-8px;width:150px;height:34px;margin-left:-75px;
+  background:radial-gradient(closest-side,rgba(0,0,0,.6),rgba(0,0,0,0));
+  transform:translateX(var(--shx,0px)) scaleX(var(--shs,1));
+  pointer-events:none;
+}
+
+/* Les 3 faces qui manquaient : on peut maintenant faire le tour. */
+.wsRight,.wsBack,.wsBottom{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.wsRight{
+  width:140px;height:250px;left:5px;transform:rotateY(90deg) translateZ(75px);
+  background:#27303c;
+  background-image:linear-gradient(160deg,rgba(255,255,255,.10),transparent 45%),
+                   repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 4px);
+}
+.wsRight::before{ /* grille d'aération */
+  content:"";position:absolute;left:22px;right:22px;top:30px;height:90px;border-radius:6px;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 4px,transparent 4px 11px);
+}
+.wsBack{
+  width:150px;height:250px;transform:rotateY(180deg) translateZ(70px);
+  background-color:#222a35;
+  background-image:
+    radial-gradient(circle at 50% 66%,#0b1017 0 25px,#3b4757 26px 28px,transparent 29px),
+    repeating-radial-gradient(circle at 50% 66%,transparent 0 5px,rgba(255,255,255,.07) 5px 6px),
+    linear-gradient(200deg,rgba(255,255,255,.08),transparent 45%);
+}
+.wsBack::before{ /* bloc de ports à l'arrière */
+  content:"";position:absolute;left:16px;top:18px;width:58px;height:70px;border-radius:5px;background:#10161e;
+  background-image:repeating-linear-gradient(90deg,#3a4656 0 8px,transparent 8px 12px),
+                   repeating-linear-gradient(0deg,transparent 0 12px,#10161e 12px 16px);
+  box-shadow:inset 0 0 0 2px #313c4a;
+}
+.wsBottom{
+  width:150px;height:140px;top:55px;transform:rotateX(-90deg) translateZ(125px);
+  background:#151b24;
+}
+
+/* Surfaces métalliques brossées sur les faces d'origine */
+.wsFront{
+  background-image:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,0) 42%,rgba(0,0,0,.28)),
+                   repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);
+}
+.wsTop{background-image:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.02))}
+.wsPanel{
+  background-image:linear-gradient(145deg,rgba(255,255,255,.14),transparent 46%),
+                   repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 4px);
+  transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .45s ease;
+}
+.wsPanel::before{ /* poignée du panneau */
+  content:"";position:absolute;right:14px;top:50%;width:8px;height:44px;margin-top:-22px;border-radius:4px;
+  background:linear-gradient(90deg,#64748b,#334155);box-shadow:0 2px 4px rgba(0,0,0,.5);
+}
+
+/* Lumière : chaque face est assombrie selon sa direction (variables
+   --shF, --shL… mises à jour par wst-v20.js pendant la rotation). */
+.wsFace::after{content:"";position:absolute;inset:0;background:#02060f;opacity:0;pointer-events:none;border-radius:inherit}
+.wsFront::after{opacity:var(--shF,0)}
+.wsTop::after{opacity:var(--shT,0)}
+.wsSide::after,.wsPanel::after{opacity:var(--shL,0)}
+.wsRight::after{opacity:var(--shR,0)}
+.wsBack::after{opacity:var(--shB,0)}
+.wsBottom::after{opacity:var(--shD,0.5)}
+
+/* Face avant : LED qui respire, bouton lumineux, grilles en creux */
+.wsLed{box-shadow:0 0 8px #22d3ee,0 0 16px rgba(34,211,238,.55);animation:wst20Led 2.6s ease-in-out infinite}
+.wsPower{
+  background:radial-gradient(circle at 35% 30%,#6ee7a8,#22b573 55%,#0e3d27);
+  box-shadow:0 0 0 3px #0b1f17,0 0 14px rgba(34,181,115,.55),inset 0 1px 2px rgba(255,255,255,.45);
+}
+.wsVent{box-shadow:inset 0 2px 3px rgba(0,0,0,.65),0 1px 0 rgba(255,255,255,.06)}
+.wsScrew{background:radial-gradient(circle at 35% 30%,#94a3b8,#475569 60%,#1e293b)}
+@keyframes wst20Led{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* Composants : relief, ombres portées, détails réalistes */
+.wsPart{
+  transform-style:preserve-3d;
+  box-shadow:0 3px 6px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 3px rgba(0,0,0,.35);
+}
+.wsBoard{
+  background-image:
+    linear-gradient(135deg,rgba(255,255,255,.14),transparent 40%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 9px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 11px);
+}
+.wsCpu{background-image:linear-gradient(135deg,#eef2f6,#aab4be 55%,#8a96a2)}
+.wsCpu::before{ /* support (socket) un peu plus bas que le CPU */
+  content:"";position:absolute;inset:-6px;background:#262b33;border-radius:6px;transform:translateZ(-4px);
+  box-shadow:0 2px 5px rgba(0,0,0,.6)
+}
+.wsRam{background-image:linear-gradient(90deg,#4a97ff,#2b7de9 50%,#1d5fb8)}
+.wsRam::before{ /* puces mémoire */
+  content:"";position:absolute;left:2px;right:2px;top:4px;bottom:10px;border-radius:2px;
+  background:repeating-linear-gradient(180deg,#0e1a2e 0 9px,transparent 9px 12px);
+}
+.wsRam::after{ /* contacts dorés */
+  content:"";position:absolute;left:0;right:0;bottom:0;height:5px;
+  background:repeating-linear-gradient(90deg,#e0b44c 0 2px,transparent 2px 3px);
+}
+.wsGpu{
+  background-image:
+    radial-gradient(circle at 24% 50%,#0b1115 0 3px,#6b8089 3px 5px,#1e2a30 5px 9px,transparent 9px),
+    radial-gradient(circle at 76% 50%,#0b1115 0 3px,#6b8089 3px 5px,#1e2a30 5px 9px,transparent 9px),
+    repeating-linear-gradient(90deg,#2b3a42 0 3px,#41535d 3px 4px);
+}
+.wsGpu::after{ /* bande lumineuse RGB */
+  content:"";position:absolute;left:3px;right:3px;bottom:2px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,#22d3ee,#a78bfa,#f472b6,#22d3ee);background-size:200% 100%;
+  animation:wst20Rgb 4s linear infinite;
+}
+@keyframes wst20Rgb{to{background-position:200% 0}}
+.wsSsd{background-image:linear-gradient(135deg,#a1887f,#6d4c41)}
+.wsSsd::before{content:"";position:absolute;right:5px;top:4px;width:10px;height:10px;border-radius:2px;background:#1b1512}
+.wsPsu{background-image:linear-gradient(135deg,#6b8794,#455a64)}
+.wsWifi{background-image:linear-gradient(135deg,#a24bd0,#6a1b9a)}
+
+/* Ventilateur : pales qui tournent (s'arrête s'il est en panne) */
+.wsFan{font-size:0;background:#1d262c;box-shadow:0 3px 6px rgba(0,0,0,.55),inset 0 0 0 3px #37474f}
+.wsFan::before{
+  content:"";position:absolute;inset:4px;border-radius:50%;
+  background:radial-gradient(circle,#0b1115 0 4px,transparent 5px),
+             repeating-conic-gradient(#78909c 0 24deg,#263238 24deg 60deg);
+  animation:wst20Spin 1.1s linear infinite;
+}
+.wsFan.fault::before{animation-play-state:paused}
+@keyframes wst20Spin{to{transform:rotate(360deg)}}
+
+/* Pièce en panne : halo rouge qui pulse */
+.wsPart.fault{animation:wst20Fault 1.3s ease-in-out infinite}
+@keyframes wst20Fault{
+  0%,100%{box-shadow:0 0 6px #ff5252}
+  50%{box-shadow:0 0 18px 2px #ff5252}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .wsLed,.wsFan::before,.wsGpu::after,.wsPart.fault{animation:none}
+}
