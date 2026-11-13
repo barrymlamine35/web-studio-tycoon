@@ -381,7 +381,7 @@ main{padding:10px 10px 116px}
 </section>
 <!-- SITES ET APPS -->
 <section id="tab-sitesapps" class="hidden">
- <button class="ghost" style="margin-bottom:10px" onclick="showTab('sites')">← Retour à l'accueil</button>
+ <button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button>
  <div class="card"><h3>🌐 Sites et Apps</h3><p class="small">Tous tes sites et tes applications, avec leurs visiteurs, leurs revenus et leur avancement.</p><button class="primary" onclick="showTab('create')">➕ Créer un site ou une app</button></div>
  <div id="mySites"></div>
  <div id="appsSection" style="margin-top:16px">
@@ -391,7 +391,7 @@ main{padding:10px 10px 116px}
 </section>
 <!-- DEPANNAGE -->
 <section id="tab-depannage" class="hidden">
- <button class="ghost" style="margin-bottom:10px" onclick="showTab('sites')">← Retour à l'accueil</button>
+ <button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button>
  <div class="card"><h3>🔧 Dépannage</h3><p class="small">Toutes les missions de dépannage sont ici : prends une mission, puis répare le PC dans l'atelier 3D.</p></div>
  <div id="depannageSection"><div id="depannageBox"></div></div>
 </section>
@@ -534,13 +534,13 @@ main{padding:10px 10px 116px}
 <div id="toast" class="toast hidden"></div>
 <div id="dayBanner" class="hidden"></div>
 <nav class="bottomnav">
- <button class="bnavbtn on" data-tab="sites" onclick="showTab('sites')" title="Accueil"><span class="ic">🏠</span></button>
- <button class="bnavbtn" data-tab="create" onclick="showTab('create')" title="Créer"><span class="ic">➕</span></button>
- <button class="bnavbtn" data-tab="team" onclick="showTab('team')" title="Équipe"><span class="ic">👥</span></button>
- <button class="bnavbtn" data-tab="contracts" onclick="showTab('contracts')" title="Contrats"><span class="ic">📋</span></button>
- <button class="bnavbtn" data-tab="market" onclick="showTab('market')" title="Marché"><span class="ic">🎯</span></button>
- <button class="bnavbtn" data-tab="darkweb" onclick="showTab('darkweb')" title="Darkweb"><span class="ic">🌑</span></button>
- <button class="bnavbtn" data-tab="messages" onclick="showTab('messages')" title="Messagerie"><span class="ic">💬</span><span class="nbadge hidden" id="msgBadge">0</span></button>
+ <button class="bnavbtn on" data-tab="sites" onclick="showTabTop('sites')" title="Accueil"><span class="ic">🏠</span></button>
+ <button class="bnavbtn" data-tab="create" onclick="showTabTop('create')" title="Créer"><span class="ic">➕</span></button>
+ <button class="bnavbtn" data-tab="team" onclick="showTabTop('team')" title="Équipe"><span class="ic">👥</span></button>
+ <button class="bnavbtn" data-tab="contracts" onclick="showTabTop('contracts')" title="Contrats"><span class="ic">📋</span></button>
+ <button class="bnavbtn" data-tab="market" onclick="showTabTop('market')" title="Marché"><span class="ic">🎯</span></button>
+ <button class="bnavbtn" data-tab="darkweb" onclick="showTabTop('darkweb')" title="Darkweb"><span class="ic">🌑</span></button>
+ <button class="bnavbtn" data-tab="messages" onclick="showTabTop('messages')" title="Messagerie"><span class="ic">💬</span><span class="nbadge hidden" id="msgBadge">0</span></button>
  <button class="bnavbtn" onclick="toggleMenu()" title="Menu"><span class="ic">☰</span></button>
 </nav>
 <div class="menuBack hidden" id="menuBack" onclick="closeMenu()"></div>
@@ -1082,12 +1082,12 @@ const FEATURES=[
  {icon:'🎯',name:'Objectif',desc:"Le but du jeu : studio niveau 10 et 1 000 de réputation. Comment y arriver.",go:'stats',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>Le but du jeu : faire grandir ton studio jusqu'au niveau 10 et atteindre 1 000 de réputation. Quand tu y arrives, tu as gagné.</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>Ton niveau = 1 + ta réputation / 110, avec un maximum de 10. Il faut donc 990 réputation pour être niveau 10. Ta réputation monte quand tu finis un contrat (+10 à +240), quand tu publies une nouvelle version (+6), quand tu fais une campagne marketing (+5) ou une offre agressive (+8), et quand tu réponds gentiment à un client dans la messagerie (+1).</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>En chemin, les sponsors te paient réputation / 10 $ par jour : 100 de réputation = 10 $ par jour, 500 = 50 $ par jour, 1 000 = 100 $ par jour. C'est ton filet de sécurité : l'argent arrive tous les matins, même si tu ne fais rien.</p></div><div class="card"><h3>💡 Astuces</h3><p>Ne perds pas de réputation : une renégociation refusée coûte −2, te faire attraper sur le Darkweb coûte −20. Les gros contrats rapportent le plus de réputation, mais ils demandent un studio de haut niveau : monte de niveau pour les débloquer.</p></div>`},
  {icon:'🎓',name:'Formations',desc:"Vends des formations en cybersécurité, réseau, cloud, Linux et hacking : tes élèves paient, tu les formes, ils repartent avec leur certificat.",go:'trainings',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>Tu vends des formations : un élève paie pour apprendre, tu organises une session, et à la fin il repart avec son certificat. C'est toi le formateur !</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>1. Choisis une formation sur l'accueil (ou dans « Formations »).<br>2. Touche « Lancer une session » : des élèves s'inscrivent (3 au minimum, plus si ta réputation est haute).<br>3. La formation avance de 1 jour à chaque « Jour suivant ».<br>4. À la fin, tu es payé : prix par élève × nombre d'élèves, et +10 réputation.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>🛡️ Cybersécurité (CompTIA Security+) : 30 jours, 500 $ par élève, max 10 élèves.<br>🌐 Networking (CompTIA Network+) : 30 jours, 450 $ par élève, max 10 élèves.<br>☁️ Cloud (AWS Solutions Architect) : 40 jours, 600 $ par élève, max 8 élèves.<br>🐧 Admin Linux (LPIC-1 / Linux+) : 30 jours, 400 $ par élève, max 10 élèves.<br>💻 Hacking (CEH) : 45 jours, 800 $ par élève, max 6 élèves, débloqué au niveau 3 du studio.</p></div><div class="card"><h3>💡 Astuces</h3><p>Les durées sont inspirées de la vraie vie : dans la vraie vie, ces certificats prennent environ 3 à 6 mois — dans le jeu, c'est 30 à 45 jours. Monte ta réputation pour attirer plus d'élèves : plus d'élèves, plus d'argent à la fin. Les 5 formations peuvent tourner en même temps, une session par formation.</p></div>`}
 ];
-function renderFeaturesHub(){let box=document.getElementById('featuresPage');if(!box)return;box.innerHTML=FEATURES.map((f,i)=>{let badge=f.go=='messages'?'<span class="cnt" id="cntMsg">'+msgUnread()+'</span>':'';return `<button class="navbtn featRow" data-tab="${f.go}" onclick="openFeatureDetail(${i})"><span style="font-size:20px">${f.icon}</span><span style="flex:1;min-width:0;text-align:left"><b>${f.name}</b><span class="fdesc">${f.desc}</span></span>${badge}</button>`}).join('')}
+function renderFeaturesHub(){let box=document.getElementById('featuresPage');if(!box)return;box.innerHTML='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button>'+FEATURES.map((f,i)=>{let badge=f.go=='messages'?'<span class="cnt" id="cntMsg">'+msgUnread()+'</span>':'';return `<button class="navbtn featRow" data-tab="${f.go}" onclick="openFeatureDetail(${i})"><span style="font-size:20px">${f.icon}</span><span style="flex:1;min-width:0;text-align:left"><b>${f.name}</b><span class="fdesc">${f.desc}</span></span>${badge}</button>`}).join('')}
 function goFeature(i){let f=FEATURES[i];if(!f)return;if(f.act=='workshop'){openWorkshop();return}if(f.scroll){showTab(f.go);setTimeout(function(){let a=document.getElementById(f.scroll);if(a&&a.scrollIntoView)a.scrollIntoView()},80);return}showTab(f.go)}
 function openFeatureDetail(i){let f=FEATURES[i];if(!f||!f.detail)return;document.getElementById('featureDetailBox').innerHTML=featureDetailHTML(f,i);showTab('featureDetail');document.getElementById('screenTitle').textContent=f.icon+' '+f.name;window.scrollTo(0,0)}
-function featureDetailHTML(f,i){return `<button class="ghost" style="width:100%;min-height:44px" onclick="backToHub()">⬅️ Retour aux fonctionnalités</button><div class="card"><h3>${f.icon} ${f.name}</h3><p>${f.desc}</p></div>`+f.detail+`<button class="primary" style="width:100%;margin-top:10px" onclick="goFeature(${i})">▶️ Ouvrir ${f.name}</button>`}
+function featureDetailHTML(f,i){return `<button class="ghost" style="width:100%;min-height:44px" onclick="goBack()">⬅️ Retour</button><div class="card"><h3>${f.icon} ${f.name}</h3><p>${f.desc}</p></div>`+f.detail+`<button class="primary" style="width:100%;margin-top:10px" onclick="goFeature(${i})">▶️ Ouvrir ${f.name}</button>`}
 function openFeaturesPage(){renderFeaturesHub();showTab('features');window.scrollTo(0,0)}
-function backToHub(){showTab('features');window.scrollTo(0,0)}
+function backToHub(){goBack()}
 const TRAININGS=[
  {id:'cyber',icon:'🛡️',name:'Formation Cybersécurité',cert:'CompTIA Security+',real:'~3 mois',days:30,price:500,max:10},
  {id:'network',icon:'🌐',name:'Formation Networking',cert:'CompTIA Network+',real:'~3 mois',days:30,price:450,max:10},
@@ -1125,7 +1125,7 @@ function renderHomeTiles(){
 }
 function renderTrainings(){
  let box=document.getElementById('trainingsBox');if(!box)return;
- let h='<button class="ghost" style="margin-bottom:10px" onclick="showTab(\'sites\')">← Retour à l\u2019accueil</button><div class="card"><h3>🎓 Formations</h3><p class="small">Tu vends des formations : tes élèves paient, tu les formes, ils repartent avec leur certificat. Les durées sont inspirées de la vraie vie, juste pour le jeu.</p></div>';
+ let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button><div class="card"><h3>🎓 Formations</h3><p class="small">Tu vends des formations : tes élèves paient, tu les formes, ils repartent avec leur certificat. Les durées sont inspirées de la vraie vie, juste pour le jeu.</p></div>';
  h+=TRAININGS.map(function(t){let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let st=(G.trainStats||{})[t.id];let sub=locked?('🔒 Débloqué au niveau '+t.minLevel+' du studio'):(c?('🎓 En cours : J-'+c.daysLeft+' • '+c.students+' élèves'):(t.price+' $ / élève • '+t.days+' jours • max '+t.max+' élèves'));return '<div class="card"><h3>'+t.icon+' '+t.name+'</h3><p class="small">Certificat : <b>'+t.cert+'</b> • Dans la vraie vie : '+t.real+'</p><p>'+sub+'</p>'+(st&&st.cohorts?'<p class="small">✅ '+st.cohorts+' session(s) terminée(s) • '+st.students+' diplômé(s) • '+st.earned+' $ gagnés</p>':'')+'<button class="primary" onclick="openTraining(\''+t.id+'\')">🎓 Voir la formation</button></div>'}).join('');
  box.innerHTML=h;
 }
@@ -1134,7 +1134,7 @@ function renderTraining(id){
  let t=trainingById(id);if(!t){box.innerHTML='';return}
  let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let st=(G.trainStats||{})[t.id];
  let pct=c?Math.round((t.days-c.daysLeft)/t.days*100):0;
- let h='<button class="ghost" style="margin-bottom:10px" onclick="showTab(\'trainings\')">← Retour aux formations</button>';
+ let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button>';
  h+='<div class="card"><h3>'+t.icon+' '+t.name+'</h3><p class="small">Certificat : <b>'+t.cert+'</b></p><p>Dans la vraie vie, ce certificat prend environ <b>'+t.real+'</b> à obtenir. Dans le jeu, la formation dure <b>'+t.days+' jours</b>. Durées inspirées de la vraie vie, juste pour le jeu.</p></div>';
  h+='<div class="card"><h3>💰 Prix et places</h3><p>'+t.price+' $ par élève • maximum '+t.max+' élèves par session.</p>'+(st&&st.cohorts?'<p class="small">✅ '+st.cohorts+' session(s) terminée(s) • '+st.students+' diplômé(s) • '+st.earned+' $ gagnés</p>':'<p class="small">Aucune session terminée pour le moment.</p>')+'</div>';
  if(locked){h+='<div class="card" style="border-color:#f59e0b"><h3>🔒 Formation verrouillée</h3><p>Cette formation se débloque au <b>niveau '+t.minLevel+' du studio</b>. Tu es niveau '+level()+' pour le moment : monte ta réputation pour la débloquer !</p></div>'}
@@ -1212,7 +1212,7 @@ function wsDiagnose(){let a=G.active;if(!a||a.cat!='depannage')return false;let 
 function wsTapPart(part){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(!ws)return false;return wsSelectPart(part)}
 function wsDoStep(i){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(!ws||ws.run)return false;let plan=depPlan(a.t);let st=plan.steps[i];if(!st||ws.done.indexOf(i)>=0)return false;if(i!==ws.done.length){toast('🔧 Fais les étapes dans l\u2019ordre !');return false}let _cost=wsStepCost(st),_shopId=WS_SHOP[st.part]||null;if(_cost>0){if(_shopId&&(G.stock[_shopId]||0)>0){G.stock[_shopId]--;addLog('Pièce prise dans ton stock : '+WS_PARTS[st.part].name+' pour le PC de '+a.client+'.','argent')}else if(G.money<_cost){toast('💰 Pas assez d\u2019argent pour cette pièce ('+_cost+' $)');return false}else{G.money-=_cost;addLog('Pièce achetée : '+st.label+' ('+_cost+' $) pour le PC de '+a.client+'.','argent')}}ws.run={i:i,pct:0};if(typeof setInterval==='function'){wsTimer=setInterval(function(){if(!ws.run){if(wsTimer){clearInterval(wsTimer);wsTimer=null}return}ws.run.pct+=8;if(ws.run.pct>=100){clearInterval(wsTimer);wsTimer=null;wsFinishStep()}else{let b=document.getElementById('wsRunBar');if(b)b.style.width=ws.run.pct+'%';let t2=document.getElementById('wsRunTxt');if(t2)t2.textContent=st.mon+' '+ws.run.pct+' %'}},60)}save();render();return true}
 function wsFinishStep(){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();if(!ws||!ws.run)return false;if(wsTimer){try{clearInterval(wsTimer)}catch(e){}wsTimer=null}let i=ws.run.i;ws.run=null;let plan=depPlan(a.t);let st=plan.steps[i];if(!st)return false;if(ws.done.indexOf(i)<0)ws.done.push(i);if(st.kind=='diag')ws.diag=true;let n=plan.steps.length;let gain=(i==n-1)?Math.max(0,a.work-a.progress):Math.round(a.work/n);a.progress=Math.min(a.work,a.progress+gain);if(st.kind!='diag')ws.lastOk=st.label;save();render();return true}
-function deliverPC(){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();let plan=depPlan(a.t);if(!ws||ws.done.length<plan.steps.length){toast('🔧 Termine d\u2019abord toutes les étapes !');return false}let c=a;G.money+=c.pay;G.rep+=c.rep;G.done++;G.coins=(G.coins||0)+10;G.active=null;wsSel=null;addLog('PC livré à '+c.client+' : '+c.t+' — '+c.pay+' $ encaissés, +'+c.rep+' réputation et +10 🪙. Le client est ravi !','contrat');sendClientMsg(c.client,'depannage',"Merci beaucoup, mon PC remarche comme neuf ! Tu es le meilleur. 🙏");save();render();showTab('depannage');toast('🎉 PC livré ! +'+c.pay+' $ et +'+c.rep+' réputation et +10 🪙');return true}
+function deliverPC(){let a=G.active;if(!a||a.cat!='depannage')return false;let ws=ensureWs();let plan=depPlan(a.t);if(!ws||ws.done.length<plan.steps.length){toast('🔧 Termine d\u2019abord toutes les étapes !');return false}let c=a;G.money+=c.pay;G.rep+=c.rep;G.done++;G.coins=(G.coins||0)+10;G.active=null;wsSel=null;addLog('PC livré à '+c.client+' : '+c.t+' — '+c.pay+' $ encaissés, +'+c.rep+' réputation et +10 🪙. Le client est ravi !','contrat');sendClientMsg(c.client,'depannage',"Merci beaucoup, mon PC remarche comme neuf ! Tu es le meilleur. 🙏");save();render();showTab('depannage',null,'top');toast('🎉 PC livré ! +'+c.pay+' $ et +'+c.rep+' réputation et +10 🪙');return true}
 function renderWorkshop(){
  let box=document.getElementById('workshopBox');if(!box)return;
  let a=G.active;
@@ -1259,7 +1259,7 @@ function renderWorkshop(){
  '<div class="card"><h3>🖥️ Le PC de '+a.client+'</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="wsPanelBtn" onclick="wsTogglePanel()">'+(wsPanelOpen?'🔒 Fermer le panneau':'🔓 Ouvrir le panneau')+'</button><button onclick="wsRotate(-15)">↺ Tourner</button><button onclick="wsRotate(15)">Tourner ↻</button><button onclick="showTab(\'shop\')">🛒 Boutique</button></div><p class="small">↔️ Fais glisser le PC pour tourner autour : gauche/droite pour orbiter, haut/bas pour incliner.</p>'+selBar+'<button class="primary" onclick="wsDiagnose()">🔍 Diagnostiquer (gratuit)</button><p class="small">Pièces : prix du jour dans la 🛒 Boutique — une pièce en stock est utilisée gratuitement.</p></div>'+
  '<div class="card"><h3>📋 Étapes de la réparation</h3>'+stepsHtml+'</div>'+
  (allDone?'<button class="green" style="width:100%;font-size:17px;margin-top:12px" onclick="deliverPC()">📦 Livrer le PC — +'+a.pay+' $</button>':'')+
- '<button class="ghost" style="width:100%;margin-top:8px" onclick="showTab(\'sites\')">← Retour à l\u2019accueil</button>';
+ '<button class="ghost" style="width:100%;margin-top:8px" onclick="goBack()">← Retour</button>';
 }
 
 
@@ -1328,7 +1328,10 @@ function renderJournal(){let box=document.getElementById('journalScreen');if(!bo
 /* --- Navigation --- */
 const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer",siteDetail:"🔎 Détail du site",appDetail:"📱 Détail de l'application",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",ranking:"🏆 Classement",market:"🎯 Marché",workshop:"🔧 Atelier",shop:"🛒 Boutique",darkweb:"🌑 Darkweb",messages:"💬 Messagerie",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio",featureDetail:"🎮 Détail de la fonctionnalité",features:"🎮 Fonctionnalités du jeu",sitesapps:"🌐 Sites et Apps",depannage:"🔧 Dépannage",trainings:"🎓 Formations",training:"🎓 Formation"};
 let currentTab='sites';
-function showTab(id,btn){
+let NAV=[]; // pile des écrans visités : un « Retour » revient en un tap sur l'écran d'origine
+function showTab(id,btn,mode){
+ if(mode!=='back'&&mode!=='top'&&id!==currentTab){NAV.push(currentTab);if(NAV.length>20)NAV.shift()}
+ if(mode==='top')NAV=[];
  currentTab=id;
  ['sites','sitesapps','depannage','trainings','training','create','siteDetail','appDetail','team','stats','contracts','workshop','ranking','market','office','help','journal','shop','darkweb','messages','featureDetail','features'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
  document.querySelectorAll('#mainNav .navbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
@@ -1337,6 +1340,8 @@ function showTab(id,btn){
  closeMenu();
  if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='appDetail')renderAppDetail(); if(id=='journal')renderJournal(); if(id=='workshop')renderWorkshop(); if(id=='shop')renderShop(); if(id=='darkweb')renderDarkweb(); if(id=='messages')renderMessages(); if(id=='trainings')renderTrainings(); if(id=='training')renderTraining(selectedTrainingId);
  window.scrollTo(0,0)}
+function showTabTop(id){showTab(id,null,'top')}
+function goBack(){let p=NAV.pop();if(!p||p===currentTab)p='sites';showTab(p,null,'back')}
 function toggleMenu(){let s=document.querySelector('.side');if(s)s.classList.toggle('open');let m=document.getElementById('menuBack');if(m)m.classList.toggle('hidden')}
 function closeMenu(){let s=document.querySelector('.side');if(s)s.classList.remove('open');let m=document.getElementById('menuBack');if(m)m.classList.add('hidden')}
 
@@ -1393,7 +1398,7 @@ function createSiteFromForm(){
  if(name&&G.sites.find(s=>s.name==name)){toast("⚠️ Ce domaine est déjà pris par un de tes sites.");return}
  let h=parseInt(((document.getElementById('hostingSelect')||{}).value||'0'),10);if(isNaN(h)||h<0||h>4)h=0;
  let cms=((document.getElementById('cmsSelect')||{}).value||'custom');if(!CMS[cms])cms='custom';
- if(createSite(selSeg,name,typeOf(selType).name,ext,h,cms)){createStep=1;document.getElementById('domainInput').value="";showTab('sitesapps')}}
+ if(createSite(selSeg,name,typeOf(selType).name,ext,h,cms)){createStep=1;document.getElementById('domainInput').value="";showTab('sitesapps',null,'top')}}
 function upgradeSite(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
  if(s.cms=='engine'){toast("🔒 Le moteur de ce site est verrouillé : on ne peut pas améliorer sa qualité manuellement.");return}
  let cost=180;if(G.money<cost){toast("💰 Il te faut "+cost+" $");return}
@@ -1417,7 +1422,7 @@ function toggleAd(id,adId){let s=G.sites.find(x=>x.id==id);if(!s)return;let a=(s
 function removeAd(id,adId){let s=G.sites.find(x=>x.id==id);if(!s)return;let a=(s.ads||[]).find(x=>x.id==adId);s.ads=(s.ads||[]).filter(x=>x.id!=adId);if(a)addLog("Pub retirée de "+s.name+" : "+a.name+". L'espace est libre pour un nouvel annonceur.",'marche');save();render();renderSiteDetail();toast("🗑️ Espace de pub libéré sur "+s.name)}
 function closeSite(id){let s=G.sites.find(x=>x.id==id);if(!s)return;
  if(!confirm("Fermer le site "+s.name+" ? Tu récupères 100 $."))return;
- G.money+=100;addLog("Site fermé : "+s.name+". Tu récupères 100 $.",'site');G.sites=G.sites.filter(x=>x.id!=id);selectedSiteId=null;save();render();showTab('sitesapps');toast("Site fermé : "+s.name)}
+ G.money+=100;addLog("Site fermé : "+s.name+". Tu récupères 100 $.",'site');G.sites=G.sites.filter(x=>x.id!=id);selectedSiteId=null;save();render();showTab('sitesapps',null,'top');toast("Site fermé : "+s.name)}
 function openSite(id){selectedSiteId=id;showTab('siteDetail')}
 function workTask(id,taskId){let s=G.sites.find(x=>x.id==id);if(!s)return;
  if(s.tasks[taskId]>=100){toast("✅ Cette tâche est déjà terminée");return}
@@ -1487,7 +1492,7 @@ function createAppFromForm(){
  if(raw&&!/^[a-zà-ÿ0-9][a-zà-ÿ0-9 ',\-]{1,23}$/i.test(raw)){toast("⚠️ Nom d'application invalide : 2 à 24 caractères.");return}
  let name=raw||"";
  if(name&&G.apps.find(a=>a.name==name)){toast("⚠️ Ce nom est déjà pris par une de tes applications.");return}
- if(createApp(selAppType,selAppPlatform,name)){createStep=1;document.getElementById('domainInput').value="";showTab('sitesapps')}}
+ if(createApp(selAppType,selAppPlatform,name)){createStep=1;document.getElementById('domainInput').value="";showTab('sitesapps',null,'top')}}
 function openApp(id){selectedAppId=id;showTab('appDetail')}
 function tasksAppAvg(a){return Math.round(APP_TASK_DEF.reduce((s,t)=>s+a.tasks[t.id],0)/APP_TASK_DEF.length)}
 function workAppTask(id,taskId){let a=G.apps.find(x=>x.id==id);if(!a)return;
@@ -1541,7 +1546,7 @@ function promoteApp(id){let a=G.apps.find(x=>x.id==id);if(!a)return;
  G.money-=cost;a.popularity=Math.min(100,a.popularity+12);addLog(a.name+" promue : popularité +12 (150 $). Plus de monde va la découvrir.",'site');save();render();renderAppDetail();toast("📣 "+a.name+" : popularité +12")}
 function closeApp(id){let a=G.apps.find(x=>x.id==id);if(!a)return;
  if(!confirm("Fermer l'application "+a.name+" ? Tu récupères 100 $."))return;
- G.money+=100;addLog("Application fermée : "+a.name+". Tu récupères 100 $.",'site');G.apps=G.apps.filter(x=>x.id!=id);selectedAppId=null;save();render();showTab('sitesapps');toast("Application fermée : "+a.name)}
+ G.money+=100;addLog("Application fermée : "+a.name+". Tu récupères 100 $.",'site');G.apps=G.apps.filter(x=>x.id!=id);selectedAppId=null;save();render();showTab('sitesapps',null,'top');toast("Application fermée : "+a.name)}
 
 /* --- Marché : campagnes, attaques, défense --- */
 function campagne(){
@@ -1669,7 +1674,7 @@ function trainMember(seed,cur){
  save();render();toast("📚 "+e.name+" passe niveau "+e.lvl+" ! +2 puissance, salaire "+e.salary+" $ / jour")}
 function buyOffice(i){let o=OFFICES[i];if(G.money<o.cost){toast("💰 Il te faut "+o.cost+" $");return}G.money-=o.cost;G.office=i;addLog("Nouveau bureau : "+o.name+" — ton équipe peut maintenant accueillir jusqu'à "+(o.max+1)+" personnes !",'studio');save();render();toast("🏢 Nouveau bureau : "+o.name)}
 function buyTool(i){let o=TOOLS[i];if(G.money<o.cost){toast("💰 Il te faut "+o.cost+" $");return}G.money-=o.cost;G.tool=i;addLog("Nouvel outil : "+o.name+" (+"+o.bonus+" puissance). Tu travailles plus vite maintenant !",'studio');save();render();toast("🛠️ Nouvel outil : "+o.name)}
-function resetGame(){if(confirm("Recommencer une nouvelle partie ?")){G=fresh();selectedSiteId=null;save();render();showTab('sites');toast("Nouvelle partie ! Bonne chance 🚀")}}
+function resetGame(){if(confirm("Recommencer une nouvelle partie ?")){G=fresh();selectedSiteId=null;save();render();showTab('sites',null,'top');toast("Nouvelle partie ! Bonne chance 🚀")}}
 
 /* --- Rendu général --- */
 /* --- Aide : une seule source, affichee dans le Menu et dans l'ecran Aide --- */
@@ -1870,9 +1875,9 @@ function renderAppPreview(){
 function renderSiteDetail(){
  let box=document.getElementById('siteDetail');if(!box)return;
  let s=G.sites.find(x=>x.id==selectedSiteId);
- if(!s){box.innerHTML=`<div class="card"><h3>Aucun site sélectionné</h3><p>Retourne à l'écran Sites et clique sur « Détails » sur une carte.</p><button class="primary" onclick="showTab('sitesapps')">← Retour à mes sites</button></div>`;return}
+ if(!s){box.innerHTML=`<div class="card"><h3>Aucun site sélectionné</h3><p>Retourne à l'écran Sites et clique sur « Détails » sur une carte.</p><button class="primary" onclick="goBack()">← Retour</button></div>`;return}
  let seg=segOf(s.seg);let v=siteVisitors(s);let avg=tasksAvg(s);
- box.innerHTML=`<button class="ghost" style="margin-bottom:10px" onclick="showTab('sitesapps')">← Retour à mes sites</button>
+ box.innerHTML=`<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button>
  <div class="card"><div class="siteHead"><div class="segico" style="background:${seg.color}">${seg.emoji}</div><div><b style="font-size:19px">${s.name}</b><br><span class="small">${s.type} • ${seg.name} • Version ${s.version}</span></div></div>
  <div class="mock"><div class="skl mid" style="background:#c9bde8"></div><div class="skl"></div><div class="skl"></div><div class="skl short"></div><p class="small">Aperçu simplifié de la page d'accueil de ton site.</p></div>
  <div class="siteNums"><div><b>${v}</b><small>visiteurs / jour</small></div><div><b>${siteRevenue(s)} $</b><small>revenus / jour</small></div><div><b>${segShare(s.seg)} %</b><small>part de marché</small></div><div><b>${s.ads.length} / 3</b><small>espaces de pub</small></div></div>
@@ -1913,9 +1918,9 @@ function renderSiteDetail(){
 function renderAppDetail(){
  let box=document.getElementById('appDetail');if(!box)return;
  let a=G.apps.find(x=>x.id==selectedAppId);
- if(!a){box.innerHTML=`<div class="card"><h3>Aucune application sélectionnée</h3><p>Retourne à l'accueil et clique sur « Détails » sur une carte d'application.</p><button class="primary" onclick="showTab('sitesapps')">← Retour à mes applications</button></div>`;return}
+ if(!a){box.innerHTML=`<div class="card"><h3>Aucune application sélectionnée</h3><p>Retourne à l'accueil et clique sur « Détails » sur une carte d'application.</p><button class="primary" onclick="goBack()">← Retour</button></div>`;return}
  let d=appDownloads(a);let avg=tasksAppAvg(a);
- box.innerHTML=`<button class="ghost" style="margin-bottom:10px" onclick="showTab('sitesapps')">← Retour à mes applications</button>
+ box.innerHTML=`<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button>
  <div class="card"><div class="siteHead"><div class="segico" style="background:#22D3EE">📱</div><div><b style="font-size:19px">${a.name}</b><br><span class="small">${a.type} • ${a.platform} • Version ${a.version}</span></div></div>
  <div class="mock"><div class="skl mid" style="background:#bae6fd"></div><div class="skl"></div><div class="skl"></div><div class="skl short"></div><p class="small">Aperçu simplifié de ton application.</p></div>
  <div class="siteNums"><div><b>${d}</b><small>téléchargements / jour</small></div><div><b>${appRevenue(a)} $</b><small>revenus / jour</small></div><div><b>${a.ads.length} / 3</b><small>espaces de pub</small></div></div>
