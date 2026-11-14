@@ -383,8 +383,6 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
  </div>
  <div id="accountBox" class="accBox hidden"></div>
  <div id="localSaveBox" style="margin:0 4px 12px">
-  <button class="ghost" style="width:100%;min-height:44px" onclick="wstExportSave()">💾 Exporter ma partie</button>
-  <button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="document.getElementById('saveFileInput').click()">📂 Importer ma partie</button>
   <button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="changeStudioName()">🏢 Nom du studio</button>
   <input type="file" id="saveFileInput" accept=".json,application/json" style="display:none" onchange="wstImportFile(this)">
  </div>
@@ -392,6 +390,11 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
   <button class="primary" style="width:100%;min-height:48px;font-size:16px" onclick="openFeaturesPage()">🎮 Fonctionnalités du jeu</button>
   <button class="ghost" id="musicBtn" style="width:100%;min-height:44px;margin-top:8px" onclick="musicToggle()">🔇 Musique : off</button>
   <button class="danger" style="width:100%;min-height:44px;margin-top:8px" onclick="resetGame()">🗑️ Réinitialiser la partie</button>
+  <button class="ghost" id="saveChoiceBtn" title="Exporter ou importer ma partie" style="min-height:44px;margin:8px auto 0;display:block;padding:10px 18px;font-size:16px" onclick="toggleSaveChoice()">💾📂</button>
+  <div id="saveChoiceRow" class="hidden" style="display:flex;gap:8px;margin-top:8px">
+   <button class="ghost" style="flex:1;min-height:44px" onclick="wstExportSave();toggleSaveChoice()">💾 Exporter</button>
+   <button class="ghost" style="flex:1;min-height:44px" onclick="document.getElementById('saveFileInput').click();toggleSaveChoice()">📂 Importer</button>
+  </div>
   <p class="small versionBadge">✨ Version 1.0 — première version jouable</p>
  </nav>
 </aside>
@@ -678,6 +681,7 @@ async function wstLogout(){
  try{wstRenderAccount(null);}catch(e){}
  wstShowLogin();wstSbMsg("");
 }
+function toggleSaveChoice(){var r=document.getElementById('saveChoiceRow');if(r)r.classList.toggle('hidden')}
 function wstExportSave(){
  try{
   var data=null;
