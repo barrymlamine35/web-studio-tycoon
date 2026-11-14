@@ -594,3 +594,126 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 @media (hover:none){ /* v19 : sur tactile, pas de survol qui soulève les cartes */
   button:hover,.card:hover,.siteCard:hover,.tCard:hover,.tile:hover,.statCard:hover,.segRow:hover,.actCard:hover{transform:none!important}
 }
+
+/* ---------- COMPACT v22 : affichage réduit sur petit écran (S21, 360 px) ---------- */
+@media(max-width:480px){ /* v22 : compact — 480 px */
+  body{font-size:12.5px}
+  main{padding:10px 8px 110px}
+  .card,.siteCard .body,.tCard .body,.statCard{padding:12px}
+  .card{margin-bottom:9px;border-radius:18px}
+  .card h3{font-size:14px}
+  .card>p{margin:6px 0}
+  .card>h3{padding-bottom:8px;margin-bottom:10px}
+  .siteNums b{font-size:16px}
+  .statCard b{font-size:20px}
+  .player h2{font-size:15px}
+  .player{padding:4px 4px 10px;margin-bottom:10px}
+  .topbar{padding:8px 10px;gap:6px}
+  .topbar h1{font-size:13.5px}
+  .topbar .tstat{font-size:11.5px;padding:4px 9px}
+  .topbar button.green{padding:8px 12px;min-height:40px}
+  .pava{width:68px;height:68px}
+  .tava{width:50px;height:50px;flex-basis:50px}
+  .segico{font-size:19px}
+  .gridSites,.gridTalents{gap:9px}
+  .homeTiles{gap:8px;margin-top:10px}
+  .tile{min-height:84px;padding:10px 6px}
+  .tic{font-size:23px}
+  button{padding:10px 10px;min-height:44px}
+  .segRow{padding:8px 10px;margin-top:6px}
+  .actCard{padding:10px;margin-top:6px}
+  .rivalRow{padding:7px 0}
+  .msgRow{padding:10px}
+  .jline{padding:7px 9px;font-size:12px}
+  .hbar{gap:7px;margin:5px 0}
+  .hbar .hn{width:110px;flex-basis:110px}
+  .taskrow{gap:8px;padding:8px 0}
+  .taskrow .tname{width:78px;flex-basis:78px}
+  .siteBtns{padding:0 12px 12px;gap:6px}
+  .segbar{height:24px;margin-top:9px}
+  .tFoot{padding:8px 12px}
+  .small{font-size:12px}
+}
+@media(max-width:390px){ /* v22 : compact — 390 px */
+  body{font-size:12px}
+  .card h3{font-size:13px}
+  .siteNums b{font-size:15px}
+  .statCard b{font-size:19px}
+  .player h2{font-size:14px}
+  .topbar h1{font-size:13px}
+  .topbar .tstat{font-size:11px}
+  .pava{width:60px;height:60px}
+  .tava{width:46px;height:46px;flex-basis:46px}
+  .segico{font-size:18px}
+  .tile{min-height:78px;font-size:11px}
+  .pill{font-size:11px;padding:4px 8px}
+  .tHead b,.siteHead b{font-size:13.5px}
+  .taskrow .tname{font-size:11px}
+  .hbar .hn{font-size:11px}
+  .hbar .hv{font-size:12px}
+  .lvlTop{font-size:12px}
+  .jday{font-size:12px}
+  .jline{font-size:11.5px}
+  .small{font-size:11.5px}
+}
+@media(max-width:360px){ /* v22 : compact fort — S21, 360 px */
+  body{font-size:11px}
+  main{padding:8px 8px 108px}
+  .card,.siteCard .body,.tCard .body,.statCard{padding:8px}
+  .card{margin-bottom:8px;border-radius:16px}
+  .card h3{font-size:12px}
+  .card>p{margin:5px 0;line-height:1.45}
+  .card>h3{padding-bottom:7px;margin-bottom:9px}
+  .siteNums b{font-size:14px}
+  .siteNums small{font-size:9.5px}
+  .siteNums{margin-top:6px}
+  .siteStats{font-size:11.5px;gap:6px 8px;margin-top:8px}
+  .siteHead{gap:8px}
+  .siteHead .small{font-size:11px}
+  .spark{margin:8px 0 4px}
+  .strip{height:18px;padding:0 8px}
+  .taskPct{padding:8px 8px 10px;font-size:11px}
+  .statCard b{font-size:18px}
+  .statCard small{font-size:10px}
+  .player h2{font-size:14px}
+  .topbar{padding:7px 8px}
+  .topbar h1{font-size:12.5px}
+  .topbar .tstat{font-size:11px}
+  .topbar button.green{padding:8px 10px;min-height:40px}
+  button{padding:9px 10px;min-height:40px}
+  .siteBtns{padding:0 8px 8px}
+  .tile{min-height:72px;padding:8px 5px;font-size:11px}
+  .tic{font-size:21px}
+  .pava{width:56px;height:56px}
+  .tava{width:44px;height:44px;flex-basis:44px}
+  .segico{width:42px;height:42px;flex:0 0 42px;font-size:18px}
+  .gridSites,.gridTalents{gap:8px}
+  .homeTiles{gap:7px}
+  .segRow{padding:7px 9px}
+  .actCard{padding:9px}
+  .actCard p{font-size:8.5px}
+  .rivalRow{padding:6px 0}
+  .msgRow{padding:9px}
+  .jline{padding:6px 8px;font-size:11px}
+  .hbar{gap:6px;margin:4px 0}
+  .hbar .hn{width:92px;flex-basis:92px;font-size:11px}
+  .hbar .hv{font-size:12px}
+  .taskrow{gap:7px;padding:7px 0}
+  .taskrow .tname{width:68px;flex-basis:68px;font-size:11px}
+  .taskrow .tnum{width:48px;flex:0 0 48px}
+  .taskrow button{padding:7px 8px;min-height:40px}
+  .tHead{gap:8px}
+  .tHead b,.siteHead b{font-size:13px}
+  .sal,.tHead .sal{font-size:11.5px}
+  .segbar{height:22px;margin-top:7px}
+  .segbar span{font-size:11px}
+  .seglabels span{font-size:9.5px}
+  .tFoot{padding:7px 8px;font-size:11.5px}
+  .bar{height:10px}
+  .lvlTop{font-size:12px}
+  .jday{font-size:12px}
+  .bnavbtn{min-height:46px}
+  .pill{font-size:11px}
+  .small{font-size:11px}
+  input,select{font-size:13px;padding:9px 11px}
+}
