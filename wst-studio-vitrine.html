@@ -94,8 +94,6 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
 .banner.show{animation:pop 2.4s cubic-bezier(.22,1,.36,1) forwards}
 .banner small{display:block;font-size:13px;font-weight:600;opacity:.92;margin-top:2px}
 @keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}25%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-70%) scale(.98)}}
-.celebrate{width:100%;margin-top:6px;border:0;border-radius:14px;min-height:50px;font:800 15px system-ui;color:#fff;background:linear-gradient(135deg,var(--pink),var(--gold));cursor:pointer;box-shadow:0 10px 26px rgba(236,72,153,.3)}
-.celebrate:active{transform:scale(.98)}
 .hist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
 .hist div{font-size:13px;color:var(--mut);background:rgba(255,255,255,.035);border-radius:10px;padding:8px 10px}
 .hist b{color:var(--txt)}
@@ -158,7 +156,6 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
     <div class="card">
       <h2>Victoires</h2>
       <p class="muted" style="margin:0 0 12px">Chaque nouveau site publié, chaque palier de popularité et chaque rival battu déclenche une célébration.</p>
-      <button class="celebrate" id="btnCelebrate">🎉 Fêter une victoire</button>
       <div class="hist" id="hist"></div>
     </div>
   </section>
@@ -221,7 +218,7 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
       { name: 'Forge du Sud', score: 530 }, { name: 'Pixel Rivière', score: 419 },
       { name: 'Atelier Caramel', score: 322 }, { name: 'Studio Brume', score: 229 }
     ],
-    me: 'Mon studio', myScore: 450, popTotal: 61 + 42 + 18 + 33, defense: 0, loyalty: 0
+    me: 'Mon studio', myScore: 450, popTotal: 61 + 42 + 18 + 33, defense: 0, loyalty: 0, victories: []
   };
   function siteVisitorsOf(s) {
     var cap = HOST_CAPS[typeof s.hosting === 'number' ? s.hosting : 0] || 0;
@@ -257,13 +254,14 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
       var popTotal = sites.reduce(function (a, s) { return a + s.popularity; }, 0);
       return { money: num(G.money), day: num(G.day) || 1, sites: sites, rivals: rivals,
                me: G.studioName || G.name || 'Mon studio', myScore: playerScoreOf(G, G.sites || []), popTotal: popTotal,
-               defense: num(G.defense), loyalty: num(G.loyalty) };
+               defense: num(G.defense), loyalty: num(G.loyalty),
+               victories: (G.victories || []).filter(function (w) { return w && w.title; }).slice(0, 8).map(function (w) { return { title: String(w.title), sub: String(w.sub || ''), day: num(w.day) || 1 }; }) };
     } catch (e) { return DEMO; }
   }
 
   var data = readData();
-  var prevSiteCount = data.sites.length;
-  var prevTier = tierOf(data.popTotal || 0);
+  function winKey(w) { return w ? (w.title + '|' + (w.day || 0) + '|' + (w.sub || '')) : ''; }
+  var prevWinKey = data.victories && data.victories.length ? winKey(data.victories[0]) : '';
 
   /* ---------- En-tête ---------- */
   function renderHeader() {
@@ -337,7 +335,6 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
   }
 
   /* ---------- Classement & stats ---------- */
-  function tierOf(score) { return score >= 500 ? 3 : score >= 200 ? 2 : score >= 50 ? 1 : 0; }
   function renderStats() {
     var total = data.sites.reduce(function (a, s) { return a + s.popularity; }, 0) || 1;
     var rivalTotal = data.rivals.reduce(function (a, r) { return a + r.score; }, 0);
@@ -418,25 +415,15 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
     b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
     if (!reduce) burst(kind === 'big' ? 160 : 90);
     if (navigator.vibrate) { try { navigator.vibrate([20, 40, 20]); } catch (_) {} }
-    addHist(title);
   }
-  function addHist(t) {
-    var h = $('hist'), d = document.createElement('div'), now = new Date();
-    d.innerHTML = '<b>' + esc(t) + '</b> · ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-    h.insertBefore(d, h.firstChild);
-    while (h.children.length > 8) h.removeChild(h.lastChild);
+  /* Historique des victoires : lu depuis la sauvegarde du jeu (G.victories) */
+  function renderHist() {
+    var h = $('hist'), vs = (data.victories || []);
+    if (!vs.length) { h.innerHTML = '<div class="empty">Aucune victoire pour l\u2019instant — publie ton premier site !</div>'; return; }
+    h.innerHTML = vs.map(function (w) {
+      return '<div><b>' + esc(w.title) + '</b>' + (w.sub ? ' · ' + esc(w.sub) : '') + ' · Jour ' + fmt(w.day || 1) + '</div>';
+    }).join('');
   }
-  /* Détection automatique : nouveau site, palier de popularité franchi, rival dépassé */
-  function checkWins(fresh) {
-    if (data.sites.length > prevSiteCount) celebrate('🚀 Nouveau site publié !', data.sites[data.sites.length - 1].name, 'big');
-    var t = tierOf(data.popTotal || 0);
-    if (t > prevTier) celebrate('⭐ Palier de popularité atteint !', 'Niveau ' + (t + 1), 'big');
-    var rivalsBefore = fresh && fresh.rivals ? fresh.rivals : [];
-    var myRank = function (score, rivals) { return rivals.filter(function (r) { return r.score > score; }).length + 1; };
-    if (rivalsBefore.length && myRank(data.myScore, data.rivals) < myRank(prevScore, rivalsBefore)) celebrate('🏅 Tu dépasses un rival !', 'Classement amélioré', '');
-    prevSiteCount = data.sites.length; prevTier = t; prevScore = data.myScore;
-  }
-  var prevScore = data.myScore;
 
   /* ---------- Onglets ---------- */
   document.querySelectorAll('.tabs button').forEach(function (b) {
@@ -446,13 +433,14 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
       if (b.dataset.tab === 'stats') setTimeout(renderStats, 30);
     });
   });
-  $('btnCelebrate').onclick = function () { celebrate('🎉 Bravo, patron !', 'Continue comme ça', 'big'); };
 
   /* ---------- Rafraîchissement : quand la sauvegarde change ---------- */
   function refresh() {
-    var fresh = data; data = readData();
-    renderHeader(); renderStage(); renderStats();
-    checkWins(fresh);
+    data = readData();
+    renderHeader(); renderStage(); renderStats(); renderHist();
+    var k = data.victories && data.victories.length ? winKey(data.victories[0]) : '';
+    if (k && k !== prevWinKey) { var v0 = data.victories[0]; celebrate(v0.title, v0.sub, 'big'); }
+    prevWinKey = k;
   }
   addEventListener('storage', function (e) { if (e.key === KEY) refresh(); });
   setInterval(function () {
@@ -464,7 +452,7 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
   /* API pour le jeu : window.WST.celebrate('Titre', 'Sous-titre', 'big') */
   window.WST = { celebrate: celebrate, refresh: refresh, readData: readData, playerScoreOf: playerScoreOf, siteVisitorsOf: siteVisitorsOf, SEG_NAMES: SEG_NAMES };
 
-  renderHeader(); renderStage(); renderStats(); bindStage();
+  renderHeader(); renderStage(); renderStats(); renderHist(); bindStage();
 })();
 </script>
 </body>
