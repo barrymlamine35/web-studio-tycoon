@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#070B16">
 <title>Web Studio Tycoon</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:"Inter",system-ui,sans-serif;background:radial-gradient(700px 320px at 85% -10%,rgba(99,102,241,.28),transparent 60%),linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);background-attachment:fixed;color:#F1F5F9;font-size:clamp(13px,3.6vw,15px);min-height:100vh}
+body{margin:0;font-family:"Inter",system-ui,sans-serif;background:radial-gradient(700px 320px at 85% -10%,rgba(99,102,241,.28),transparent 60%),linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);color:#F1F5F9;font-size:clamp(13px,3.6vw,15px);min-height:100vh}
 h1,h2,h3{font-weight:800;color:#F1F5F9}
 button{font-family:inherit;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:12px 12px;font-weight:600;font-size:10px;background:rgba(255,255,255,.08);color:#F1F5F9;min-height:48px;box-shadow:0 4px 14px rgba(2,6,23,.35);transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease,background .15s ease}
 button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):hover{transform:scale(1.02)}
@@ -357,7 +358,6 @@ main{padding:10px 10px 116px}
 
 
 /* v15 : touche humaine */
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")}
 .hand{font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive}
 .wordmark{font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive;font-size:26px;font-weight:700;color:#FFD166;text-align:center;margin:6px 0 2px;letter-spacing:.5px}
 .tagline{text-align:center;color:#FDE68A;font-style:italic;margin:0 0 10px;font-size:14px}

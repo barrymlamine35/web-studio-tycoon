@@ -128,6 +128,9 @@
         try {
           if (document.body && document.body.setAttribute) document.body.setAttribute('data-wst-tab', String(id));
           if (HEAVY_TABS[id]) showLoader(200);
+          /* v32 : fondu à l'ouverture de l'onglet (audit 5.3) */
+          var m = document.querySelector('main');
+          if (m && m.classList) { m.classList.remove('wstTabIn'); void m.offsetWidth; m.classList.add('wstTabIn'); }
         } catch (e) {}
         return r;
       };

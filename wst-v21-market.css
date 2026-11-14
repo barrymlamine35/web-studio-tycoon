@@ -12,7 +12,7 @@
   --mk-line-2:rgba(226,232,240,.16);
   --mk-ink:#e6ebf3;
   --mk-ink-2:#9aa6b8;
-  --mk-ink-3:#637086;
+  --mk-ink-3:#74829A; /* v32 : contraste (audit 3.1) */
   --mk-accent:#7dd3c0;          /* un seul accent, vert d'eau doux */
   --mk-warn:#e7b26a;            /* prix : ocre, pas de néon */
   --mk-radius:12px;

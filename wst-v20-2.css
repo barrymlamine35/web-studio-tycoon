@@ -24,7 +24,7 @@
 /* 3) Défilement tactile plus doux, sans effet de rebond parasite. */
 html{-webkit-text-size-adjust:100%}
 body{overscroll-behavior-y:none}
-.side{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.side{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent} /* v32 : scrollbar sombre (audit 2.6) */
 
 /* 4) Les éléments qui s'animent passent sur le GPU. */
 .bottomnav,.toast,.side{will-change:transform}
@@ -175,12 +175,14 @@ button,.bnavbtn,.tile,.typeCard{touch-action:manipulation}
 @keyframes wst20Spin{to{transform:rotate(360deg)}}
 
 /* Pièce en panne : halo rouge qui pulse */
-.wsPart.fault{animation:wst20Fault 1.3s ease-in-out infinite}
-@keyframes wst20Fault{
-  0%,100%{box-shadow:0 0 6px #ff5252}
-  50%{box-shadow:0 0 18px 2px #ff5252}
+.wsPart.fault{animation:none} /* v32 : le halo passe en ::after (audit 2.3) */
+.wsPart.fault::after{ /* v32 : halo de panne en opacité (audit 2.3) — remplace wst20Fault qui animait box-shadow */
+  content:"";position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;
+  box-shadow:0 0 12px 2px #ff5252;opacity:1;
+  animation:wst20Fault2 1.3s ease-in-out infinite;
 }
+@keyframes wst20Fault2{0%,100%{opacity:.3}50%{opacity:1}}
 
 @media (prefers-reduced-motion:reduce){
-  .wsLed,.wsFan::before,.wsGpu::after,.wsPart.fault{animation:none}
+  .wsLed,.wsFan::before,.wsGpu::after,.wsPart.fault,.wsPart.fault::after{animation:none}
 }

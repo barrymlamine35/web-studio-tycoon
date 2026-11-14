@@ -42,6 +42,7 @@
   --shadow-card:0 12px 40px rgba(2,6,23,.55),inset 0 1px 0 rgba(255,255,255,.06);
   --shadow-lift:0 18px 50px rgba(2,6,23,.65),inset 0 1px 0 rgba(255,255,255,.09);
   --radius:22px;
+  color-scheme:dark; /* v32 : contrôles natifs + scrollbars sombres (audit 3.7) */
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
@@ -51,12 +52,15 @@ body{
   margin:0;font-family:"Inter",system-ui,-apple-system,sans-serif;
   color:var(--txt);font-size:clamp(13px,3.6vw,15px);min-height:100vh;
   background:var(--bg-0);
+}
+/* v32 : fond Aurora en calque fixe séparé (audit 1.4) — mêmes dégradés, plus de repaint au scroll */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
   background-image:
     radial-gradient(900px 500px at 90% -10%,rgba(99,102,241,.35),transparent 60%),
     radial-gradient(700px 400px at -10% 10%,rgba(34,211,238,.22),transparent 55%),
     radial-gradient(800px 600px at 50% 110%,rgba(139,92,246,.25),transparent 60%),
     linear-gradient(180deg,#070B16 0%,#0C1224 45%,#111A33 100%);
-  background-attachment:fixed;
 }
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.04;
@@ -69,6 +73,10 @@ h1{font-size:clamp(17px,4vw,20px)}
 h2{font-size:clamp(15px,3.6vw,18px)}
 h3{font-size:clamp(14px,3.4vw,17px)}
 .small{font-size:12.5px;color:var(--txt-mute);line-height:1.5}
+/* v32 : chiffres tabulaires (audit 3.2) — les compteurs ne sautent plus en largeur */
+.pill b,.topbar .tstat b,.siteNums b,.statCard b,.hbar .hv,.rScore,.segPct,.taskrow .tnum,.lvlTop span{font-variant-numeric:tabular-nums}
+/* v32 : sélection assortie au jeu (audit 3.7) */
+::selection{background:rgba(99,102,241,.45);color:#fff}
 
 /* ---------- BOUTONS ---------- */
 button{
@@ -105,7 +113,7 @@ input,select{
   background:rgba(255,255,255,.06);color:var(--txt);color-scheme:dark;
   transition:border-color .16s,box-shadow .16s;
 }
-input::placeholder{color:#5C6B85}
+input::placeholder{color:#7C8BA5} /* v32 : contraste (audit 3.1) */
 input:focus,select:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(34,211,238,.18)}
 #hostingSelect,#cmsSelect,.taskrow select{background:rgba(255,255,255,.07)!important;border-color:var(--stroke)!important;color:var(--txt)}
 
@@ -119,10 +127,11 @@ input:focus,select:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 
   border-right:1px solid var(--stroke);padding:18px 14px;
   position:fixed;left:0;top:0;bottom:0;height:100vh;height:100dvh;
   overflow:auto;z-index:70;transform:translateX(-105%);
-  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  visibility:hidden; /* v32 : sidebar masquée quand fermée (audit 2.5) */
+  transition:transform .28s cubic-bezier(.4,0,.2,1),visibility 0s linear .28s;
   box-shadow:8px 0 40px rgba(2,6,23,.7);
 }
-.side.open{transform:none}
+.side.open{transform:none;visibility:visible;transition:transform .28s cubic-bezier(.4,0,.2,1),visibility 0s}
 .side nav{padding-bottom:4px}
 
 /* ---------- PLAYER ---------- */
@@ -131,12 +140,14 @@ input:focus,select:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 
   width:92px;height:92px;margin:0 auto;border-radius:50%;
   background:var(--grad-brand);padding:3px;position:relative;
   box-shadow:0 0 0 4px rgba(99,102,241,.12),0 12px 32px rgba(99,102,241,.4);
-  animation:pulseRing 3s ease-in-out infinite;
+  overflow:visible; /* v32 : l'anneau pulsé (::after) dépasse du cercle */
 }
-@keyframes pulseRing{
-  0%,100%{box-shadow:0 0 0 4px rgba(99,102,241,.12),0 12px 32px rgba(99,102,241,.4)}
-  50%{box-shadow:0 0 0 8px rgba(34,211,238,.08),0 12px 40px rgba(34,211,238,.5)}
+.pava::after{ /* v32 : anneau pulsé en transform/opacity (audit 2.1) — remplace pulseRing qui animait box-shadow */
+  content:"";position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid rgba(99,102,241,.55);opacity:0;pointer-events:none;
+  animation:pulseRing2 3s ease-in-out infinite;
 }
+@keyframes pulseRing2{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.7;transform:scale(1.05)}}
 .pava svg,.pava img{width:100%;height:100%;display:block;border-radius:50%;object-fit:cover}
 .lvlbadge{
   display:inline-block;background:var(--grad-brand);color:#fff;
@@ -186,6 +197,8 @@ input:focus,select:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 
   gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:5;
   box-shadow:0 4px 24px rgba(2,6,23,.5);border-bottom:1px solid var(--stroke);
 }
+/* v32 : safe-area haute (audit 1.2) — le titre ne passe plus sous le poinçon */
+.topbar{padding-top:calc(12px + env(safe-area-inset-top,0px))}
 .topbar h1{
   font-size:16px;margin:0;font-weight:800;
   background:linear-gradient(135deg,#fff,#C7D2FE);
@@ -240,9 +253,8 @@ main{padding:14px 14px 124px;overflow-x:hidden}
 .bar.purple i{background:linear-gradient(90deg,#8B5CF6,#A78BFA)}
 .bar.pop i{background:linear-gradient(90deg,#F59E0B,#FBBF24)}
 .bar.share i{background:linear-gradient(90deg,#F59E0B,#FB923C)}
-.bar.energy i{background:linear-gradient(90deg,#EC4899,#F472B6)}
+.bar.energy i,.bar.pink i{background:linear-gradient(90deg,#EC4899,#F472B6)} /* v32 : regroupés, identiques (audit 4.2) */
 .bar.red i{background:linear-gradient(90deg,#EF4444,#F87171)}
-.bar.pink i{background:linear-gradient(90deg,#EC4899,#F472B6)}
 .bar.loyalty i{background:linear-gradient(90deg,#F59E0B,#FCD34D)}
 .bar.xp i{background:linear-gradient(90deg,#8B5CF6,#C4B5FD)}
 
@@ -319,6 +331,8 @@ main{padding:14px 14px 124px;overflow-x:hidden}
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
   animation:shimmer 3s ease-in-out infinite;
 }
+/* v32 : reflet coupé sur mobile (audit 2.4) — reflet statique discret sur les en-têtes */
+@media(max-width:480px){.bar i::after,.siteTop::after{animation:none}.siteTop::after{opacity:.4}}
 .siteCard .body{padding:18px 18px 6px;flex:1}
 .siteHead{display:flex;gap:12px;align-items:center}
 .segico{
@@ -347,9 +361,9 @@ main{padding:14px 14px 124px;overflow-x:hidden}
 .newVer{
   display:inline-block;background:var(--grad-green);color:#fff;
   border-radius:999px;padding:4px 12px;font-size:12px;font-weight:800;
-  box-shadow:0 6px 18px rgba(34,197,94,.4);animation:pulseBadge 1.8s ease-in-out infinite;
+  box-shadow:0 6px 18px rgba(34,197,94,.4);animation:pulseBadge2 1.8s ease-in-out infinite;
 }
-@keyframes pulseBadge{0%,100%{box-shadow:0 6px 18px rgba(34,197,94,.4)}50%{box-shadow:0 6px 26px rgba(34,197,94,.7)}}
+@keyframes pulseBadge2{0%,100%{opacity:1}50%{opacity:.75}} /* v32 : pulsation en opacité (audit 2.2) — remplace pulseBadge qui animait box-shadow */
 .flash b{animation:flashNum 1.2s ease 1}
 @keyframes flashNum{0%{color:var(--green);transform:scale(1.15)}50%{color:var(--amber)}100%{color:var(--txt);transform:scale(1)}}
 .siteBtns{display:flex;gap:8px;padding:4px 18px 18px}
@@ -453,12 +467,11 @@ main{padding:14px 14px 124px;overflow-x:hidden}
 .lvlRow{margin-top:14px}
 .lvlTop{display:flex;justify-content:space-between;font-weight:800;font-size:14px;color:var(--txt)}
 .lvlSegs{display:flex;gap:5px;margin-top:8px}
-.lvlSegs i{flex:1;}
 
 /* ---------- FIN COMPLÉTÉE v19 : le code collé s'arrêtait à .lvlSegs i ---------- */
 .lvlSegs i{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.12)} /* v19 : fin de la règle tronquée (segment de niveau) */
 .lvlSegs i.on{background:linear-gradient(90deg,#22D3EE,#38BDF8)} /* v19 : segment de niveau atteint */
-.lvlSegs i.onL{background:var(--pink)} /* v19 : segment de niveau, variante rose */
+.lvlSegs i.onL{background:linear-gradient(90deg,#EC4899,#F472B6)} /* v32 : dégradé rose comme les autres segments (audit 3.4) */
 
 /* ---------- RIVAUX ET CLASSEMENT ---------- */
 .rivalRow{display:flex;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--stroke)} /* v19 : ligne rival */
@@ -515,7 +528,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .loginCard h2{margin:0 0 4px;text-align:center}
 .loginSub{text-align:center;color:var(--txt-mute);margin:0 0 16px;line-height:1.5} /* v19 : sous-titre de connexion (taille gardée) */
 .loginMsg{min-height:20px;text-align:center;line-height:1.4;color:#FCA5A5;margin:12px 0 0} /* v19 : message d'erreur de connexion (taille gardée) */
-.loginNote{text-align:center;color:#64748B;margin:10px 0 0;line-height:1.5} /* v19 : note sous la connexion (taille gardée) */
+.loginNote{text-align:center;color:#8A9AB4;margin:10px 0 0;line-height:1.5} /* v19 : note sous la connexion (taille gardée) */
 .loginField{width:100%;margin-bottom:10px} /* v19 : champ de connexion, pleine largeur */
 .loginTabs{display:flex;gap:8px;margin-bottom:14px} /* v19 : onglets Connexion / Créer un compte */
 .loginTabs button{flex:1} /* v19 : onglets de connexion, largeur égale */
@@ -526,7 +539,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 
 /* ---------- ATELIER 3D (on ne touche jamais aux transform 3D) ---------- */
 .wsStage{perspective:900px;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--stroke);border-radius:22px;padding:14px 10px 10px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow-card)} /* v19 : scène 3D, verre */
-.wsPanel{background:#232c38} /* v19 : panneau latéral du PC (couleur gardée) */
+.wsPanel{background:#1E2540} /* v32 : teinte indigo de la palette (audit 3.5) */
 .wsScreen{border:2px solid #334155;border-radius:8px;padding:10px;display:flex;flex-direction:column;justify-content:center;gap:6px;overflow:hidden} /* v19 : écran du PC (taille gardée) */
 .wsStep{display:flex;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--stroke);border-radius:14px;margin-top:8px;background:var(--glass)} /* v19 : étape de réparation, verre */
 .wsStep.done{border-color:var(--green)} /* v19 : étape terminée, bordure verte */
@@ -588,6 +601,9 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 }
 
 /* ---------- ACCESSIBILITÉ ---------- */
+/* v32 : fondu à l'ouverture d'un onglet (audit 5.3) — rejoué par wst-v19.js sur main */
+@keyframes wstTabIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+main.wstTabIn{animation:wstTabIn .25s ease}
 @media (prefers-reduced-motion:reduce){ /* v19 : mouvement réduit — toutes les animations coupées */
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
@@ -717,3 +733,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
   .small{font-size:11px}
   input,select{font-size:13px;padding:9px 11px}
 }
+
+/* v32 : safe-area haute, paliers compacts (audit 1.2) — base compacte gardée (8 px à 480, 7 px à 360), l'encoche s'ajoute seulement */
+@media(max-width:480px){.topbar{padding-top:calc(8px + env(safe-area-inset-top,0px))}}
+@media(max-width:360px){.topbar{padding-top:calc(7px + env(safe-area-inset-top,0px))}}
