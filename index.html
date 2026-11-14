@@ -56,6 +56,10 @@ main{padding:12px 12px 116px}
 .card:hover{transform:translateY(-2px)}
 .card h3{margin:0 0 6px;font-size:16px;color:#F1F5F9;font-weight:800}
 .card p{margin:6px 0;line-height:1.5;color:#CBD5E1}
+.certCard{text-align:center;border:2px solid #d4af37}
+.certCard .certSeal{font-size:28px;line-height:1.2}
+.certCard .certTitle{font-size:16px;font-weight:800;letter-spacing:2px;color:#d4af37;margin:2px 0}
+.certCard .certNote{font-size:10px;color:#94a3b8}
 .card>button{margin-top:8px}
 .card>button+p{margin-top:8px}
 .small{font-size:12.5px;color:#94A3B8}
@@ -394,6 +398,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
  </div>
  <nav id="mainNav">
   <button class="primary" style="width:100%;min-height:48px;font-size:16px" onclick="openFeaturesPage()">🎮 Fonctionnalités du jeu</button>
+  <button class="ghost" style="width:100%;min-height:44px;margin-top:8px" onclick="openMyFormations()">🎓 Mes formations</button>
   <button class="ghost" id="musicBtn" style="width:100%;min-height:44px;margin-top:8px" onclick="musicToggle()">🔇 Musique : off</button>
   <button class="danger" style="width:100%;min-height:44px;margin-top:8px" onclick="resetGame()">🗑️ Réinitialiser la partie</button>
   <button class="ghost" id="saveChoiceBtn" title="Exporter ou importer ma partie" style="min-height:44px;margin:8px auto 0;display:block;padding:10px 18px;font-size:16px" onclick="toggleSaveChoice()">💾📂</button>
@@ -443,6 +448,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
 <section id="tab-training" class="hidden"><div id="trainingBox"></div></section>
 <!-- CERTIFICATS -->
 <section id="tab-certificates" class="hidden"><div id="certificatesBox"></div></section>
+<section id="tab-myformations" class="hidden"><div id="myformationsBox"></div></section>
 <!-- CREATION -->
 <section id="tab-create" class="hidden">
  <div style="display:flex;gap:8px;margin-bottom:12px">
@@ -956,7 +962,7 @@ function taskGain(e,tid){return 8+Math.round(taskSkillVal(e,tid)/2);}
 let G, selectedSiteId=null, selectedAppId=null, selSeg='blogs', selType='contenu', createStep=1, createMode='site', selAppType='mobile', selAppPlatform='android';
 function freshRivals(){return RIVAL_DEF.map(r=>({...r}))}
 function fresh(){return{day:1,studioName:"Mon studio",money:750000000,rep:0,dev:6,design:4,team:[],active:null,offers:genOffers(1,true),office:0,tool:0,done:0,won:false,coins:1000000,musicOn:false,courses:{},trainStats:{},stock:{},shopPrices:{},shopPrev:{},messages:[{id:Date.now()+1,client:'🎮 Web Studio',kind:'welcome',text:"Salut patron, c'est Pixel ! 🐾 Bienvenue dans ta messagerie — c'est ici que tes clients t'écrivent : quand tu prends un contrat, quand tu publies un site ou une app, et quand tu livres un PC. Réponds-leur avec le sourire, ça rapporte de la réputation. Et s'il y a un imprévu, tu pourras renégocier le prix ici même. — L'équipe du studio",from:'client',day:1,read:false},{id:Date.now()+2,client:CLIENTS[0],kind:'inquiry',text:MSG_INQUIRIES[0].text,from:'client',day:1,read:false,inquiry:'site'}],msgSeeded:true,
- sites:[],apps:[],rivals:freshRivals(),defense:0,loyalty:0,cdMarket:0,cdAggress:0,log:[],siteIncomeTotal:0,visitorsTotal:0,visitorHist:[],adOffers:genAdOffers(),trafficOffers:genTrafficOffers(),victories:[],certificates:[]}}
+ sites:[],apps:[],rivals:freshRivals(),defense:0,loyalty:0,cdMarket:0,cdAggress:0,log:[],siteIncomeTotal:0,visitorsTotal:0,visitorHist:[],adOffers:genAdOffers(),trafficOffers:genTrafficOffers(),victories:[],certificates:[],heroStudy:null,heroCerts:[],certSeq:0}}
 function defaultTasks(q){return{design:Math.min(90,Math.round(q*0.9)),layout:Math.min(85,Math.round(q*0.8)),code:Math.min(88,Math.round(q*0.85)),content:Math.min(80,Math.round(q*0.75)),seo:Math.min(70,Math.round(q*0.55)),social:Math.min(65,Math.round(q*0.5)),mkt:Math.min(70,Math.round(q*0.6))}}
 function ensure(){
  if(!Array.isArray(G.sites))G.sites=[];
@@ -976,6 +982,9 @@ function ensure(){
  if(!G.courses||typeof G.courses!=='object')G.courses={};
  if(!G.trainStats||typeof G.trainStats!=='object')G.trainStats={};
  if(!Array.isArray(G.certificates))G.certificates=[];
+ if(!Array.isArray(G.heroCerts))G.heroCerts=[];
+ if(typeof G.certSeq!=="number")G.certSeq=0;
+ if(!G.heroStudy||typeof G.heroStudy!=='object')G.heroStudy=null;
  if(!G.messages.length&&!G.msgSeeded){seedWelcomeMessages();G.msgSeeded=true}
  if(!Array.isArray(G.encOrders))G.encOrders=[];
  if(typeof G.encPin!=='string')G.encPin='';
@@ -1319,7 +1328,7 @@ const FEATURES=[
  {icon:'📊',name:'Statistiques',desc:"Tous tes chiffres en un coup d'œil : visiteurs, revenus, réputation et parts de marché.",go:'stats',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>L'écran Statistiques regroupe tous les chiffres de ton studio en un seul endroit : combien de visiteurs, combien d'argent, combien de réputation.</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>7 cartes en haut : visites aujourd'hui, profits des sites, nombre de sites, nombre d'applications, employés, réputation et contrats réussis. En dessous, un graphique montre tes visiteurs des derniers jours, puis les visiteurs de chaque site, et tes parts de marché par thème.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>C'est gratuit. La carte Réputation montre ton objectif : 1 000 réputation, et ton niveau de studio. Ton niveau = 1 + ta réputation / 110, avec un maximum de 10 : il faut 990 réputation pour être niveau 10.</p></div><div class="card"><h3>💡 Astuces</h3><p>Regarde les visiteurs de chaque site : celui qui a le plus de visiteurs, c'est lui qui rapporte le plus. Si la courbe des visiteurs baisse, c'est le moment de publier une nouvelle version ou de lancer une campagne marketing.</p></div>`},
  {icon:'💡',name:'Aide & astuces',desc:"Toutes les explications du jeu, en français simple : cherche ce que tu ne comprends pas.",go:'help',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>La page Aide & astuces regroupe toutes les explications du jeu, en français simple : une ligne par règle, facile à retrouver.</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>Ouvre-la depuis « Fonctionnalités du jeu » puis « Aide & astuces ». Chaque point explique une règle : les contrats, les sites, les applications, le dépannage, l'atelier, la boutique, le Darkweb, la messagerie, la renégociation et les polices adaptées.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>C'est gratuit. L'aide ne rapporte pas d'argent, mais elle t'évite d'en perdre : par exemple, ne pas changer la mauvaise pièce dans l'atelier, ou ne pas perdre un contrat en négociant au mauvais moment.</p></div><div class="card"><h3>💡 Astuces</h3><p>Quand tu ne sais pas comment marche une fonctionnalité, cherche d'abord sa page détaillée dans « Fonctionnalités du jeu » : elle explique tout, avec les vrais chiffres. Quand tu ne comprends pas pourquoi ton argent a bougé, regarde le Journal du studio.</p></div>`},
  {icon:'🎯',name:'Objectif',desc:"Le but du jeu : studio niveau 10 et 1 000 de réputation. Comment y arriver.",go:'stats',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>Le but du jeu : faire grandir ton studio jusqu'au niveau 10 et atteindre 1 000 de réputation. Quand tu y arrives, tu as gagné.</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>Ton niveau = 1 + ta réputation / 110, avec un maximum de 10. Il faut donc 990 réputation pour être niveau 10. Ta réputation monte quand tu finis un contrat (+10 à +240), quand tu publies une nouvelle version (+6), quand tu fais une campagne marketing (+5) ou une offre agressive (+8), et quand tu réponds gentiment à un client dans la messagerie (+1).</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>En chemin, les sponsors te paient réputation / 10 $ par jour : 100 de réputation = 10 $ par jour, 500 = 50 $ par jour, 1 000 = 100 $ par jour. C'est ton filet de sécurité : l'argent arrive tous les matins, même si tu ne fais rien.</p></div><div class="card"><h3>💡 Astuces</h3><p>Ne perds pas de réputation : une renégociation refusée coûte −2, te faire attraper sur le Darkweb coûte −20. Les gros contrats rapportent le plus de réputation, mais ils demandent un studio de haut niveau : monte de niveau pour les débloquer.</p></div>`},
- {icon:'🎓',name:'Formations',desc:"Vends des formations en cybersécurité, réseau, cloud, Linux, hacking et trading : tes élèves paient, tu les formes, ils repartent avec leur certificat.",go:'trainings',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>Tu vends des formations : un élève paie pour apprendre, tu organises une session, et à la fin il repart avec son certificat. C'est toi le formateur !</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>1. Choisis une formation sur l'accueil (ou dans « Formations »).<br>2. Touche « Lancer une session » : des élèves s'inscrivent (3 au minimum, plus si ta réputation est haute).<br>3. La formation avance de 1 jour à chaque « Jour suivant ».<br>4. À la fin, tu es payé : prix par élève × nombre d'élèves, et +10 réputation.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>🛡️ Cybersécurité (CompTIA Security+) : 30 jours, 500 $ par élève, max 10 élèves.<br>🌐 Networking (CompTIA Network+) : 30 jours, 450 $ par élève, max 10 élèves.<br>☁️ Cloud (AWS Solutions Architect) : 40 jours, 600 $ par élève, max 8 élèves.<br>🐧 Admin Linux (LPIC-1 / Linux+) : 30 jours, 400 $ par élève, max 10 élèves.<br>💻 Hacking (CEH) : 45 jours, 800 $ par élève, max 6 élèves, débloqué au niveau 3 du studio.<br>📈 Trading (CMT) : 45 jours, 750 $ par élève, max 8 élèves, débloqué au niveau 3 du studio.</p></div><div class="card"><h3>💡 Astuces</h3><p>Les durées sont inspirées de la vraie vie : dans la vraie vie, ces certificats prennent environ 3 à 6 mois — dans le jeu, c'est 30 à 45 jours. Monte ta réputation pour attirer plus d'élèves : plus d'élèves, plus d'argent à la fin. Les 6 formations peuvent tourner en même temps, une session par formation. Tous les certificats gagnés sont visibles dans « 🎓 Mes certificats » (bouton en haut de la page Formations).</p></div>`},
+ {icon:'🎓',name:'Formations',desc:"Apprends d'abord, enseigne ensuite : suis les formations (cybersécurité, réseau, cloud, Linux, hacking, trading), gagne tes certificats, puis vends-les à tes élèves.",go:'trainings',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>Tu vends des formations : un élève paie pour apprendre, tu organises une session, et à la fin il repart avec son certificat. Mais avant d'enseigner, tu dois d'abord apprendre toi-même : chaque formation que tu termines te donne ton propre certificat.</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>1. Touche « 📖 Suivre la formation » : tu suis la formation comme un élève (même durée, une à la fois, prix d'une place).<br>2. À la fin, tu obtiens ton certificat (+5 réputation) : il est visible comme un vrai document dans « 🎓 Mes formations » (bouton dans le Menu ☰).<br>3. Avec ton certificat en poche, touche « Lancer une session » : des élèves s'inscrivent (3 au minimum, plus si ta réputation est haute).<br>4. La formation avance de 1 jour à chaque « Jour suivant ».<br>5. À la fin, tu es payé : prix par élève × nombre d'élèves, et +10 réputation.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>🛡️ Cybersécurité (CompTIA Security+) : 30 jours, 500 $ par élève, max 10 élèves.<br>🌐 Networking (CompTIA Network+) : 30 jours, 450 $ par élève, max 10 élèves.<br>☁️ Cloud (AWS Solutions Architect) : 40 jours, 600 $ par élève, max 8 élèves.<br>🐧 Admin Linux (LPIC-1 / Linux+) : 30 jours, 400 $ par élève, max 10 élèves.<br>💻 Hacking (CEH) : 45 jours, 800 $ par élève, max 6 élèves, débloqué au niveau 3 du studio.<br>📈 Trading (CMT) : 45 jours, 750 $ par élève, max 8 élèves, débloqué au niveau 3 du studio.<br>Suivre une formation toi-même coûte le prix d'une place et rapporte ton certificat + 5 réputation.</p></div><div class="card"><h3>💡 Astuces</h3><p>Les durées sont inspirées de la vraie vie : dans la vraie vie, ces certificats prennent environ 3 à 6 mois — dans le jeu, c'est 30 à 45 jours. Monte ta réputation pour attirer plus d'élèves : plus d'élèves, plus d'argent à la fin. Les 6 formations peuvent tourner en même temps, une session par formation. Tes propres certificats sont visibles dans « 🎓 Mes certificats » (page « Mes formations » du Menu) et les promotions que tu as formées dans « 🎓 Promotions diplômées » (bouton en haut de la page Formations).</p></div>`},
 {icon:'🐾',name:'Pixel, le chat du studio',desc:"Pixel, ton chat roux à lunettes, vit dans le studio et te glisse une astuce différente chaque jour.",go:'sites',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>Pixel, c'est le chat roux à lunettes du studio. Il dort sur le clavier, ronronne quand un contrat est signé, et te glisse une astuce différente chaque jour.</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>1. Pixel vit dans ta chambre, juste sous le bureau.<br>2. Chaque jour, il a une nouvelle astuce pour toi dans sa petite note jaune.<br>3. Tu le retrouves aussi sur l'écran de connexion : il veille sur ton studio, même quand tu es parti.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>Pixel ne coûte rien : il mange des croquettes virtuelles. En échange, ses astuces t'aident à gagner plus chaque jour.</p></div><div class="card"><h3>💡 Astuces</h3><p>Lis l'astuce du jour de Pixel avant de commencer : elle te rappelle les bons réflexes — promouvoir tes sites, répondre aux clients avec le sourire, et ne jamais oublier de sauvegarder ta partie.</p></div>`},
 {icon:'🎵',name:'Musique & sons',desc:"Une petite musique douce en fond et des sons quand tu es payé ou que tu publies. À activer dans le Menu.",go:'sites',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>Une petite musique douce, façon lo-fi, qui tourne en fond pendant que tu travailles, et des petits sons quand tu es payé ou que tu publies une version.</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>1. Ouvre le Menu (☰ en bas à droite).<br>2. Touche « 🔊 Musique » pour l'activer ou la couper.<br>3. La musique ne démarre qu'après ton premier tap, et ton choix est gardé dans ta sauvegarde.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>La musique est gratuite et ne coûte rien. Elle est faite par le jeu lui-même, sans abonnement et sans Internet.</p></div><div class="card"><h3>💡 Astuces</h3><p>La musique est faite par le jeu lui-même, sans aucun fichier : elle marche même sans Internet. Si tu n'entends rien, vérifie que le son de ton téléphone n'est pas coupé.</p></div>`},
 {icon:'⚡',name:'Fluidité & atelier 3D',desc:"Le jeu est plus fluide et l'atelier 3D est plus beau : moins de flou, écrans redessinés seulement quand tu les regardes, tour complète avec lumière et ombre.",go:'sites',detail:`<div class="card"><h3>📌 C'est quoi ?</h3><p>La v20 fait deux choses : elle rend le jeu plus fluide (moins de flou, écrans redessinés seulement quand tu les regardes, sauvegardes groupées) et elle embellit l'atelier 3D (la tour a maintenant ses 6 faces, une vraie lumière, une ombre au sol, et elle tourne avec de l'inertie).</p></div><div class="card"><h3>📋 Comment ça marche</h3><p>1. Le flou est retiré des cartes (il reste sur le menu, la barre du haut et la barre du bas) — à l'œil, rien ne change.<br>2. Quand tu touches un bouton, seul l'écran visible est redessiné.<br>3. Les sauvegardes sont groupées : au maximum une écriture toutes les 400 ms, et une sauvegarde immédiate quand tu quittes l'application.<br>4. Dans l'atelier, glisse pour faire tourner la tour sur 360° : elle continue un peu après ton doigt (inertie) et s'arrête doucement. Les boutons ↺ / ↻ la tournent doucement.<br>5. Ouvre le panneau : la caméra se place toute seule sur le côté ouvert pour voir les composants.<br>6. Le ventilateur tourne (il s'arrête si la pièce est en panne) et une pièce en panne a un halo rouge qui pulse.</p></div><div class="card"><h3>💰 Coûts et gains</h3><p>C'est gratuit et ça ne change rien au jeu : même argent, même réputation, mêmes règles. L'export de ta sauvegarde lit directement ta partie, donc il marche toujours.</p></div><div class="card"><h3>💡 Astuces</h3><p>Sur un téléphone un peu lent, la différence se sent surtout sur les longues listes (contrats, sites, journal) et quand tu enchaînes les actions. Dans l'atelier, tourne la tour pour voir l'arrière : le ventilateur et les ports. Si un écran semblait vide, rouvre-le : il se redessine à l'ouverture.</p></div>`},
@@ -1350,11 +1359,25 @@ function startTraining(id){
  if(trainingLocked(t)){toast('🔒 '+t.name+' débloquée au niveau '+t.minLevel+' du studio');return false}
  if(!G.courses)G.courses={};
  if(G.courses[id]){toast('🎓 Une session est déjà en cours pour cette formation');return false}
+ if(!heroCertFor(id)){toast('🔒 Termine d\u2019abord cette formation toi-même pour pouvoir l\u2019enseigner');return false}
  let stu=Math.min(t.max,3+Math.floor(Math.random()*(t.max-3+1))+Math.floor(G.rep/300));
  G.courses[id]={students:stu,daysLeft:t.days,total:t.days};
  addLog('Nouvelle session '+t.name+' : '+stu+' élèves inscrits pour '+t.days+' jours ('+t.cert+'). La salle est prête, à toi de jouer, prof !','formation');
  save();render();renderTraining(id);
  toast('🎓 Session '+t.name+' lancée : '+stu+' élèves !');return true}
+function heroCertFor(id){return (G.heroCerts||[]).find(function(x){return x.training===id})}
+function heroStudyFor(id){return !!(G.heroStudy&&G.heroStudy.training===id)}
+function heroDisplayName(){try{var pn=document.getElementById('playerName');var n=pn?pn.textContent:'';return (n&&String(n).trim())?String(n).trim():'Toi'}catch(e){return 'Toi'}}
+function startHeroStudy(id){
+ let t=trainingById(id);if(!t)return false;
+ if(trainingLocked(t)){toast('🔒 '+t.name+' débloquée au niveau '+t.minLevel+' du studio');return false}
+ if(heroCertFor(id)){toast('✅ Tu as déjà ton certificat '+t.cert);return false}
+ if(G.heroStudy){let ot=trainingById(G.heroStudy.training);toast('📖 Tu suis déjà '+(ot?ot.name:'une formation')+' — termine-la d\u2019abord');return false}
+ if(G.money<t.price){toast('💰 Il te faut '+t.price+' $ pour t\u2019inscrire à '+t.name);return false}
+ G.money-=t.price;G.heroStudy={training:id,daysLeft:t.days,total:t.days};
+ addLog('Tu t\u2019es inscrit(e) à '+t.name+' ('+t.cert+') : '+t.days+' jours de formation, '+t.price+' $ d\u2019inscription. À la fin : ton certificat !','formation');
+ save();render();renderTraining(id);renderMyFormations();
+ toast('📖 Tu suis '+t.name+' : '+t.days+' jours !');return true}
 function renderHomeTiles(){
  let box=document.getElementById('homeTiles');if(!box)return;
  let deps=G.offers.filter(o=>o.cat=='depannage').length;
@@ -1362,29 +1385,36 @@ function renderHomeTiles(){
  let tile=function(icon,name,sub,onclick,wide){return '<button class="tile'+(wide?' tileWide':'')+'" onclick="'+onclick+'"><span class="tic">'+icon+'</span><span>'+name+'</span><span class="tstat">'+sub+'</span></button>'};
  let h=tile('🌐','Sites et Apps',G.sites.length+' site(s) • '+G.apps.length+' app(s)',"openSitesApps()");
  h+=tile('🔧','Dépannage',depSub,"openDepannagePage()");
- h+=TRAININGS.slice(0,4).map(function(t){let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let sub=locked?('🔒 Niveau '+t.minLevel+' requis'):(c?('En cours : J-'+c.daysLeft+' • '+c.students+' élèves'):(t.price+' $ / élève • '+t.days+' jours'));return tile(t.icon,t.name,sub,"openTraining('"+t.id+"')")}).join('');
- TRAININGS.slice(4).forEach(function(t){let c=(G.courses||{})[t.id];let l=trainingLocked(t);let sub=l?('🔒 Niveau '+t.minLevel+' requis'):(c?('En cours : J-'+c.daysLeft+' • '+c.students+' élèves'):(t.price+' $ / élève • '+t.days+' jours'));h+=tile(t.icon,t.name,sub,"openTraining('"+t.id+"')",true)});
+ h+=TRAININGS.slice(0,4).map(function(t){let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let hs=(G.heroStudy&&G.heroStudy.training===t.id)?G.heroStudy:null;let sub=locked?('🔒 Niveau '+t.minLevel+' requis'):(hs?('📖 Tu étudies : J-'+hs.daysLeft):(c?('En cours : J-'+c.daysLeft+' • '+c.students+' élèves'):(heroCertFor(t.id)?('✅ Certificat • '+t.price+' $ / élève'):(t.price+' $ / élève • '+t.days+' jours'))));return tile(t.icon,t.name,sub,"openTraining('"+t.id+"')")}).join('');
+ TRAININGS.slice(4).forEach(function(t){let c=(G.courses||{})[t.id];let l=trainingLocked(t);let hs=(G.heroStudy&&G.heroStudy.training===t.id)?G.heroStudy:null;let sub=l?('🔒 Niveau '+t.minLevel+' requis'):(hs?('📖 Tu étudies : J-'+hs.daysLeft):(c?('En cours : J-'+c.daysLeft+' • '+c.students+' élèves'):(heroCertFor(t.id)?('✅ Certificat • '+t.price+' $ / élève'):(t.price+' $ / élève • '+t.days+' jours'))));h+=tile(t.icon,t.name,sub,"openTraining('"+t.id+"')",true)});
  h+=tile('🏆','Vitrine du studio',G.sites.length+' site(s) publié(s)',"location.href='wst-studio-vitrine.html'",true);
  box.innerHTML='<div class="homeTiles">'+h+'</div>';
 }
 function renderTrainings(){
  let box=document.getElementById('trainingsBox');if(!box)return;
- let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button><div class="card"><h3>🎓 Formations</h3></div><button class="ghost" style="margin-bottom:10px" onclick="openCertificates()">🎓 Mes certificats ('+((G.certificates||[]).length)+')</button>';
- h+=TRAININGS.map(function(t){let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let st=(G.trainStats||{})[t.id];let sub=locked?('🔒 Débloqué au niveau '+t.minLevel+' du studio'):(c?('🎓 En cours : J-'+c.daysLeft+' • '+c.students+' élèves'):(t.price+' $ / élève • '+t.days+' jours • max '+t.max+' élèves'));return '<div class="card"><h3>'+t.icon+' '+t.name+'</h3><p class="small">Certificat : <b>'+t.cert+'</b> • Dans la vraie vie : '+t.real+'</p><p>'+sub+'</p>'+(st&&st.cohorts?'<p class="small">✅ '+st.cohorts+' session(s) terminée(s) • '+st.students+' diplômé(s) • '+st.earned+' $ gagnés</p>':'')+'<button class="primary" onclick="openTraining(\''+t.id+'\')">🎓 Voir la formation</button></div>'}).join('');
+ let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button><div class="card"><h3>🎓 Formations</h3></div><button class="ghost" style="margin-bottom:10px" onclick="openCertificates()">🎓 Promotions diplômées ('+((G.certificates||[]).length)+')</button>';
+ h+=TRAININGS.map(function(t){let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let st=(G.trainStats||{})[t.id];let hc=heroCertFor(t.id);let hs=(G.heroStudy&&G.heroStudy.training===t.id)?G.heroStudy:null;let sub=locked?('🔒 Débloqué au niveau '+t.minLevel+' du studio'):(c?('🎓 En cours : J-'+c.daysLeft+' • '+c.students+' élèves'):(t.price+' $ / élève • '+t.days+' jours • max '+t.max+' élèves'));let heroLine=hc?('<p class="small">📜 Ton certificat : ✅ Jour '+hc.day+' • N° '+hc.certNo+'</p>'):(hs?('<p class="small">📖 Tu suis cette formation (encore '+hs.daysLeft+' jour(s))</p>'):'<p class="small">📜 Ton certificat : ❌ pas encore</p>');return '<div class="card"><h3>'+t.icon+' '+t.name+'</h3><p class="small">Certificat : <b>'+t.cert+'</b> • Dans la vraie vie : '+t.real+'</p><p>'+sub+'</p>'+heroLine+(st&&st.cohorts?'<p class="small">✅ '+st.cohorts+' session(s) terminée(s) • '+st.students+' diplômé(s) • '+st.earned+' $ gagnés</p>':'')+'<button class="primary" onclick="openTraining(\''+t.id+'\')">🎓 Voir la formation</button></div>'}).join('');
  box.innerHTML=h;
 }
 function renderTraining(id){
  let box=document.getElementById('trainingBox');if(!box)return;
  let t=trainingById(id);if(!t){box.innerHTML='';return}
- let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let st=(G.trainStats||{})[t.id];
+ let c=(G.courses||{})[t.id];let locked=trainingLocked(t);let st=(G.trainStats||{})[t.id];let hc=heroCertFor(id);
  let pct=c?Math.round((t.days-c.daysLeft)/t.days*100):0;
  let certCount=(G.certificates||[]).filter(function(x){return x.training===t.id}).length;
  let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button>';
  h+='<div class="card"><h3>'+t.icon+' '+t.name+'</h3><p class="small">Certificat : <b>'+t.cert+'</b></p></div>';
  h+='<div class="card"><h3>📚 Ce que tu apprends</h3><p>'+(t.contents||[]).map(function(x){return '• '+x}).join('<br>')+'</p></div>';
- h+='<div class="card"><h3>💰 Prix et places</h3><p>'+t.price+' $ par élève • maximum '+t.max+' élèves par session.</p>'+(st&&st.cohorts?'<p class="small">✅ '+st.cohorts+' session(s) terminée(s) • '+st.students+' diplômé(s) • '+st.earned+' $ gagnés</p>':'<p class="small">Aucune session terminée pour le moment.</p>')+'<p class="small">🎓 Certificats obtenus : '+certCount+'</p></div>';
+ h+='<div class="card"><h3>💰 Prix et places</h3><p>'+t.price+' $ par élève • maximum '+t.max+' élèves par session.</p>'+(st&&st.cohorts?'<p class="small">✅ '+st.cohorts+' session(s) terminée(s) • '+st.students+' diplômé(s) • '+st.earned+' $ gagnés</p>':'<p class="small">Aucune session terminée pour le moment.</p>')+'<p class="small">🎓 Promotions diplômées : '+certCount+'</p><p class="small">📜 Ton certificat : '+(hc?('✅ obtenu — Jour '+hc.day+' • N° '+hc.certNo):'❌ pas encore')+'</p></div>';
+ if(!locked){
+  if(hc){h+='<div class="card" style="border-color:#22b573"><h3>📖 Ta formation</h3><p>✅ Tu as ton certificat <b>'+t.cert+'</b> (Jour '+hc.day+', N° '+hc.certNo+'). Tu peux enseigner cette formation.</p></div>'}
+  else if(G.heroStudy&&G.heroStudy.training===id){let hs=G.heroStudy;let pct2=Math.round((hs.total-hs.daysLeft)/hs.total*100);h+='<div class="card" style="border-color:#2b7de9"><h3>📖 Tu suis cette formation</h3><p>Encore <b>'+hs.daysLeft+' jour(s)</b> sur '+hs.total+' — à la fin, ton certificat <b>'+t.cert+'</b> et +5 réputation.</p><div class="bar blue"><i style="width:'+pct2+'%"></i></div><p class="small">La formation avance de 1 jour à chaque « Jour suivant ».</p></div>'}
+  else if(G.heroStudy){let ot=trainingById(G.heroStudy.training);h+='<div class="card"><h3>📖 Ta formation</h3><p>Tu suis déjà <b>'+(ot?ot.name:'une formation')+'</b> (encore '+G.heroStudy.daysLeft+' jour(s)). Termine-la d\u2019abord, puis reviens ici.</p><button class="ghost" onclick="toast(\'📖 Termine d\u2019abord ta formation en cours.\')">📖 Suivre la formation</button></div>'}
+  else{h+='<div class="card"><h3>📖 Suivre la formation (toi d\u2019abord)</h3><p>Avant d\u2019enseigner, suis cette formation toi-même : <b>'+t.days+' jours</b>, <b>'+t.price+' $</b> d\u2019inscription. À la fin : ton certificat <b>'+t.cert+'</b> et +5 réputation.</p><button class="primary" onclick="startHeroStudy(\''+t.id+'\')">📖 Suivre la formation — '+t.price+' $</button></div>'}
+ }
  if(locked){h+='<div class="card" style="border-color:#f59e0b"><h3>🔒 Formation verrouillée</h3><p>Cette formation se débloque au <b>niveau '+t.minLevel+' du studio</b>. Tu es niveau '+level()+' pour le moment : monte ta réputation pour la débloquer !</p></div>'}
  else if(c){h+='<div class="card" style="border-color:#22b573"><h3>🎓 Session en cours</h3><p><b>'+c.students+' élèves</b> • Encore <b>'+c.daysLeft+' jour(s)</b> sur '+t.days+' • Gain à la fin : <b>'+(t.price*c.students)+' $</b> + 10 réputation</p><div class="bar blue"><i style="width:'+pct+'%"></i></div><p class="small">La formation avance de 1 jour à chaque « Jour suivant ».</p></div>'}
+ else if(!hc){h+='<div class="card" style="border-color:#f59e0b"><h3>🔒 Enseigner cette formation</h3><p>Pour vendre cette formation à des élèves, obtiens d\u2019abord ton certificat : suis la formation ci-dessus.</p><button class="ghost" onclick="toast(\'🔒 Suis d\u2019abord cette formation pour pouvoir l\u2019enseigner.\')">🔒 Termine d\u2019abord cette formation</button></div>'}
  else{h+='<div class="card"><h3>🚀 Lancer une session</h3><p>Des élèves vont s\u2019inscrire (3 au minimum, plus si ta réputation est haute). À la fin des '+t.days+' jours, tu es payé '+t.price+' $ par élève, et tu gagnes +10 réputation.</p><button class="primary" onclick="startTraining(\''+t.id+'\')">🎓 Lancer une session — '+t.days+' jours</button></div>'}
  box.innerHTML=h;
 }
@@ -1393,9 +1423,37 @@ function openCertificates(){renderCertificates();showTab('certificates');window.
 function renderCertificates(){
  let box=document.getElementById('certificatesBox');if(!box)return;
  let certs=G.certificates||[];
- let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button><div class="card"><h3>🎓 Mes certificats</h3><p class="small">'+certs.length+' certificat(s) gagné(s) en formant tes élèves.</p></div>';
+ let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button><div class="card"><h3>🎓 Promotions diplômées</h3><p class="small">'+certs.length+' certificat(s) gagné(s) en formant tes élèves.</p></div>';
  if(!certs.length){h+='<div class="card"><p>Aucun certificat pour l’instant — termine une formation pour en gagner un !</p></div>'}
  else{h+=certs.map(function(x){let t=trainingById(x.training);let nm=t?(t.icon+' '+t.name):x.training;let cf=t?(' • '+t.cert):'';return '<div class="card"><h3>'+nm+'</h3><p class="small">Jour '+x.day+' • '+x.students+' diplômé(s)'+cf+'</p></div>'}).join('')}
+ box.innerHTML=h;
+}
+
+function openMyFormations(){renderMyFormations();showTab('myformations');window.scrollTo(0,0)}
+function heroCertCard(x){
+ let t=trainingById(x.training);let nm=t?t.name:x.training;let cf=t?t.cert:'';let ic=t?t.icon:'🎓';
+ return '<div class="card certCard"><div class="certSeal">🎓</div><div class="certTitle">CERTIFICAT</div><p><b>'+ic+' '+nm+'</b></p><p class="small">'+cf+'</p><p class="small">décerné à <b>'+wstEsc(heroDisplayName())+'</b></p><p class="small">Jour '+x.day+' • N° '+x.certNo+'</p><p class="certNote">Certificat fictif — créé uniquement pour le jeu Web Studio Tycoon, sans valeur réelle.</p></div>';
+}
+function renderMyFormations(){
+ let box=document.getElementById('myformationsBox');if(!box)return;
+ let h='<button class="ghost" style="margin-bottom:10px" onclick="goBack()">← Retour</button><div class="card"><h3>🎓 Mes formations</h3><p class="small">Apprends d\u2019abord, enseigne ensuite : suis une formation pour gagner ton certificat, puis tu pourras la vendre à tes élèves.</p></div>';
+ h+='<div class="card"><h3>📖 Mes formations</h3></div>';
+ h+=TRAININGS.map(function(t){
+  let locked=trainingLocked(t);let c=(G.courses||{})[t.id];let hc=heroCertFor(t.id);let hs=(G.heroStudy&&G.heroStudy.training===t.id)?G.heroStudy:null;let other=(G.heroStudy&&G.heroStudy.training!==t.id)?G.heroStudy:null;
+  let st=locked?('🔒 Débloqué au niveau '+t.minLevel+' du studio'):(hc?('✅ Certificat obtenu — Jour '+hc.day+' • N° '+hc.certNo):(hs?('📖 En cours — encore '+hs.daysLeft+' jour(s) sur '+hs.total):(other?('📖 Tu suis déjà '+(trainingById(other.training)||{name:'une formation'}).name):'À faire')));
+  let btn='';
+  if(!locked){
+   if(hc)btn='<p class="small">✅ Tu peux enseigner cette formation.</p>';
+   else if(hs){let pct3=Math.round((hs.total-hs.daysLeft)/hs.total*100);btn='<div class="bar blue"><i style="width:'+pct3+'%"></i></div><p class="small">La formation avance de 1 jour à chaque « Jour suivant ».</p>'}
+   else if(other)btn='<button class="ghost" onclick="toast(\'📖 Termine d\u2019abord ta formation en cours.\')">📖 Suivre la formation</button>';
+   else btn='<button class="primary" onclick="startHeroStudy(\''+t.id+'\')">📖 Suivre la formation — '+t.price+' $ • '+t.days+' jours</button>';
+  }
+  return '<div class="card"><h3>'+t.icon+' '+t.name+'</h3><p class="small">Certificat : <b>'+t.cert+'</b> • Dans la vraie vie : '+t.real+'</p><p>'+st+'</p>'+(c?'<p class="small">🎓 Session en cours : '+c.students+' élèves • J-'+c.daysLeft+'</p>':'')+btn+'</div>';
+ }).join('');
+ let certs=G.heroCerts||[];
+ h+='<div class="card"><h3>🎓 Mes certificats</h3><p class="small">'+certs.length+' certificat(s) à ton nom.</p></div>';
+ if(!certs.length){h+='<div class="card"><p>Aucun certificat pour l\u2019instant — suis une formation pour en gagner un !</p></div>'}
+ else{h+=certs.map(heroCertCard).join('')}
  box.innerHTML=h;
 }
 
@@ -1709,7 +1767,7 @@ function renderJournal(){let box=document.getElementById('journalScreen');if(!bo
  box.innerHTML='<p class="small">'+G.log.length+' entrée(s) — la plus récente en haut.</p>'+days.map(g=>'<div class="jday">📅 Jour '+g.d+'</div>'+g.items.map(e=>'<div class="jline"><span class="jico">'+(LOG_CATS[e.c]||'🗒️')+'</span><span>'+e.t+'</span></div>').join('')).join('')}
 
 /* --- Navigation --- */
-const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer",siteDetail:"🔎 Détail du site",appDetail:"📱 Détail de l'application",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",market:"🎯 Marché",workshop:"🔧 Atelier",shop:"🛒 Boutique",darkweb:"🌑 Darkweb",messages:"💬 Messagerie",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio",featureDetail:"🎮 Détail de la fonctionnalité",features:"🎮 Fonctionnalités du jeu",sitesapps:"🌐 Sites et Apps",depannage:"🔧 Dépannage",trainings:"🎓 Formations",training:"🎓 Formation",certificates:"🎓 Mes certificats"};
+const TITLES={sites:"🖥️ Mes sites",create:"➕ Créer",siteDetail:"🔎 Détail du site",appDetail:"📱 Détail de l'application",team:"👥 Équipe",stats:"📊 Statistiques",contracts:"📋 Contrats",market:"🎯 Marché",workshop:"🔧 Atelier",shop:"🛒 Boutique",darkweb:"🌑 Darkweb",messages:"💬 Messagerie",office:"🏢 Bureau & outils",help:"💡 Aide & astuces",journal:"📖 Journal du studio",featureDetail:"🎮 Détail de la fonctionnalité",features:"🎮 Fonctionnalités du jeu",sitesapps:"🌐 Sites et Apps",depannage:"🔧 Dépannage",trainings:"🎓 Formations",training:"🎓 Formation",certificates:"🎓 Promotions diplômées",myformations:"🎓 Mes formations"};
 let currentTab='sites';
 let NAV=[]; // pile des écrans visités : un « Retour » revient en un tap sur l'écran d'origine
 function showTab(id,btn,mode){
@@ -1717,12 +1775,12 @@ function showTab(id,btn,mode){
  if(mode!=='back'&&mode!=='top'&&id!==currentTab){NAV.push(currentTab);if(NAV.length>20)NAV.shift()}
  if(mode==='top')NAV=[];
  currentTab=id;
- ['sites','sitesapps','depannage','trainings','training','certificates','create','siteDetail','appDetail','team','stats','contracts','workshop','market','office','help','journal','shop','darkweb','messages','featureDetail','features'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
+ ['sites','sitesapps','depannage','trainings','training','certificates','myformations','create','siteDetail','appDetail','team','stats','contracts','workshop','market','office','help','journal','shop','darkweb','messages','featureDetail','features'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!=id));
  document.querySelectorAll('#mainNav .navbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
  document.querySelectorAll('.bnavbtn').forEach(b=>b.classList.toggle('on',b.dataset.tab==id));
  document.getElementById('screenTitle').textContent=TITLES[id]||'Web Studio Tycoon';
  closeMenu();
- if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='appDetail')renderAppDetail(); if(id=='journal')renderJournal(); if(id=='workshop')renderWorkshop(); if(id=='shop')renderShop(); if(id=='darkweb')renderDarkweb(); if(id=='messages')renderMessages(); if(id=='trainings')renderTrainings(); if(id=='training')renderTraining(selectedTrainingId); if(id=='certificates')renderCertificates();
+ if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='appDetail')renderAppDetail(); if(id=='journal')renderJournal(); if(id=='workshop')renderWorkshop(); if(id=='shop')renderShop(); if(id=='darkweb')renderDarkweb(); if(id=='messages')renderMessages(); if(id=='trainings')renderTrainings(); if(id=='training')renderTraining(selectedTrainingId); if(id=='certificates')renderCertificates(); if(id=='myformations')renderMyFormations();
  window.scrollTo(0,0)}
 function showTabTop(id){showTab(id,null,'top')}
 function goBack(){let p=NAV.pop();if(!p||p===currentTab)p='sites';showTab(p,null,'back')}
@@ -2025,6 +2083,7 @@ function nextDay(){
   else if(G.active.left<0){let _lc=G.active.client;G.rep=Math.max(0,G.rep-15);G.active=null;addLog("Contrat perdu pour retard : le client a annulé, -15 réputation. Les délais, c'est sacré…",'contrat');sendClientMsg(_lc,'plainte',"Je suis très déçu, le délai n'a pas été respecté… Je ne reviendrai pas. 😠");toast("⏰ Trop tard ! Contrat perdu, -15 réputation")}
   if(G.active&&Math.random()<0.25)triggerImprevu();}
  if(G.courses){if(!G.trainStats)G.trainStats={};Object.keys(G.courses).forEach(function(id){let c=G.courses[id];if(!c)return;c.daysLeft--;if(c.daysLeft<=0){let t=trainingById(id);let gain=t.price*c.students;G.money+=gain;G.rep+=10;let st=G.trainStats[id]||(G.trainStats[id]={cohorts:0,students:0,earned:0});st.cohorts++;st.students+=c.students;st.earned+=gain;if(!Array.isArray(G.certificates))G.certificates=[];G.certificates.unshift({training:id,day:G.day,students:c.students});addLog('Formation '+t.name+' terminée : '+c.students+' élèves ont eu leur certificat '+t.cert+' — +'+gain+' $ et +10 réputation !','formation');sfx('coin');toast('🎓 Formation '+t.name+' terminée ! +'+gain+' $ et +10 réputation');delete G.courses[id]}})}
+ if(G.heroStudy){let hs=G.heroStudy;hs.daysLeft--;if(hs.daysLeft<=0){let t=trainingById(hs.training);G.heroStudy=null;if(t){if(!Array.isArray(G.heroCerts))G.heroCerts=[];if(typeof G.certSeq!=="number")G.certSeq=0;G.certSeq++;let no='WST-'+String(G.certSeq).padStart(3,'0');G.heroCerts.unshift({training:hs.training,day:G.day,certNo:no});G.rep+=5;addLog('🎓 Certificat '+t.cert+' obtenu ! Tu as terminé '+t.name+' — Jour '+G.day+', N° '+no+'. Tu peux maintenant enseigner cette formation.','formation');sfx('coin');toast('🎓 Certificat '+t.cert+' obtenu ! +5 réputation')}}}
  let inc=tickSites()+tickApps(); tickRivals();
  let sponsor=sponsorIncome();if(sponsor>0){G.money+=sponsor;addLog("Sponsors : +"+sponsor+" $ aujourd'hui grâce à ta réputation ("+G.rep+"). C'est de l'argent qui tombe chaque matin.",'argent')}
  if(Math.random()<.35)G.offers=genOffers(level());
@@ -2160,7 +2219,7 @@ function render(){
  } else ab.innerHTML=`<div class="card"><h3>💤 Aucun contrat en cours</h3><p class="small">Puissance : ${power()} • Salaires/jour : ${salaries()} $ • Contrats réussis : ${G.done} • Revenus de tes sites au total : ${G.siteIncomeTotal} $ • Sponsors : +${sponsorIncome()} $ / jour</p><div class="bar"><i style="width:${Math.min(100,G.rep/10)}%"></i></div><p class="small">Progression vers la victoire : ${G.rep} / 1 000 réputation</p></div>`;
  document.getElementById('contracts').innerHTML=G.offers.map(c=>{
   let locked=c.min>level();return `<div class="card"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:34px">${c.emoji}</div><div style="flex:1"><h3>${c.t}</h3><p>Client : ${c.client}<br>💰 ${c.pay} $ • ⭐ +${c.rep} rép. • ⏳ ${c.days} jours • Travail : ${c.work}</p>${c.cat=='depannage'?'<p class="small">🔧 Dépannage — mission de maintenance</p>':''}${locked?`<p class="small">🔒 Débloqué au studio niveau ${c.min}</p>`:''}</div></div><button class="primary" ${locked||G.active?'disabled':''} onclick="accept(${c.id})">${G.active?'Déjà un contrat en cours':'✅ Prendre ce contrat'}</button><button ${locked||G.active||c.negotiated?'disabled':''} onclick="negotiateOffer(${c.id})">${c.negotiated?'✅ Négocié : '+c.pay+' $':'💬 Négocier — chance '+negoChance()+' %'}</button>${c.negotiated?'':`<p class="small">💬 Négocier peut ajouter +25 à 40 % au prix — mais si le client refuse, il retire son offre. La chance dépend de ta réputation.</p>`}</div>`}).join('');
- renderSites();renderApps();renderDepannage();renderHomeTiles();renderTrainings();if(selectedTrainingId)renderTraining(selectedTrainingId);renderCreate();renderMarket();renderTeam();renderUpgrades();renderStats();renderHelp();renderJournal();renderShop();renderDarkweb();renderMessages();renderFeaturesHub();
+ renderSites();renderApps();renderDepannage();renderHomeTiles();renderTrainings();renderMyFormations();if(selectedTrainingId)renderTraining(selectedTrainingId);renderCreate();renderMarket();renderTeam();renderUpgrades();renderStats();renderHelp();renderJournal();renderShop();renderDarkweb();renderMessages();renderFeaturesHub();
  if(selectedSiteId)renderSiteDetail();
  if(selectedAppId)renderAppDetail();
  if(currentTab=='workshop')renderWorkshop();
