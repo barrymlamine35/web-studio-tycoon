@@ -371,6 +371,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
   <div class="pava" id="playerAvatar"></div>
   <div class="pinfo">
    <h2 id="playerName">Toi</h2>
+   <div class="small" id="studioNameLine" style="margin-top:2px">🏢 Mon studio</div>
    <span class="lvlbadge" id="pLevel">Studio niveau 1</span>
    <div class="bar pink" style="margin:8px auto 0;max-width:180px"><i id="lvlBar" style="width:0%"></i></div>
    <div class="moneyrow">
@@ -384,6 +385,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
  <div id="localSaveBox" style="margin:0 4px 12px">
   <button class="ghost" style="width:100%;min-height:44px" onclick="wstExportSave()">💾 Exporter ma partie</button>
   <button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="document.getElementById('saveFileInput').click()">📂 Importer ma partie</button>
+  <button class="ghost" style="width:100%;margin-top:8px;min-height:44px" onclick="changeStudioName()">🏢 Nom du studio</button>
   <input type="file" id="saveFileInput" accept=".json,application/json" style="display:none" onchange="wstImportFile(this)">
  </div>
  <nav id="mainNav">
@@ -941,7 +943,7 @@ function taskGain(e,tid){return 8+Math.round(taskSkillVal(e,tid)/2);}
 /* --- État de la partie --- */
 let G, selectedSiteId=null, selectedAppId=null, selSeg='blogs', selType='contenu', createStep=1, createMode='site', selAppType='mobile', selAppPlatform='android';
 function freshRivals(){return RIVAL_DEF.map(r=>({...r}))}
-function fresh(){return{day:1,money:750000000,rep:0,dev:6,design:4,team:[],active:null,offers:genOffers(1,true),office:0,tool:0,done:0,won:false,coins:1000000,musicOn:false,courses:{},trainStats:{},stock:{},shopPrices:{},shopPrev:{},messages:[{id:Date.now()+1,client:'🎮 Web Studio',kind:'welcome',text:"Salut patron, c'est Pixel ! 🐾 Bienvenue dans ta messagerie — c'est ici que tes clients t'écrivent : quand tu prends un contrat, quand tu publies un site ou une app, et quand tu livres un PC. Réponds-leur avec le sourire, ça rapporte de la réputation. Et s'il y a un imprévu, tu pourras renégocier le prix ici même. — L'équipe du studio",from:'client',day:1,read:false},{id:Date.now()+2,client:CLIENTS[0],kind:'inquiry',text:MSG_INQUIRIES[0].text,from:'client',day:1,read:false,inquiry:'site'}],msgSeeded:true,
+function fresh(){return{day:1,studioName:"Mon studio",money:750000000,rep:0,dev:6,design:4,team:[],active:null,offers:genOffers(1,true),office:0,tool:0,done:0,won:false,coins:1000000,musicOn:false,courses:{},trainStats:{},stock:{},shopPrices:{},shopPrev:{},messages:[{id:Date.now()+1,client:'🎮 Web Studio',kind:'welcome',text:"Salut patron, c'est Pixel ! 🐾 Bienvenue dans ta messagerie — c'est ici que tes clients t'écrivent : quand tu prends un contrat, quand tu publies un site ou une app, et quand tu livres un PC. Réponds-leur avec le sourire, ça rapporte de la réputation. Et s'il y a un imprévu, tu pourras renégocier le prix ici même. — L'équipe du studio",from:'client',day:1,read:false},{id:Date.now()+2,client:CLIENTS[0],kind:'inquiry',text:MSG_INQUIRIES[0].text,from:'client',day:1,read:false,inquiry:'site'}],msgSeeded:true,
  sites:[],apps:[],rivals:freshRivals(),defense:0,loyalty:0,cdMarket:0,cdAggress:0,log:[],siteIncomeTotal:0,visitorsTotal:0,visitorHist:[],adOffers:genAdOffers(),trafficOffers:genTrafficOffers()}}
 function defaultTasks(q){return{design:Math.min(90,Math.round(q*0.9)),layout:Math.min(85,Math.round(q*0.8)),code:Math.min(88,Math.round(q*0.85)),content:Math.min(80,Math.round(q*0.75)),seo:Math.min(70,Math.round(q*0.55)),social:Math.min(65,Math.round(q*0.5)),mkt:Math.min(70,Math.round(q*0.6))}}
 function ensure(){
@@ -954,6 +956,7 @@ function ensure(){
  if(typeof G.cdAggress!=="number")G.cdAggress=0;
  if(typeof G.coins!=="number")G.coins=0;
  if(typeof G.musicOn!=="boolean")G.musicOn=false;
+ if(typeof G.studioName!=="string"||!G.studioName)G.studioName="Mon studio";
  if(!G.stock||typeof G.stock!=='object')G.stock={};
  if(!G.shopPrices||typeof G.shopPrices!=='object')G.shopPrices={};
  if(!G.shopPrev||typeof G.shopPrev!=='object')G.shopPrev={};
@@ -1968,6 +1971,7 @@ function trainMember(seed,cur){
 function buyOffice(i){let o=OFFICES[i];if(G.money<o.cost){toast("💰 Il te faut "+o.cost+" $");return}G.money-=o.cost;G.office=i;addLog("Nouveau bureau : "+o.name+" — ton équipe peut maintenant accueillir jusqu'à "+(o.max+1)+" personnes !",'studio');save();render();toast("🏢 Nouveau bureau : "+o.name)}
 function buyTool(i){let o=TOOLS[i];if(G.money<o.cost){toast("💰 Il te faut "+o.cost+" $");return}G.money-=o.cost;G.tool=i;addLog("Nouvel outil : "+o.name+" (+"+o.bonus+" puissance). Tu travailles plus vite maintenant !",'studio');save();render();toast("🛠️ Nouvel outil : "+o.name)}
 function resetGame(){if(confirm("Recommencer une nouvelle partie ?")){G=fresh();selectedSiteId=null;save();render();showTab('sites',null,'top');toast("Nouvelle partie ! Bonne chance 🚀")}}
+function changeStudioName(){var cur=(typeof G.studioName==="string"&&G.studioName)?G.studioName:"Mon studio";var v=prompt("Nom de ton studio :",cur);if(v===null)return;v=String(v).trim();if(v.length>30)v=v.slice(0,30);if(!v)v="Mon studio";G.studioName=v;save();render();toast("Ton studio s'appelle maintenant « "+v+" » !");}
 
 /* --- Rendu général --- */
 /* --- Aide : une seule source, affichee dans le Menu et dans l'ecran Aide --- */
@@ -2044,6 +2048,7 @@ function render(){
  document.getElementById('sRep').textContent=G.rep;
  document.getElementById('sLevel').textContent=level();
  document.getElementById('pLevel').textContent='Studio niveau '+level()+' • '+OFFICES[G.office].name;
+ let _sn=document.getElementById('studioNameLine');if(_sn)_sn.textContent='🏢 '+(G.studioName||'Mon studio');
  document.getElementById('lvlBar').style.width=((G.rep%110)/110*100)+'%';
  document.getElementById('sVisitors').textContent=totalVisitors();
  let _sv=document.getElementById('sVisitorsSide');if(_sv)_sv.textContent=totalVisitors();

@@ -146,3 +146,25 @@
 @media (prefers-reduced-motion:reduce){
   #defenseInfo .lvlSegs i,#marketActions .actCard{transition:none}
 }
+
+/* ---------- Compact téléphone : tailles adaptées au jeu actuel (v22) ---------- */
+/* Les tailles de ce fichier sont ramenées à celles du jeu : base 11 px, cartes 8 px, titres 14 px, boutons -4 px. */
+@media (max-width:480px){
+  #tab-market .card{padding:8px}
+  #tab-market .card h3{font-size:14px;margin-bottom:10px;padding-bottom:8px}
+  #marketActions .actCard{font-size:10px;padding:14px 2px}
+  #marketActions .actCard b{font-size:10px}
+  #marketActions .actCard .aprice{font-size:9px}
+  #marketActions .actCard p{font-size:9px}
+  #marketActions .actCard .small{font-size:8px}
+  #defenseInfo{margin-top:12px;gap:12px}
+  #defenseInfo .lvlTop{font-size:10px;margin-bottom:6px}
+  #defenseInfo .lvlTop span:last-child{font-size:8px}
+  #defenseInfo .small{font-size:8px}
+  #segments .segTop{font-size:10px}
+  #segments .segBadge{font-size:8px}
+  #segments p{font-size:9px}
+  #tab-market .rRank{font-size:9px}
+  #tab-market .rName{font-size:10px}
+  #tab-market .rScore{font-size:10px}
+}
