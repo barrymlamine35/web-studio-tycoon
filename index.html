@@ -363,7 +363,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
 .versionBadge{text-align:center;margin:10px 0 0;color:#94A3B8}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Caveat:wght@600&display=swap" rel="stylesheet"><link rel="stylesheet" href="wst-v19.css"><link rel="stylesheet" href="wst-v20-2.css"></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Caveat:wght@600&display=swap" rel="stylesheet"><link rel="stylesheet" href="wst-v19.css"><link rel="stylesheet" href="wst-v20-2.css">
+<link rel="stylesheet" href="wst-v21-market.css"></head><body>
 <div class="app">
 <aside class="side">
  <div class="player">
@@ -388,6 +389,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
  <nav id="mainNav">
   <button class="primary" style="width:100%;min-height:48px;font-size:16px" onclick="openFeaturesPage()">🎮 Fonctionnalités du jeu</button>
   <button class="ghost" id="musicBtn" style="width:100%;min-height:44px;margin-top:8px" onclick="musicToggle()">🔇 Musique : off</button>
+  <button class="danger" style="width:100%;min-height:44px;margin-top:8px" onclick="resetGame()">🗑️ Réinitialiser la partie</button>
   <p class="small versionBadge">✨ Version 1.0 — première version jouable</p>
  </nav>
 </aside>

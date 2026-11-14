@@ -1,0 +1,148 @@
+/* ============================================================
+   wst-v21-market.css — Écran Marché : « Attaquer et se défendre »
+   + « Les studios rivaux » + « Tes parts de marché »
+   Style sobre : surfaces unies, filets fins, un seul accent.
+   Charger APRÈS wst-v19.css et wst-v20.css. Ne modifie aucune logique.
+   ============================================================ */
+
+:root{
+  --mk-surface:#131a29;
+  --mk-surface-2:#182134;
+  --mk-line:rgba(226,232,240,.09);
+  --mk-line-2:rgba(226,232,240,.16);
+  --mk-ink:#e6ebf3;
+  --mk-ink-2:#9aa6b8;
+  --mk-ink-3:#637086;
+  --mk-accent:#7dd3c0;          /* un seul accent, vert d'eau doux */
+  --mk-warn:#e7b26a;            /* prix : ocre, pas de néon */
+  --mk-radius:12px;
+}
+
+/* Les cartes de cet écran : plates, sans verre ni lueur */
+#tab-market .card{
+  background:var(--mk-surface);
+  border:1px solid var(--mk-line);
+  border-radius:16px;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  padding:18px 16px 16px;
+}
+#tab-market .card h3{
+  font:600 15px/1.2 Inter,system-ui,sans-serif;
+  letter-spacing:.01em;
+  color:var(--mk-ink);
+  margin:0 0 14px;
+  padding:0 0 12px;
+  border-bottom:1px solid var(--mk-line);
+  background:none;
+  text-shadow:none;
+}
+#tab-market .card h3::before{content:none}
+
+/* ---------- Actions : des lignes, pas des boutons-cartes ---------- */
+#marketActions{display:flex;flex-direction:column;border-top:1px solid var(--mk-line)}
+#marketActions .actCard{
+  -webkit-appearance:none;appearance:none;
+  display:grid;grid-template-columns:1fr auto;align-items:baseline;column-gap:12px;row-gap:3px;
+  width:100%;text-align:left;
+  background:transparent;color:var(--mk-ink);
+  border:0;border-bottom:1px solid var(--mk-line);
+  border-radius:0;box-shadow:none;
+  padding:14px 2px;margin:0;min-height:0;
+  font:500 14px/1.3 Inter,system-ui,sans-serif;
+  cursor:pointer;transition:background .15s ease;
+}
+#marketActions .actCard:last-child{border-bottom:0}
+#marketActions .actCard:active{background:rgba(226,232,240,.04)}
+#marketActions .actCard b{font:600 14px/1.3 Inter,system-ui,sans-serif;color:var(--mk-ink);grid-column:1}
+#marketActions .actCard .aprice{
+  grid-column:2;grid-row:1;
+  font:600 13px Inter,system-ui,sans-serif;color:var(--mk-warn);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+#marketActions .actCard p{
+  grid-column:1 / -1;margin:0;color:var(--mk-ink-2);font:400 13px/1.45 Inter,system-ui,sans-serif;
+}
+#marketActions .actCard .small{grid-column:1 / -1;color:var(--mk-ink-3);font-size:12px}
+#marketActions .actCard:disabled{opacity:.42;cursor:not-allowed}
+#marketActions .actCard:disabled .aprice{color:var(--mk-ink-3)}
+
+/* ---------- Niveaux (défense / fidélisation) : 5 crans nets ---------- */
+#defenseInfo{margin-top:18px;display:flex;flex-direction:column;gap:18px}
+#defenseInfo .lvlRow{margin:0}
+#defenseInfo .lvlTop{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font:600 14px Inter,system-ui,sans-serif;color:var(--mk-ink);margin-bottom:8px;
+}
+#defenseInfo .lvlTop span:last-child{
+  font:500 12px Inter,system-ui,sans-serif;color:var(--mk-ink-2);font-variant-numeric:tabular-nums;
+}
+#defenseInfo .lvlSegs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:0}
+#defenseInfo .lvlSegs i{
+  display:block;height:6px;border-radius:2px;margin:0;
+  background:rgba(226,232,240,.08);
+  box-shadow:none;
+  transition:background .3s ease;
+}
+#defenseInfo .lvlSegs i.on{background:var(--mk-accent)}
+#defenseInfo .lvlSegs i.onL{background:var(--mk-warn)}
+#defenseInfo .small{color:var(--mk-ink-3);font-size:12px;line-height:1.45}
+
+/* ---------- Parts de marché ---------- */
+#segments .segRow{
+  -webkit-appearance:none;appearance:none;
+  display:block;width:100%;text-align:left;
+  background:transparent;border:0;border-bottom:1px solid var(--mk-line);
+  border-radius:0;box-shadow:none;margin:0;padding:12px 2px;min-height:0;
+  color:var(--mk-ink);cursor:pointer;
+}
+#segments .segRow:last-child{border-bottom:0}
+#segments .segTop{display:flex;align-items:center;gap:8px;font:500 14px Inter,system-ui,sans-serif}
+#segments .segName{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#segments .segPct{font-variant-numeric:tabular-nums;font-weight:600;color:var(--mk-ink)}
+#segments .segBadge{
+  font:500 11px Inter,system-ui,sans-serif;color:var(--mk-ink-2);
+  border:1px solid var(--mk-line-2);border-radius:999px;padding:2px 8px;white-space:nowrap;
+}
+#segments .segBar{display:block;height:4px;margin-top:9px;border-radius:2px;background:rgba(226,232,240,.08);overflow:hidden}
+#segments .segBar i{display:block;height:100%;background:var(--mk-accent);border-radius:2px}
+#segments p{color:var(--mk-ink-2);font-size:13px}
+#segments b{color:var(--mk-ink);font-weight:600}
+#segments .bar.share{height:6px;background:rgba(226,232,240,.08);border-radius:3px;box-shadow:none}
+#segments .bar.share i{background:var(--mk-accent);border-radius:3px}
+
+/* ---------- Rivaux : classement sobre ---------- */
+#rivalsList{display:flex;flex-direction:column}
+#tab-market .rivalRow{
+  display:grid;grid-template-columns:22px 1fr 44px;grid-template-rows:auto auto;
+  column-gap:12px;row-gap:6px;align-items:center;
+  padding:12px 2px;border-bottom:1px solid var(--mk-line);
+  background:transparent;border-radius:0;box-shadow:none;margin:0;
+}
+#tab-market .rivalRow:last-child{border-bottom:0}
+#tab-market .rRank{
+  grid-row:1 / 3;font:600 13px Inter,system-ui,sans-serif;color:var(--mk-ink-3);
+  font-variant-numeric:tabular-nums;text-align:center;
+}
+#tab-market .rivalRow:first-child .rRank{color:var(--mk-warn)}
+#tab-market .rName{
+  font:500 14px Inter,system-ui,sans-serif;color:var(--mk-ink);
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#tab-market .rScore{
+  grid-row:1 / 3;grid-column:3;text-align:right;
+  font:600 14px Inter,system-ui,sans-serif;color:var(--mk-ink);font-variant-numeric:tabular-nums;
+}
+#tab-market .rBar{
+  grid-column:2;height:3px;border-radius:2px;background:rgba(226,232,240,.08);overflow:hidden;display:block;
+}
+#tab-market .rBar i{display:block;height:100%;background:var(--mk-ink-3);border-radius:2px}
+#tab-market .rivalRow:first-child .rBar i{background:var(--mk-warn)}
+
+/* Rien de tapageur au survol / au toucher */
+#tab-market .card:hover,#tab-market .actCard:hover{transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  #defenseInfo .lvlSegs i,#marketActions .actCard{transition:none}
+}
