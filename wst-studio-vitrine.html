@@ -97,6 +97,16 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
 .hist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
 .hist div{font-size:13px;color:var(--mut);background:rgba(255,255,255,.035);border-radius:10px;padding:8px 10px}
 .hist b{color:var(--txt)}
+/* ---------- Certificats 3D ---------- */
+.cert{position:absolute;width:190px;height:250px;margin:-125px 0 0 -95px;border-radius:14px;background:linear-gradient(180deg,#fdf6e3,#f5e6c8);border:2px solid #d4af37;box-shadow:0 18px 40px rgba(0,0,0,.5);padding:10px 12px;backface-visibility:hidden;cursor:pointer;overflow:hidden;color:#1e293b;text-align:center}
+.cert .certSeal{font-size:22px;line-height:1.2}
+.cert .certTitle{font-size:13px;font-weight:800;letter-spacing:2px;color:#b8860b;margin:2px 0}
+.cert h3{margin:6px 0 2px;font-size:13px;color:#1e293b}
+.cert .dipl{font-size:11px;color:#475569;font-weight:600}
+.cert .who{font-size:11px;color:#334155;margin-top:6px}
+.cert .when{font-size:11px;color:#475569}
+.cert .note{font-size:8px;color:#94a3b8;margin-top:6px;line-height:1.3}
+.cert.sel{box-shadow:0 0 0 2px rgba(251,191,36,.5),0 18px 40px rgba(0,0,0,.5)}
 /* ---------- Compact petits ecrans (v24 : Samsung 360 px) ---------- */
 @media (max-width:480px){
   .wrap{padding:10px 8px 26px}
@@ -115,6 +125,12 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
   .ctrl button{min-height:44px;min-width:48px;font-size:16px}
   .ctrl button.wide{padding:0 12px;font-size:13px}
   .detail{margin-top:8px;padding:8px 10px;font-size:12px}
+  .cert{width:150px;height:210px;margin:-105px 0 0 -75px;padding:8px 10px;border-radius:12px}
+  .cert .certSeal{font-size:18px}
+  .cert .certTitle{font-size:11px}
+  .cert h3{font-size:11px;margin:4px 0 1px}
+  .cert .dipl,.cert .who,.cert .when{font-size:10px}
+  .cert .note{font-size:8px;margin-top:4px}
 }
 @media (prefers-reduced-motion:reduce){.panel,.banner.show{animation:none}.banner.show{opacity:1;transform:translate(-50%,-50%)}}
 </style>
@@ -135,6 +151,7 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
     <button class="on" data-tab="vitrine">Vitrine 3D</button>
     <button data-tab="victoires">Victoires</button>
     <button data-tab="stats">Stats & classement</button>
+    <button data-tab="certificats">Certificats</button>
   </nav>
 
   <!-- ===== VITRINE 3D ===== -->
@@ -185,6 +202,19 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
       <div class="rank" id="rank"></div>
     </div>
   </section>
+
+  <!-- ===== CERTIFICATS ===== -->
+  <section class="panel" id="tab-certificats">
+    <div class="card">
+      <h2>🎓 Tes certificats</h2>
+      <div class="stage" id="certStage"><div class="ring" id="certRing"></div><div class="floor"></div></div>
+      <div class="ctrl">
+        <button id="certPrev" aria-label="Précédent">‹</button>
+        <button id="certNext" aria-label="Suivant">›</button>
+      </div>
+      <div class="detail" id="certDetail"><span class="muted">Glisse pour feuilleter tes certificats.</span></div>
+    </div>
+  </section>
 </div>
 
 <canvas id="fx"></canvas>
@@ -218,7 +248,7 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
       { name: 'Forge du Sud', score: 530 }, { name: 'Pixel Rivière', score: 419 },
       { name: 'Atelier Caramel', score: 322 }, { name: 'Studio Brume', score: 229 }
     ],
-    me: 'Mon studio', myScore: 450, popTotal: 61 + 42 + 18 + 33, defense: 0, loyalty: 0, victories: []
+    me: 'Mon studio', myScore: 450, popTotal: 61 + 42 + 18 + 33, defense: 0, loyalty: 0, victories: [], heroCerts: []
   };
   function siteVisitorsOf(s) {
     var cap = HOST_CAPS[typeof s.hosting === 'number' ? s.hosting : 0] || 0;
@@ -255,13 +285,15 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
       return { money: num(G.money), day: num(G.day) || 1, sites: sites, rivals: rivals,
                me: G.studioName || G.name || 'Mon studio', myScore: playerScoreOf(G, G.sites || []), popTotal: popTotal,
                defense: num(G.defense), loyalty: num(G.loyalty),
-               victories: (G.victories || []).filter(function (w) { return w && w.title; }).slice(0, 8).map(function (w) { return { title: String(w.title), sub: String(w.sub || ''), day: num(w.day) || 1 }; }) };
+               victories: (G.victories || []).filter(function (w) { return w && w.title; }).slice(0, 8).map(function (w) { return { title: String(w.title), sub: String(w.sub || ''), day: num(w.day) || 1 }; }),
+               heroCerts: (G.heroCerts || []).filter(function (c) { return c && c.training; }).map(function (c) { return { training: String(c.training), day: num(c.day) || 1, certNo: String(c.certNo || ''), name: String(c.name || '') }; }) };
     } catch (e) { return DEMO; }
   }
 
   var data = readData();
   function winKey(w) { return w ? (w.title + '|' + (w.day || 0) + '|' + (w.sub || '')) : ''; }
   var prevWinKey = data.victories && data.victories.length ? winKey(data.victories[0]) : '';
+  var prevCertKey = (data.heroCerts || []).map(certKey).join(';');
 
   /* ---------- En-tête ---------- */
   function renderHeader() {
@@ -332,6 +364,72 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
     $('openSite').onclick = function () { var s = data.sites[sel]; if (s) celebrate('🌐 ' + s.name + ' en ligne !', 'Bien joué, patron', 'small'); };
     /* rotation automatique lente tant qu'on ne touche pas */
     (function auto() { if (!drag && data.sites.length > 1 && $('tab-vitrine').classList.contains('on')) spinTo(sel + 1); setTimeout(auto, 4200); })();
+  }
+
+
+  /* ---------- Certificats 3D ---------- */
+  var CERT_MAP = {cyber:{name:'Formation Cybersécurité',cert:'CompTIA Security+',icon:'🛡️'},network:{name:'Formation Networking',cert:'CompTIA Network+',icon:'🌐'},cloud:{name:'Formation Cloud',cert:'AWS Solutions Architect',icon:'☁️'},linux:{name:'Formation Admin Linux',cert:'LPIC-1 / Linux+',icon:'🐧'},hacking:{name:'Formation Hacking',cert:'CEH (Certified Ethical Hacker)',icon:'💻'},trading:{name:'Formation Trading',cert:'CMT — Chartered Market Technician',icon:'📈'}};
+  var certSel = 0, certAngle = 0, certDrag = null;
+  function certKey(c) { return c ? (c.training + '|' + (c.certNo || '') + '|' + (c.day || 0)) : ''; }
+  function certOf(c) { return CERT_MAP[c.training] || { name: c.training, cert: '', icon: '🎓' }; }
+  function renderCertStage() {
+    var ring = $('certRing'), certs = data.heroCerts || [], n = certs.length;
+    if (!n) {
+      ring.innerHTML = '';
+      $('certDetail').innerHTML = '<span class="muted">Aucun certificat pour l\u2019instant — suis une formation pour en gagner un !</span>';
+      $('certPrev').disabled = $('certNext').disabled = true;
+      return;
+    }
+    $('certPrev').disabled = $('certNext').disabled = false;
+    if (certSel >= n) certSel = n - 1;
+    var R = Math.min(200, Math.max(150, n * 40)), step = 360 / n;
+    ring.innerHTML = certs.map(function (c, i) {
+      var m = certOf(c), nm = c.name || 'Toi';
+      return '<div class="cert" data-i="' + i + '" style="transform:rotateY(' + (i * step) + 'deg) translateZ(' + R + 'px)">' +
+        '<div class="certSeal">🎓</div><div class="certTitle">CERTIFICAT</div>' +
+        '<h3>' + esc(m.icon + ' ' + m.name) + '</h3><div class="dipl">' + esc(m.cert) + '</div>' +
+        '<div class="who">décerné à <b>' + esc(nm) + '</b></div>' +
+        '<div class="when">Jour ' + fmt(c.day) + ' • N° ' + esc(c.certNo) + '</div>' +
+        '<div class="note">Certificat fictif — créé uniquement pour le jeu Web Studio Tycoon, sans valeur réelle.</div></div>';
+    }).join('');
+    ring.querySelectorAll('.cert').forEach(function (el) {
+      el.addEventListener('click', function () { if (!el.dataset.moved) spinCertTo(+el.dataset.i); });
+    });
+    spinCertTo(certSel);
+  }
+  function spinCertTo(i) {
+    var n = (data.heroCerts || []).length; if (!n) return;
+    certSel = ((i % n) + n) % n;
+    certAngle = -certSel * (360 / n);
+    $('certRing').style.transform = 'rotateX(' + tiltDeg() + 'deg) rotateY(' + certAngle + 'deg)';
+    document.querySelectorAll('.cert').forEach(function (el, k) { el.classList.toggle('sel', k === certSel); });
+    updateCertDetail();
+  }
+  function updateCertDetail() {
+    var c = (data.heroCerts || [])[certSel]; if (!c) return;
+    var m = certOf(c);
+    $('certDetail').innerHTML = '<span><b>' + (certSel + 1) + ' / ' + data.heroCerts.length + '</b> <span class="muted">· ' + esc(m.name) + '</span></span><span>' + esc(m.cert) + '</span>';
+  }
+  function bindCertStage() {
+    var st = $('certStage'), startX = 0, startAng = 0, moved = false, dxTotal = 0;
+    st.addEventListener('pointerdown', function (e) { certDrag = true; startX = e.clientX; startAng = certAngle; moved = false; dxTotal = 0; });
+    window.addEventListener('pointermove', function (e) {
+      if (!certDrag || !(data.heroCerts || []).length) return;
+      var dx = e.clientX - startX; dxTotal = dx; if (Math.abs(dx) > 6) moved = true;
+      certAngle = startAng + dx * 0.4;
+      $('certRing').style.transition = 'none';
+      $('certRing').style.transform = 'rotateX(' + tiltDeg() + 'deg) rotateY(' + certAngle + 'deg)';
+    });
+    window.addEventListener('pointerup', function () {
+      if (!certDrag) return; certDrag = false; $('certRing').style.transition = '';
+      if (moved) {
+        if (Math.abs(dxTotal) > 40) { spinCertTo(certSel + (dxTotal < 0 ? 1 : -1)); }
+        else { spinCertTo(certSel); }
+        document.querySelectorAll('.cert').forEach(function (el) { el.dataset.moved = '1'; setTimeout(function () { delete el.dataset.moved; }, 250); });
+      }
+    });
+    $('certPrev').onclick = function () { spinCertTo(certSel - 1); };
+    $('certNext').onclick = function () { spinCertTo(certSel + 1); };
   }
 
   /* ---------- Classement & stats ---------- */
@@ -438,6 +536,8 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
   function refresh() {
     data = readData();
     renderHeader(); renderStage(); renderStats(); renderHist();
+    var ck = (data.heroCerts || []).map(certKey).join(';');
+    if (ck !== prevCertKey) { prevCertKey = ck; renderCertStage(); }
     var k = data.victories && data.victories.length ? winKey(data.victories[0]) : '';
     if (k && k !== prevWinKey) { var v0 = data.victories[0]; celebrate(v0.title, v0.sub, 'big'); }
     prevWinKey = k;
@@ -452,7 +552,7 @@ h1{font-size:19px;margin:0;font-weight:800;letter-spacing:.2px}
   /* API pour le jeu : window.WST.celebrate('Titre', 'Sous-titre', 'big') */
   window.WST = { celebrate: celebrate, refresh: refresh, readData: readData, playerScoreOf: playerScoreOf, siteVisitorsOf: siteVisitorsOf, SEG_NAMES: SEG_NAMES };
 
-  renderHeader(); renderStage(); renderStats(); renderHist(); bindStage();
+  renderHeader(); renderStage(); renderStats(); renderHist(); renderCertStage(); bindStage(); bindCertStage();
 })();
 </script>
 </body>
