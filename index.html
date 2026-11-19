@@ -8,8 +8,8 @@
 body{margin:0;font-family:"Inter",system-ui,sans-serif;background:radial-gradient(700px 320px at 85% -10%,rgba(99,102,241,.28),transparent 60%),linear-gradient(180deg,#0A0F1E 0%,#111A33 100%);color:#F1F5F9;font-size:clamp(13px,3.6vw,15px);min-height:100vh}
 h1,h2,h3{font-weight:800;color:#F1F5F9}
 button{font-family:inherit;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:12px 12px;font-weight:600;font-size:10px;background:rgba(255,255,255,.08);color:#F1F5F9;min-height:48px;box-shadow:0 4px 14px rgba(2,6,23,.35);transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease,background .15s ease}
-button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):hover{transform:scale(1.02)}
-button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):active{transform:scale(.97)}
+button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):not(.pwEye):hover{transform:scale(1.02)}
+button:not(.navbtn):not(.bnavbtn):not(.typeCard):not(.themeBtn):not(.pwEye):active{transform:scale(.97)}
 button:disabled{opacity:.45;cursor:default}
 button:focus-visible{outline:2px solid #22D3EE;outline-offset:2px}
 button.primary{background:linear-gradient(135deg,#6366F1,#22D3EE);color:#fff;border:1px solid transparent;width:100%;box-shadow:0 8px 22px rgba(99,102,241,.45)}
@@ -214,6 +214,13 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .loginTabs button{flex:1;min-height:44px}
 .loginTabs button.on{background:#6366F1;border-color:#6366F1;color:#fff}
 .loginField{width:100%;margin-bottom:10px}
+.pwWrap{position:relative;width:100%;margin-bottom:10px}
+.pwWrap .loginField{margin-bottom:0;padding-right:46px}
+button.pwEye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:40px;min-height:40px;padding:0;border:none;background:none;box-shadow:none;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#94A3B8}
+button.pwEye:hover,button.pwEye:active{transform:translateY(-50%);background:rgba(255,255,255,.06)}
+button.pwEye:focus-visible{outline:2px solid #22D3EE;outline-offset:1px}
+button.pwEye svg{width:20px;height:20px;display:block}
+button.pwEye.on{color:#22D3EE}
 .loginMsg{min-height:20px;text-align:center;font-size:13px;line-height:1.4;color:#FCA5A5;margin:12px 0 0}
 .loginNote{text-align:center;color:#64748B;font-size:12px;margin:10px 0 0;line-height:1.5}
 .linklike{background:none!important;border:none!important;box-shadow:none!important;color:#22D3EE;font-size:9px;min-height:36px;text-decoration:underline;padding:6px 10px}
@@ -558,14 +565,14 @@ main{padding:10px 10px 116px}
   </div>
   <div id="loginForm">
    <input id="login-email" class="loginField" type="text" placeholder="Ton e-mail ou ton pseudo" autocomplete="username">
-   <input id="login-password" class="loginField" type="password" placeholder="Ton mot de passe" autocomplete="current-password">
+   <div class="pwWrap"><input id="login-password" class="loginField" type="password" placeholder="Ton mot de passe" autocomplete="current-password"><button type="button" class="pwEye" onclick="wstTogglePw('login-password',this)" aria-label="Voir le mot de passe" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
    <button class="primary" style="width:100%" onclick="wstAuthSubmit('login')">🔑 Se connecter</button>
    <div style="text-align:center;margin-top:10px"><button class="linklike" onclick="wstForgotPw()">Mot de passe oublié ?</button></div>
   </div>
   <div id="regForm" class="hidden">
    <input id="reg-name" class="loginField" type="text" placeholder="Ton pseudo" autocomplete="nickname" maxlength="24">
    <input id="reg-email" class="loginField" type="email" placeholder="Ton e-mail" autocomplete="email">
-   <input id="reg-password" class="loginField" type="password" placeholder="Mot de passe (8 caractères min.)" autocomplete="new-password">
+   <div class="pwWrap"><input id="reg-password" class="loginField" type="password" placeholder="Mot de passe (8 caractères min.)" autocomplete="new-password"><button type="button" class="pwEye" onclick="wstTogglePw('reg-password',this)" aria-label="Voir le mot de passe" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
    <button class="primary" style="width:100%" onclick="wstAuthSubmit('register')">🎉 Créer mon compte</button>
   </div>
   <button class="ghost" style="width:100%;margin-top:10px" onclick="wstContinueOffline()">▶️ Continue as guest</button>
@@ -635,6 +642,9 @@ async function wstSavePseudo(){
  }catch(e){toast("Connexion Internet requise pour modifier ton pseudo.");}
 }
 function wstShowGame(user){var s=document.getElementById('loginScreen');if(s)s.classList.add('hidden');wstRenderAccount(user);}
+var WST_EYE_ON='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+var WST_EYE_OFF='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+function wstTogglePw(id,btn){var inp=document.getElementById(id);if(!inp||!btn)return;var show=inp.type==="password";inp.type=show?"text":"password";btn.setAttribute("aria-pressed",show?"true":"false");btn.setAttribute("aria-label",show?"Masquer le mot de passe":"Voir le mot de passe");btn.classList.toggle("on",show);btn.innerHTML=show?WST_EYE_OFF:WST_EYE_ON;}
 function wstLoginMode(mode){var lf=document.getElementById('loginForm'),rf=document.getElementById('regForm');if(lf)lf.classList.toggle('hidden',mode!=="login");if(rf)rf.classList.toggle('hidden',mode!=="register");var b1=document.getElementById('tabLoginBtn'),b2=document.getElementById('tabRegBtn');if(b1)b1.classList.toggle('on',mode==="login");if(b2)b2.classList.toggle('on',mode==="register");wstSbMsg("");}
 function wstVal(id){var e=document.getElementById(id);return e?e.value.trim():"";}
 function wstValPw(id){var e=document.getElementById(id);return e?e.value:"";}
