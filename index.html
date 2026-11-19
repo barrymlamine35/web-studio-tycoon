@@ -169,11 +169,16 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .themeBtn small{display:block;font-size:7.5px;font-weight:600;color:#94A3B8;margin-top:3px}
 .officeBanner{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.10);margin-bottom:12px;background:rgba(255,255,255,.04)}
 .officeBanner svg{width:100%;height:auto;display:block}
-.bottomnav{display:flex;position:fixed;left:50%;transform:translateX(-50%);width:min(496px,calc(100vw - 24px));bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;background:rgba(17,26,51,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:6px 8px;box-shadow:0 10px 30px rgba(2,6,23,.6)}
-.bnavbtn{flex:1;min-width:0;border:none;position:relative;background:transparent;border-radius:999px;padding:6px 1px;font-size:6px;font-weight:700;color:#94A3B8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:50px;box-shadow:none;white-space:nowrap;overflow:hidden}
-.bnavbtn .ic{font-size:19px;line-height:1}
-.bnavbtn.on{color:#fff;background:linear-gradient(135deg,#6366F1,#22D3EE);box-shadow:0 4px 14px rgba(99,102,241,.4)}
+.bottomnav{display:flex;position:fixed;left:50%;transform:translateX(-50%);width:min(496px,calc(100vw - 24px));bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;background:rgba(255,255,255,.10);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.15),0 10px 30px rgba(0,0,0,.35);touch-action:none}
+.bnavbtn{flex:1;min-width:0;border:none;position:relative;background:transparent;border-radius:999px;padding:6px 1px;font-size:6px;font-weight:700;color:#94A3B8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:50px;box-shadow:none;white-space:nowrap;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.6),0 0 8px rgba(0,0,0,.35)}
+.bnavbtn .ic{font-size:19px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.65))}
+.bnavbtn.on{color:#22D3EE;background:transparent;box-shadow:none}
+.bnavbtn.on .ic{filter:drop-shadow(0 0 6px rgba(34,211,238,.75))}
 .nbadge{position:absolute;top:3px;right:4px;min-width:18px;height:18px;border-radius:999px;background:#ef4444;color:#fff;font-size:7px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;pointer-events:none}
+#navlamp{position:absolute;top:-6px;left:0;width:30px;height:5px;border-radius:999px;background:#22D3EE;box-shadow:0 0 8px rgba(34,211,238,.9),0 0 18px rgba(34,211,238,.55);transform:translateX(0);transition:transform .18s cubic-bezier(.34,1.45,.64,1);will-change:transform;touch-action:none;cursor:grab}
+#navlamp::before{content:"";position:absolute;left:50%;transform:translateX(-50%);top:-13px;width:64px;height:44px}
+#navlamp .navcone{position:absolute;left:50%;transform:translateX(-50%);top:2px;width:64px;height:44px;background:linear-gradient(to bottom,rgba(34,211,238,.34),rgba(34,211,238,0));clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);pointer-events:none}
+@media (prefers-reduced-motion:reduce){#navlamp{transition:none}}
 .msgRow{display:flex;gap:10px;align-items:center;padding:12px;border-radius:14px;background:#1e293b;border:1px solid rgba(255,255,255,.08);margin-bottom:8px;cursor:pointer;width:100%;color:#E2E8F0;text-align:left;font-size:11px}
 .msgRow .unread{min-width:20px;height:20px;border-radius:999px;background:#ef4444;color:#fff;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px;margin-left:auto}
 .msgMe{background:#6366F1;color:#fff;border-radius:14px 14px 4px 14px;padding:10px 12px;margin:6px 0 6px 40px}
@@ -583,6 +588,7 @@ main{padding:10px 10px 116px}
 <div id="toast" class="toast hidden"></div>
 <div id="dayBanner" class="hidden"></div>
 <nav class="bottomnav">
+ <span id="navlamp"><span class="navcone"></span></span>
  <button class="bnavbtn on" data-tab="sites" onclick="showTabTop('sites')" title="Accueil"><span class="ic">🏠</span></button>
  <button class="bnavbtn" data-tab="create" onclick="showTabTop('create')" title="Créer"><span class="ic">➕</span></button>
  <button class="bnavbtn" data-tab="team" onclick="showTabTop('team')" title="Équipe"><span class="ic">👥</span></button>
@@ -1791,8 +1797,119 @@ function showTab(id,btn,mode){
  document.getElementById('screenTitle').textContent=TITLES[id]||'Web Studio Tycoon';
  closeMenu();
  if(id=='create')renderCreate(); if(id=='siteDetail')renderSiteDetail(); if(id=='appDetail')renderAppDetail(); if(id=='journal')renderJournal(); if(id=='workshop')renderWorkshop(); if(id=='shop')renderShop(); if(id=='darkweb')renderDarkweb(); if(id=='messages')renderMessages(); if(id=='trainings')renderTrainings(); if(id=='training')renderTraining(selectedTrainingId); if(id=='certificates')renderCertificates(); if(id=='myformations')renderMyFormations();
- window.scrollTo(0,0)}
+ window.scrollTo(0,0);moveNavLamp()}
 function showTabTop(id){showTab(id,null,'top')}
+/* ---- Barre du bas : lampe Nexus Guardian (Liquid Glass) ---- */
+var lampDragActive=false;
+function moveNavLamp(){
+  if(lampDragActive) return;
+  var nav=document.querySelector(".bottomnav"), lamp=document.getElementById("navlamp");
+  if(!nav || !lamp) return;
+  var btn=nav.querySelector(".bnavbtn.on");
+  if(!btn) return;
+  var nr=nav.getBoundingClientRect(), br=btn.getBoundingClientRect();
+  if(!nr.width) return;
+  lamp.style.transform="translateX("+(((br.left-nr.left)+br.width/2)-lamp.offsetWidth/2)+"px)";
+}
+window.addEventListener("resize", moveNavLamp);
+window.addEventListener("orientationchange", moveNavLamp);
+window.addEventListener("load", function(){ setTimeout(moveNavLamp, 50); });
+/* ---- Lampe déplaçable au doigt : maintenir et glisser depuis n'importe quel point de la pilule ----
+   Tap (doigt levé sans bouger) = clic normal sur l'onglet. Au-delà de ~8 px horizontaux, c'est un
+   drag : la lampe suit le doigt, l'onglet sous la lampe s'active au passage, snap au relâchement,
+   et le clic de fin de geste est supprimé pour ne pas déclencher un tap par accident. */
+(function(){
+  var nav=document.querySelector(".bottomnav"), lamp=document.getElementById("navlamp");
+  if(!nav || !lamp) return;
+  var THRESH=8;
+  var pid=null, startX=0, startTx=0, dragging=false, downOnLamp=false, suppressClick=false, suppressT=null;
+  function armSuppress(){
+    suppressClick=true;
+    clearTimeout(suppressT);
+    suppressT=setTimeout(function(){ suppressClick=false; }, 350);
+  }
+  function tabCenters(){
+    var nr=nav.getBoundingClientRect(), out=[];
+    nav.querySelectorAll(".bnavbtn[data-tab]").forEach(function(b){
+      var br=b.getBoundingClientRect();
+      out.push({ view:b.getAttribute("data-tab"), x:(br.left-nr.left)+br.width/2 });
+    });
+    return out;
+  }
+  function lampTx(){
+    var m=/translateX\((-?[\d.]+)px\)/.exec(lamp.style.transform||"");
+    return m ? parseFloat(m[1]) : 0;
+  }
+  function nearestTab(x){
+    var cs=tabCenters();
+    if(!cs.length) return null;
+    var best=cs[0];
+    cs.forEach(function(c){ if(Math.abs(c.x-x)<Math.abs(best.x-x)) best=c; });
+    return best;
+  }
+  nav.addEventListener("pointerdown", function(e){
+    if(pid!==null) return;
+    if(e.button!==undefined && e.button!==0) return;
+    pid=e.pointerId; startX=e.clientX; startTx=lampTx();
+    dragging=false;
+    downOnLamp = (e.target===lamp) || lamp.contains(e.target);
+  });
+  nav.addEventListener("pointermove", function(e){
+    if(pid===null || e.pointerId!==pid) return;
+    var dx=e.clientX-startX;
+    if(!dragging){
+      if(Math.abs(dx)<=THRESH) return;
+      dragging=true;
+      lampDragActive=true;
+      lamp.style.transition="none";
+    }
+    var cs=tabCenters();
+    if(!cs.length) return;
+    var half=lamp.offsetWidth/2;
+    var tx=startTx+dx;
+    var min=cs[0].x-half, max=cs[cs.length-1].x-half;
+    if(tx<min) tx=min;
+    if(tx>max) tx=max;
+    lamp.style.transform="translateX("+tx+"px)";
+    var cx=tx+half, best=cs[0];
+    cs.forEach(function(c){ if(Math.abs(c.x-cx)<Math.abs(best.x-cx)) best=c; });
+    if(best.view!==currentTab) showTabTop(best.view);
+  });
+  function finishDrag(){
+    pid=null;
+    dragging=false;
+    downOnLamp=false;
+    lampDragActive=false;
+    lamp.style.transition="";
+    armSuppress();
+    moveNavLamp();
+  }
+  function endDrag(e){
+    if(pid===null || (e && e.pointerId!==pid)) return;
+    if(dragging){ finishDrag(); return; }
+    if(downOnLamp){
+      var nr=nav.getBoundingClientRect();
+      var best=nearestTab(e.clientX-nr.left);
+      pid=null; downOnLamp=false;
+      armSuppress();
+      if(best){ showTabTop(best.view); }
+      return;
+    }
+    pid=null; downOnLamp=false;
+  }
+  function cancelDrag(e){
+    if(pid===null || (e && e.pointerId!==pid)) return;
+    if(dragging){ finishDrag(); return; }
+    pid=null; dragging=false; downOnLamp=false;
+  }
+  nav.addEventListener("pointerup", endDrag);
+  nav.addEventListener("pointercancel", cancelDrag);
+  window.addEventListener("pointerup", endDrag);
+  window.addEventListener("pointercancel", cancelDrag);
+  nav.addEventListener("click", function(e){
+    if(suppressClick){ suppressClick=false; e.preventDefault(); e.stopPropagation(); }
+  }, true);
+})();
 function goBack(){let p=NAV.pop();if(!p||p===currentTab)p='sites';showTab(p,null,'back')}
 function toggleMenu(){let s=document.querySelector('.side');if(s)s.classList.toggle('open');let m=document.getElementById('menuBack');if(m)m.classList.toggle('hidden')}
 function closeMenu(){let s=document.querySelector('.side');if(s)s.classList.remove('open');let m=document.getElementById('menuBack');if(m)m.classList.add('hidden')}
