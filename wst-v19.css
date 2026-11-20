@@ -506,7 +506,7 @@ table.rank tr.me{background:rgba(99,102,241,.18);font-weight:700}
 .bottomnav{display:flex;position:fixed;left:50%;transform:translateX(-50%);width:min(496px,calc(100vw - 24px));bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;background:rgba(17,26,51,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--stroke);border-radius:999px;padding:6px 8px;box-shadow:0 10px 30px rgba(2,6,23,.6)} /* v19 : barre du bas, verre */
 .bnavbtn{flex:1;min-width:0;border:none;position:relative;background:transparent;border-radius:999px;padding:6px 1px;font-weight:700;color:var(--txt-mute);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:50px;box-shadow:none;white-space:nowrap;overflow:hidden} /* v19 : bouton bas — AUCUNE font-size (le 6 px du jeu gagne) */
 .bnavbtn .ic{line-height:1} /* v19 : icône du bas (taille gardée : 19 px, 16 px à 360 px) */
-.bnavbtn.on{color:#fff;background:var(--grad-brand);box-shadow:0 4px 14px rgba(99,102,241,.4)} /* v19 : onglet actif en dégradé */
+.bnavbtn.on{color:#22D3EE;background:transparent;box-shadow:none} /* v19 : onglet actif — lampe seule, pas de dégradé */
 .nbadge{position:absolute;top:3px;right:4px;min-width:18px;height:18px;border-radius:999px;background:var(--red);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;pointer-events:none} /* v19 : pastille de notification (taille gardée : 7 px) */
 
 /* ---------- MESSAGERIE ---------- */
